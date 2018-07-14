@@ -80,7 +80,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    我的学习-Laravel
+                    我的Laravel学习
                 </div>
 
                 <div class="links">
