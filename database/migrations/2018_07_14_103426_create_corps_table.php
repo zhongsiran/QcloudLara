@@ -17,19 +17,19 @@ class CreateCorpsTable extends Migration
             $table->increments('id');
             $table->string('corporation_name');
             $table->string('registration_num');
-            $table->string('address');
-            $table->string('represen_person');
-            $table->string('phone');
-            $table->string('contact_person');
-            $table->string('contact_phone');
-            $table->string('nian_bao_status');
+            $table->string('address')->nullable();
+            $table->string('represen_person')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('contact_person')->nullable();
+            $table->string('contact_phone')->nullable();
+            $table->string('nian_bao_status')->nullable();
             $table->string('inspection_status')->nullable();
             $table->string('phone_call_record')->nullable();
             $table->string('longitude')->comment('经度')->nullable();
             $table->string('latitude')->comment('纬度')->nullable();
             $table->unsignedInteger('photos_number')->default(0);
             $table->boolean('is_active')->default('1');
-            $table->string('corporation_aic_division');
+            $table->string('corporation_aic_division')->nullable();
             $table->timestamps();
 
             $table->unique('registration_num');

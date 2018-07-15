@@ -3,19 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use App\UserManipulationHistory;
+use App\UserManipulationHistory as ManHistory;
 use App\Corps;
 
 use Illuminate\Http\Request;
 use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
+
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Log;
 
 class WeChatController extends Controller
 {
 
-	public function __construct(User $user, UserManipulationHistory $history, Corps $corps)
+	public function __construct(User $user, ManHistory $history, Corps $corps)
 	{
         $this->user = $user;
         $this->history = $history;
@@ -143,48 +145,17 @@ class WeChatController extends Controller
             break;
 
             case(strstr($keyword,"4401") AND strlen($keyword)>="10" OR preg_match('/^内资*/',$keyword) OR preg_match('/^独资*/',$keyword)):
-            return sprintf('按注册号 %s 搜索', $keyword);
-                // session('result') = $CurrentCorp->getCorpInfoByregnum($keyword);//将查询结果存入SESSION
-                // if($CurrentCorp->regnum)
-                // {
-                //     session('regnum')=$CurrentCorp->regnum;
-                //     session('corpname')=$CurrentCorp->corpname;
-                //     session('Addr')=$CurrentCorp->Addr;
-                //     session('LocX')=$CurrentCorp->LocX;
-                //     session('LocY')=$CurrentCorp->LocY;
-                //     session('PicNum')=$CurrentCorp->PicNum;
-                //     if (isset($CurrentCorp->LocX) || !empty($CurrentCorp->LocX))
-                //     {
-                //         $eword = $CurrentCorp->corpname;
-                //         $epointx = $CurrentCorp->LocX;
-                //         $epointy= $CurrentCorp->LocY;
-                //         $content[0] = ["Title" => session('corpname'),"Description"=> "此企业有位置信息，点击查看导航路线。\n回复“查询”查看企业详情\n回复“备注 + 需要备注内容”增加对此企业的备注","PicUrl"=>"http://shilingaic-aic.stor.sinaapp.com/W020140128563566202451.png","Url"=>"http://apis.map.qq.com/tools/routeplan/eword=". $eword ."&epointx=".$epointx."&epointy=".$epointy."?referer=wxbro&key=6GJBZ-WKHKD-VBT4V-POM3Q-K3DW7-BJBL3
-                //         "];
-                //         if (session('PicNum')>0){
-                //             $content[1] = ["Title" =>"现场图片","Description"=> "点击查看大图","Url"=>"http://shilingaic.applinzi.com/index.php?regnum=" . session('regnum')];
-                //         }
-                //     }else{
-                //         $content = "本企业未有位置信息，请通过对话功能的“发送位置”进行添加：\n".session('result');
-                //     }                                              
-                // }else
-                // {
-                //     if(isset(session('corpname'))){
-                //         $content ="找不到目标企业，目前仍在操作以下企业:\n".session('corpname')."（".session('regnum')."）";
-                //     }else{
-                //         $content ="找不到目标企业，目前没有操作企业，请回复注册号指定要操作的企业，或者输入字号查询注册号。";
-                //     }
-                // }
-            break;
-
+            try {
+                $corp_to_be_search = Corps::where('registration_num', (string)$keyword)->firstOrFail();
+                return sprintf('找到代号为 %s 的业户', $keyword);
+                break;
+            } catch (ModelNotFoundException $e) {
+                return sprintf('无法找到代号为 %s 的业户', $keyword);
+                break;
+            }
+            
             case(preg_match('/^现场*/',$keyword)):
-                // $se_corpname = session('corpname');
-                // $corp_desc = $se_corpname. "\n". session('Addr');
-                // if(session('picnum')>0){
-                //     $content[0] = ["Title" =>$corp_desc,"Description"=> "点击查看现场照片","PicUrl"=>"http://aic-1253948304.cosgz.myqcloud.com/onspot.png","Url"=>"http://shilingaic.applinzi.com/index.php?regnum=" . session('regnum']."&division=" .$_SESSION['subdivision')];
-                // }else{
-                //     $content = "暂无现场图片";
-                // }
-            return sprintf('查看 %s 的现场照片（如有）', session('test_name'));
+            return sprintf('查看 %s 的现场照片（如有）', $keyword);
             break;
 
             case(preg_match('/^导航*/',$keyword)):

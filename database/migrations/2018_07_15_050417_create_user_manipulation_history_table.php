@@ -14,14 +14,12 @@ class CreateUserManipulationHistoryTable extends Migration
     public function up()
     {
         Schema::create('user_manipulation_history', function (Blueprint $table) {
-            $table->increments('id');
 
-            $table->string('scjg_openid')->unique()->comment('局公众号的OPEN ID');
-            $table->string('slaic_openid')->unique()->comment('测试号的OPEN ID');;
-            $table->string('wx_nickname');
+            $table->string('id')->primary()->comment('slaic_openid');
+            $table->string('wx_nickname')->nullable();
 
-            $table->string('current_manipulating_corporation');
-            $table->string('previous_manipulated_corporation');
+            $table->string('current_manipulating_corporation')->nullable();
+            $table->string('previous_manipulated_corporation')->nullable();
 
             $table->timestamps();
         });
