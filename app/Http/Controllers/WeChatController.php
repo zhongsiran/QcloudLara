@@ -7,6 +7,7 @@ use App\UserManipulationHistory as ManHistory;
 use App\Corps;
 
 use Illuminate\Http\Request;
+// use EasyWeChat\Kernel\Messages\Message;
 use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
@@ -32,7 +33,7 @@ class WeChatController extends Controller
      * @return boolean
      */
 
-    private function authorize_with_slaic_openid($message)
+    private function authorize_with_slaic_openid(array $message)
     {
         $current_user = User::firstOrCreate([
             "slaic_openid" => $message['FromUserName'],
@@ -80,7 +81,8 @@ class WeChatController extends Controller
                     break;
 
                     case 'location':
-                    return '收到坐标消息';
+                    $result = $this->handle_location_message($message);
+                    return $result ?? '收到坐标消息';
                     break;
 
                     case 'link':
@@ -112,48 +114,97 @@ class WeChatController extends Controller
         // return var_dump($incoming_msg);
     }
 
-    private function handle_text_message($message)
+    private function handle_text_message(array $message)
     {
     	$keyword = trim($message['Content']);
     	switch (true) {
-    		case (strstr($keyword,'进入')):
-    		$title = '微信监管平台' . session()->getId();
-    		$url = 'https://hdscjg.applinzi.com/mylib/H5controllers/shilingaic_openid.php';
-    		$image = 'http://sinacloud.net/aicbucket/babb0823bf2de393cbb694b1c7a71964.jpg';
+            /*
+             * 收到“进入”之后
+             * 回复链接页面
+             */
+            case (strstr($keyword,'进入')):
+            $title = '微信监管平台' . session()->getId();
+            $url = 'https://hdscjg.applinzi.com/mylib/H5controllers/shilingaic_openid.php';
+            $image = 'http://sinacloud.net/aicbucket/babb0823bf2de393cbb694b1c7a71964.jpg';
 
-    		$items = [
-    			new NewsItem([
-    				'title'       => $title,
-    				'description' => "进入网页版监管平台",
-    				'url'         => $url,
-    				'image'       => $image,
-    			]),
-    		];
-    		$link_to_hd_cloud_aic_h5_website = new News($items);
-    		return $link_to_hd_cloud_aic_h5_website;
-    		break;
+            $items = [
+             new NewsItem([
+                'title'       => $title,
+                'description' => "进入网页版监管平台",
+                'url'         => $url,
+                'image'       => $image,
+            ]),
+         ];
+         $link_to_hd_cloud_aic_h5_website = new News($items);
+         return $link_to_hd_cloud_aic_h5_website;
+         break;
 
-    		case (strstr($keyword,'当前')):
-            $content="目前操作企业为：\n". session('corpname')."（".session('regnum')."）";
-            return $content;
-            break;
+            /*
+             * 收到“当前”之后
+             * 回复当前操作中的业户
+             * 从histories表中取注册号，再到Corps表中查企业名称
+             */
 
+            case (strstr($keyword,'当前')):
+            try {
+                $history = ManHistory::findOrFail($message['FromUserName']);
+                $history_registration_num = $history->current_manipulating_corporation;
+                $history_corporation_name = Corps::where('registration_num', $history_registration_num)
+                ->first()
+                ->corporation_name;
+                $content= sprintf("目前操作企业为： %s (%s)", $history_corporation_name, $history_registration_num);
+                return $content;
+                break;    
+            } catch (ModelNotFoundException $e) {
+                return '当前无指定操作企业';
+                break;
+            }
+
+            /*
+             * 收到“查询”之后
+             * 回复当前操作中的业户的详情
+             * 从histories表中取注册号，再到Corps表中取出详情$corp_to_be_search
+             * 然后用fetch_corp_info()格式化返回详情信息
+             */
             case($keyword== "查询"):
-            // $se_regnum = session('regnum');
-            // $content .= $CurrentCorp->SearchCorpInfoByregnum($se_regnum);
-            return '查询';
+            try {
+                $history = ManHistory::findOrFail($message['FromUserName']);
+                $history_registration_num = $history->current_manipulating_corporation;
+                $corp_to_be_search = Corps::where('registration_num', (string)$history_registration_num)->firstOrFail();
+            } catch (ModelNotFoundException $e) {
+                return '查询当前操作用户失败';
+                break;
+            }
+            return $this->fetch_corp_info($corp_to_be_search);
             break;
 
+            /*
+            以下处理4401开头的注册号，或者指定关键词开头的代号
+            第一个TRY尝试确定是否能在CORPS表中找到企业记录，如果找不到，即产生ModelNotFoundException，catch本异常后直接返回信息；
+            第地个TRY尝试在UserManipulationHistories表中进行记录，以便进行上下文对话。
+            注意：UserManipulationHistories表为复数名称，对应单数名称的UserManipulationHistory的Model类。
+            */
             case(strstr($keyword,"4401") AND strlen($keyword)>="10" OR preg_match('/^内资*/',$keyword) OR preg_match('/^独资*/',$keyword)):
             try {
                 $corp_to_be_search = Corps::where('registration_num', (string)$keyword)->firstOrFail();
-                return sprintf('找到代号为 %s 的业户', $keyword);
-                break;
             } catch (ModelNotFoundException $e) {
                 return sprintf('无法找到代号为 %s 的业户', $keyword);
                 break;
             }
-            
+            try {
+                $current_user = ManHistory::firstOrNew([
+                    'id' => $message['FromUserName']
+                ]);
+                $current_user->previous_manipulated_corporation = $current_user->current_manipulating_corporation ?? '';
+                $current_user->current_manipulating_corporation = $keyword;
+                $current_user->save();
+            } catch (\Exception $e) {
+                return '保存到ManHistories时出错';
+                break;    
+            }
+
+            return $this->fetch_corp_info($corp_to_be_search);
+
             case(preg_match('/^现场*/',$keyword)):
             return sprintf('查看 %s 的现场照片（如有）', $keyword);
             break;
@@ -181,5 +232,59 @@ class WeChatController extends Controller
             break;
         }
 
+    }
+    private function fetch_corp_info(Corps $corp)
+    {
+        //用sprintf会保留换行和空格，为了代码易读，在书写时保持缩进，用str_replace将空格删除。不需要\n换行
+        $corp_info_template = str_replace(' ','','
+            %s
+            %s
+            地址：%s
+            法人：%s
+            电话：%s
+            联络员：%s
+            联络员电话：%s
+            年报情况：%s
+            核查记录：%s
+            电话联系记录：%s
+            相关图片数：%s
+            ====================');
+        return sprintf($corp_info_template,  // 模板
+                //数据
+            $corp->registration_num, 
+            $corp->corporation_name,
+            $corp->address,
+            $corp->represent_person,
+            $corp->phone,
+            $corp->contact_person,
+            $corp->contact_phone,
+            $corp->nian_bao_status,
+            $corp->inspection_status,
+            $corp->phone_call_record,
+            $corp->photos_number
+        );
+    }
+
+    private function handle_location_message(array $message)
+    {
+        $latitude = $message['Location_X'];
+        $longitude = $message['Location_Y'];
+
+        try {
+            $history = ManHistory::findOrFail($message['FromUserName']);
+            $history_registration_num = $history->current_manipulating_corporation;            
+        } catch (ModelNotFoundException $e) {
+            return '当前无指定操作企业，请先指定再上传定位';
+        }
+
+        try {
+            $current_corporation = Corps::where('registration_num', $history_registration_num)->firstOrFail();
+            $current_corporation->latitude = $latitude;
+            $current_corporation->longitude = $longitude;
+            $current_corporation->save();
+            return sprintf('成功上传定位信息，当前定位：东经 %s，北纬： %s', $latitude, $longitude);
+        } catch (ModelNotFoundException $e) {
+            return '在数据库中找不到当前操作企业，无法上传定位信息';
+        }
     }
 }

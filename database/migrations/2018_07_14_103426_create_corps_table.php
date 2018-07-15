@@ -18,7 +18,7 @@ class CreateCorpsTable extends Migration
             $table->string('corporation_name');
             $table->string('registration_num');
             $table->string('address')->nullable();
-            $table->string('represen_person')->nullable();
+            $table->string('represent_person')->nullable();
             $table->string('phone')->nullable();
             $table->string('contact_person')->nullable();
             $table->string('contact_phone')->nullable();

@@ -7,7 +7,7 @@ $factory->define(App\Corps::class, function (Faker $faker) {
             'corporation_name' => $faker->company,
             'registration_num' => '4440121000' . (string)($faker->randomNumber($nbDigits = 6, $strict = false)),
             'address' => $faker->address,
-            'represen_person' => $faker->name,
+            'represent_person' => $faker->name,
             'phone' => $faker->phoneNumber,
             'contact_person' => $faker->name,
             'contact_phone' => $faker->phoneNumber,

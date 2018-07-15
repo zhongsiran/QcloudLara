@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserManipulationHistoryTable extends Migration
+class CreateUserManipulationHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUserManipulationHistoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_manipulation_history', function (Blueprint $table) {
+        Schema::create('user_manipulation_histories', function (Blueprint $table) {
 
             $table->string('id')->primary()->comment('slaic_openid');
             $table->string('wx_nickname')->nullable();
@@ -32,6 +32,6 @@ class CreateUserManipulationHistoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_manipulation_history');
+        Schema::dropIfExists('user_manipulation_histories');
     }
 }
