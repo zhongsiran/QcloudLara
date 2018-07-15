@@ -15,18 +15,18 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('user_name');
-            $table->string('user_real_name');
+            $table->string('user_name')->nullable();
+            $table->string('user_real_name')->nullable();
 
-            $table->string('scjg_openid')->unique()->comment('局公众号的OPEN ID');
+            $table->string('scjg_openid')->unique()->comment('局公众号的OPEN ID')->nullable();
             $table->string('slaic_openid')->unique()->comment('测试号的OPEN ID');;
-            $table->string('wx_nickname');
+            $table->string('wx_nickname')->nullable();
 
             $table->string('password')->nullable();
 
-            $table->string('user_group');
-            $table->string('active_status');
-            $table->string('user_aic_division');
+            $table->string('user_group')->default('normal_user');
+            $table->boolean('active_status')->default(0);
+            $table->string('user_aic_division')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
