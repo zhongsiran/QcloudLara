@@ -226,8 +226,8 @@ class WeChatController extends Controller
             break;
 
             case(preg_match('~[\x{4e00}-\x{9fa5}]+~u', $keyword)):
-            
-            return sprintf('回复所有带有 %s 的业户名单', session('test_name'));
+            $result = $this->get_corporation_info_by_name($keyword);
+            return $result;
             break;
 
             default:
@@ -235,5 +235,5 @@ class WeChatController extends Controller
             break;
         }
     }
-    
+
 }

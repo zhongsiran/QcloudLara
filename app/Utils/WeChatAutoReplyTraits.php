@@ -64,4 +64,24 @@ trait WeChatAutoReplyTraits
             return '在数据库中找不到当前操作企业，无法上传定位信息';
         }
     }
+
+    public function get_corporation_info_by_name($keyword)
+    {
+        $corps_found = Corps::where('corporation_name', 'like', '%' .$keyword .'%')->take(20)->get();
+        $result_string = '';
+        $count = 1;
+        if ($corps_found->count() > 0) {
+            foreach ($corps_found as $corp) {
+                $result_string .= 
+                $count . ':' .$corp->corporation_name . "\n" . 
+                $corp->registration_num . "\n".
+                "------------------------". "\n";
+                $count += 1;
+            }
+            return $result_string;
+        }else{
+            return '无法找到包含“' . $keyword .'”的企业';
+        }
+        
+    }
 }
