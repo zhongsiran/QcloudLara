@@ -6,8 +6,10 @@ use App\User;
 use App\UserManipulationHistory as ManHistory;
 use App\Corps;
 use App\Utils\WeChatAutoReplyTraits;
-    
+
 use Illuminate\Http\Request;
+use Qcloud\Cos\Api;
+
 // use EasyWeChat\Kernel\Messages\Message;
 use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\News;
@@ -21,8 +23,8 @@ class WeChatController extends Controller
 
     use WeChatAutoReplyTraits;
 
-	public function __construct(User $user, ManHistory $history, Corps $corps)
-	{
+    public function __construct(User $user, ManHistory $history, Corps $corps)
+    {
         $this->user = $user;
         $this->history = $history;
         $this->corps = $corps;
@@ -72,7 +74,7 @@ class WeChatController extends Controller
 
                     case 'image':
       		        // return '收到图片消息';
-                    return $message['FromUserName']. $current_user->user_name;
+                    return $this->handle_image_message($message);
                     break;
 
                     case 'voice':
@@ -121,33 +123,30 @@ class WeChatController extends Controller
     {
     	$keyword = trim($message['Content']);
     	switch (true) {
-            /*
-             * 收到“进入”之后
-             * 回复链接页面
-             */
+
+            // 收到“进入”之后回复链接页面
             case (strstr($keyword,'进入')):
             $title = '微信监管平台' . session()->getId();
             $url = 'https://hdscjg.applinzi.com/mylib/H5controllers/shilingaic_openid.php';
             $image = 'http://sinacloud.net/aicbucket/babb0823bf2de393cbb694b1c7a71964.jpg';
 
             $items = [
-             new NewsItem([
-                'title'       => $title,
-                'description' => "进入网页版监管平台",
-                'url'         => $url,
-                'image'       => $image,
-            ]),
-         ];
-         $link_to_hd_cloud_aic_h5_website = new News($items);
-         return $link_to_hd_cloud_aic_h5_website;
-         break;
+                new NewsItem([
+                    'title'       => $title,
+                    'description' => "进入网页版监管平台",
+                    'url'         => $url,
+                    'image'       => $image,
+                ]),
+            ];
+            $link_to_hd_cloud_aic_h5_website = new News($items);
+            return $link_to_hd_cloud_aic_h5_website;
+            break;
 
             /*
              * 收到“当前”之后
              * 回复当前操作中的业户
              * 从histories表中取注册号，再到Corps表中查企业名称
              */
-
             case (strstr($keyword,'当前')):
             try {
                 $history = ManHistory::findOrFail($message['FromUserName']);
@@ -208,23 +207,24 @@ class WeChatController extends Controller
 
             return $this->fetch_corp_info($corp_to_be_search);
 
+            // TODO 回复现场照片页面
             case(preg_match('/^现场*/',$keyword)):
             return sprintf('查看 %s 的现场照片（如有）', $keyword);
             break;
 
+            //回复导航链接
             case(preg_match('/^导航*/',$keyword)):
-                // $corp_desc = session('regnum'] . "\n" . $_SESSION['Addr');
-                // $eword = session('corpname');
-                // $epointx=session('LocX');
-                // $epointy=session('LocY');
-                // $content[0] = ["Title" =>session('corpname') ."\n". $corp_desc,"Description"=> "点击显示导航路径","PicUrl"=>"http://shilingaic-aic.stor.sinaapp.com/W020140128563566202451.png","Url"=>"http://apis.map.qq.com/tools/routeplan/eword=". $eword ."&epointx=".$epointx."&epointy=".$epointy."?referer=wxbro&key=6GJBZ-WKHKD-VBT4V-POM3Q-K3DW7-BJBL3
-                // "];
-                // if (session('PicNum')>0){
-                //     $content[1] = ["Title" =>"现场图片","Description"=> "点击查看大图","Url"=>"http://shilingaic.applinzi.com/index.php?regnum=" . session('regnum')];
-                // };
-            return sprintf('导航到 %s （如有）', $keyword);
+            try {
+                $history = ManHistory::findOrFail($message['FromUserName']);
+                $history_registration_num = $history->current_manipulating_corporation;
+            } catch (ModelNotFoundException $e) {
+                return '查询当前操作用户失败';
+                break;
+            }
+            return $this->get_corporation_route_plan($history_registration_num);
             break;
 
+            // 模糊查询企业字号
             case(preg_match('~[\x{4e00}-\x{9fa5}]+~u', $keyword)):
             $result = $this->get_corporation_info_by_name($keyword);
             return $result;
