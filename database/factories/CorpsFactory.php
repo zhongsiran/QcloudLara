@@ -5,7 +5,7 @@ use Faker\Generator as Faker;
 $factory->define(App\Corps::class, function (Faker $faker) {
     return [
             'corporation_name' => $faker->company,
-            'registration_num' => '4440121000' . (string)($faker->randomNumber($nbDigits = 6, $strict = false)),
+            'registration_num' => '4440121000' . (string)($faker->unique()->randomNumber($nbDigits = 6, $strict = false)),
             'address' => $faker->address,
             'represent_person' => $faker->name,
             'phone' => $faker->phoneNumber,

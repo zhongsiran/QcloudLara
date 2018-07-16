@@ -179,12 +179,12 @@ class WeChatController extends Controller
             break;
 
             /*
-            以下处理4401开头的注册号，或者指定关键词开头的代号
+            以下处理44开头的注册号，或者指定关键词开头的代号
             第一个TRY尝试确定是否能在CORPS表中找到企业记录，如果找不到，即产生ModelNotFoundException，catch本异常后直接返回信息；
             第地个TRY尝试在UserManipulationHistories表中进行记录，以便进行上下文对话。
             注意：UserManipulationHistories表为复数名称，对应单数名称的UserManipulationHistory的Model类。
             */
-            case(strstr($keyword,"4401") AND strlen($keyword)>="10" OR preg_match('/^内资*/',$keyword) OR preg_match('/^独资*/',$keyword)):
+            case(strstr($keyword,"44") AND strlen($keyword)>="10" OR preg_match('/^内资*/',$keyword) OR preg_match('/^独资*/',$keyword)):
             try {
                 $corp_to_be_search = Corps::where('registration_num', (string)$keyword)->firstOrFail();
             } catch (ModelNotFoundException $e) {
@@ -223,7 +223,7 @@ class WeChatController extends Controller
             break;
 
             case(preg_match('~[\x{4e00}-\x{9fa5}]+~u', $keyword)):
-            session()->put('test_name', $keyword);
+            
             return sprintf('回复所有带有 %s 的业户名单', session('test_name'));
             break;
 

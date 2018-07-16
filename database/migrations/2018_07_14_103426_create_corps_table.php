@@ -14,7 +14,6 @@ class CreateCorpsTable extends Migration
     public function up()
     {
         Schema::create('corps', function (Blueprint $table) {
-            $table->increments('id');
             $table->string('corporation_name');
             $table->string('registration_num');
             $table->string('address')->nullable();
@@ -32,8 +31,7 @@ class CreateCorpsTable extends Migration
             $table->string('corporation_aic_division')->nullable();
             $table->timestamps();
 
-            $table->unique('registration_num');
-            $table->index('registration_num');
+            $table->primary('registration_num');
             $table->index('corporation_name');
         });
     }
