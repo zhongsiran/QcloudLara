@@ -8,7 +8,7 @@ use App\Corps;
 use App\Utils\WeChatAutoReplyTraits;
 
 use Illuminate\Http\Request;
-use Qcloud\Cos\Api;
+use Qcloud\Cos\Client;
 
 // use EasyWeChat\Kernel\Messages\Message;
 use EasyWeChat\Kernel\Messages\Text;
@@ -23,11 +23,12 @@ class WeChatController extends Controller
 
     use WeChatAutoReplyTraits;
 
-    public function __construct(User $user, ManHistory $history, Corps $corps)
+    public function __construct(User $user, ManHistory $history, Corps $corps, Client $cos_client)
     {
         $this->user = $user;
         $this->history = $history;
         $this->corps = $corps;
+        $this->cos_client = $cos_client;
     }
 
     /**

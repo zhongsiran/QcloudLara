@@ -9,7 +9,7 @@ use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
 use EasyWeChat\Kernel\Messages\Image;
 
-use Qcloud\Cos\Api;
+use Qcloud\Cos\Client;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -51,7 +51,7 @@ trait WeChatAutoReplyTraits
             $history = ManHistory::findOrFail($message['FromUserName']);
             $history_registration_num = $history->current_manipulating_corporation;            
         } catch (ModelNotFoundException $e) {
-            return '当前无指定操作企业，请先指定再上传定位';
+            return '当前无指定操作企业，请先指定再上传照片';
         }
         try {
             $current_corporation = Corps::findOrFail($history_registration_num);
@@ -64,8 +64,14 @@ trait WeChatAutoReplyTraits
 
         // $image_upload_name = sprintf("%s-%s-%s", $div, $current_pic_num, $date);
         // $return_image = new Image($media_id);
-        return $this->list_objects_with_prefix('广东钱龙五金制品有限公司');
+        try {
+            $result = $this->list_objects_with_prefix('广州华伟广告设计有限公司', 'CorpImg/SL/日常监管');
+        } catch (\Exception $e) {
+            return 'first fail';
+        }
+        return $result;
         // return $date;
+        // return $return_image;
     }
 
     public function fetch_corp_info(Corps $corp)
@@ -102,7 +108,7 @@ trait WeChatAutoReplyTraits
 
     public function get_corporation_info_by_name($keyword)
     {
-        $corps_found = Corps::where('corporation_name', 'like', '%' .$keyword .'%')->take(20)->get();
+        $corps_found = Corps::where('corporation_name', 'like', '%' .$keyword .'%')->take(15)->get();
         $result_string = '';
         $count = 1;
         if ($corps_found->count() > 0) {
@@ -110,6 +116,7 @@ trait WeChatAutoReplyTraits
                 $result_string .= 
                 $count . ':' .$corp->corporation_name . "\n" . 
                 $corp->registration_num . "\n".
+                str_replace('广州市花都区狮岭镇', '', $corp->address) ."\n".
                 "------------------------". "\n";
                 $count += 1;
             }
@@ -166,30 +173,16 @@ trait WeChatAutoReplyTraits
         unset($cosClient);
     }
 
-    public function list_objects_with_prefix($corp_name, $prefix='CorpImg/SL/日常监管/')
+    public function list_objects_with_prefix($corp_name, $prefix='CorpImg/SL/日常监管')
     {
-        $cosClient = new \Qcloud\Cos\Client(array('region' => env('QCLOUD_REGION'),
-            'credentials'=> array(
-                'appId' => env('QCLOUD_APPID'),
-                'secretId'    => env('QCLOUD_SECRETID'),
-                'secretKey' => env('QCLOUD_SECRETKEY'))));
-        if (isset($cosClient)) {
-            return 'ok';
-            # code...
-        }else{
+        try {
+            $result = $this->cos_client->listObjects(array(
+                'Bucket' => 'aic-1253948304',
+                'Prefix' => $prefix . "/" . $corp_name,
+            ));
+        } catch (\Exception $e) {
             return 'fail';
         }
-        try {
-            $result = $cosClient->listObjects(array(
-                'Bucket' => 'aic-1253948304',
-                'Prefix' => 'CorpImg/SL/日常监管/',
-            ));
-            // foreach ($result['Contents'] as $rt) {
-            //     print_r($rt);
-        // }
-        } catch (\Exception $e) {
-            return ($e);
-        }
-        return "OK";
+        return $result['Contents'][1]['Key'];
     }
 }
