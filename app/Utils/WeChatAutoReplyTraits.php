@@ -184,5 +184,28 @@ trait WeChatAutoReplyTraits
             return 'fail';
         }
         return $result['Contents'][1]['Key'];
+
+        /*object(Guzzle\Service\Resource\Model)#500 (2) { 
+            ["structure":protected]=> NULL 
+            ["data":protected]=> array(7) { 
+                ["Name"]=> string(14) "aic-1253948304" 
+                ["Prefix"]=> string(60) "CorpImg/SL/日常监管/广州华伟广告设计有限公司" 
+                ["Marker"]=> array(0) { } 
+                ["MaxKeys"]=> string(4) "1000" 
+                ["IsTruncated"]=> bool(false) 
+                ["Contents"]=> array(3) { 
+                    [0]=> array(6) { 
+                        ["Key"]=> string(80) "CorpImg/SL/日常监管/广州华伟广告设计有限公司/SL-1_2018-06-12.jpg" ["LastModified"]=> string(24) "2018-06-12T03:13:38.000Z" 
+                        ["ETag"]=> string(42) ""1aa3a211dba82da8ec69e0692e5c66c62d0e5c3d"" 
+                        ["Size"]=> string(6) "148804" 
+                        ["Owner"]=> array(2) { 
+                            ["ID"]=> string(10) "1253948304" 
+                            ["DisplayName"]=> string(10) "1253948304" 
+                            } 
+                        ["StorageClass"]=> string(8) "STANDARD" 
+                        } 
+                    [1]=> array(6) { ["Key"]=> string(80) "CorpImg/SL/日常监管/广州华伟广告设计有限公司/SL-2_2018-06-12.jpg" ["LastModified"]=> string(24) "2018-06-12T03:13:40.000Z" ["ETag"]=> string(42) ""fef817a797b6168f5b53b46d6d01ed659e5df332"" ["Size"]=> string(6) "197058" ["Owner"]=> array(2) { ["ID"]=> string(10) "1253948304" ["DisplayName"]=> string(10) "1253948304" } ["StorageClass"]=> string(8) "STANDARD" } [2]=> array(6) { ["Key"]=> string(80) "CorpImg/SL/日常监管/广州华伟广告设计有限公司/SL-3_2018-06-12.jpg" ["LastModified"]=> string(24) "2018-06-12T03:13:41.000Z" ["ETag"]=> string(42) ""1aa3a211dba82da8ec69e0692e5c66c62d0e5c3d"" ["Size"]=> string(6) "148804" ["Owner"]=> array(2) { ["ID"]=> string(10) "1253948304" ["DisplayName"]=> string(10) "1253948304" } ["StorageClass"]=> string(8) "STANDARD" } 
+                } 
+                ["RequestId"]=> string(40) "NWI0ZjY5ODhfNjBhYTk0MGFfOTkzM181NDEyMw==" } }*/
     }
 }

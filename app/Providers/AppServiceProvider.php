@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // 腾讯COS的操作类
         $this->app->singleton(Client::class, function ($app) {
             return new Client(array('region' => config('qcloud.region'),
                 'credentials'=> array(
