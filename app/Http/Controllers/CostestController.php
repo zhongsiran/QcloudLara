@@ -33,6 +33,10 @@ class CostestController extends Controller
         } catch (\Exception $e) {
             return ($e);
         }
-        return var_dump($result);
+        $second = gettimeofday();
+        // return $second['sec'].$second['usec'];
+        // return $second;
+        // return \Carbon\Carbon::now()->format('Y-m-d-s-v');
+        return $result;
     }
 }

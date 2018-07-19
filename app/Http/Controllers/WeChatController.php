@@ -187,7 +187,7 @@ class WeChatController extends Controller
             第地个TRY尝试在UserManipulationHistories表中进行记录，以便进行上下文对话。
             注意：UserManipulationHistories表为复数名称，对应单数名称的UserManipulationHistory的Model类。
             */
-            case(strstr($keyword,"44") AND strlen($keyword)>="10" OR preg_match('/^内资*/',$keyword) OR preg_match('/^独资*/',$keyword)):
+            case(strstr($keyword,"44") AND strlen($keyword)>="6" OR preg_match('/^内资*/',$keyword) OR preg_match('/^独资*/',$keyword)):
             try {
                 $corp_to_be_search = Corps::where('registration_num', (string)$keyword)->firstOrFail();
             } catch (ModelNotFoundException $e) {

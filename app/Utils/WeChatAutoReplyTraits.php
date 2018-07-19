@@ -4,6 +4,7 @@ namespace App\Utils;
 
 use App\Corps;
 use App\UserManipulationHistory as ManHistory;
+use App\CorpPhotos;
 
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
@@ -25,8 +26,7 @@ trait WeChatAutoReplyTraits
         $longitude = $message['Location_Y'];
 
         try {
-            $history = ManHistory::findOrFail($message['FromUserName']);
-            $history_registration_num = $history->current_manipulating_corporation;            
+            $history_registration_num = ManHistory::findOrFail($message['FromUserName'])->current_manipulating_corporation;            
         } catch (ModelNotFoundException $e) {
             return '当前无指定操作企业，请先指定再上传定位';
         }
@@ -48,8 +48,7 @@ trait WeChatAutoReplyTraits
         $media_id = $message['MediaId'];
 
         try {
-            $history = ManHistory::findOrFail($message['FromUserName']);
-            $history_registration_num = $history->current_manipulating_corporation;            
+            $history_registration_num = ManHistory::findOrFail($message['FromUserName'])->current_manipulating_corporation;            
         } catch (ModelNotFoundException $e) {
             return '当前无指定操作企业，请先指定再上传照片';
         }
@@ -58,20 +57,32 @@ trait WeChatAutoReplyTraits
         } catch (ModelNotFoundException $e) {
             return '在数据库中无法找到当前操作企业，请重新指定要操作的企业。';
         }
-        $corp_name = $current_corporation->corporation_name;
-        $div = $current_corporation->corporation_aic_division;
-        $date = date("Ymd-His");
 
-        // $image_upload_name = sprintf("%s-%s-%s", $div, $current_pic_num, $date);
-        // $return_image = new Image($media_id);
+        // 构造上传文件名为 所代号+企业名+日期毫秒.jpg
+        $upload_timestring = \Carbon\Carbon::now()->format('Ymd-Hi--sv');
+        $uploader = $message['FromUserName'];
+        $image_upload_name = sprintf("%s_%s_%s.jpg", 
+            $current_corporation->corporation_aic_division, 
+            $current_corporation->corporation_name,
+            $upload_timestring);
+
+        // 命名规则:根目录/所代号/日常监管/年月/照片名称
+        $full_key = 'CorpImg/' . $current_corporation->corporation_aic_division . '/日常监管/' . date('Ym'). '/' . $image_upload_name;  
         try {
-            $result = $this->list_objects_with_prefix('广州华伟广告设计有限公司', 'CorpImg/SL/日常监管');
+            $result = $this->upload_image($full_key, $message['PicUrl']);
         } catch (\Exception $e) {
-            return 'first fail';
+            return 'upload fail';
         }
-        return $result;
-        // return $date;
-        // return $return_image;
+
+        $upload_image_link = 'http://aic-1253948304.cosgz.myqcloud.com/'. \urlencode($full_key);
+        CorpPhotos::create([
+            'corporation_name' => $current_corporation->corporation_name,
+            'link' => $upload_image_link,
+            'uploader' => $message['FromUserName']
+        ]);
+        $photos_number = CorpPhotos::where('corporation_name', $current_corporation->corporation_name)->count();
+        Corps::find($history_registration_num)->update(['photos_number' => $photos_number]);
+        return '成功上传照片，当前共有' . $photos_number . '张照片';
     }
 
     public function fetch_corp_info(Corps $corp)
@@ -153,31 +164,32 @@ trait WeChatAutoReplyTraits
         }
     }
 
-    public function upload_image($fileName, $realPath)
+    public function upload_image($full_key, $photo_url)
     {
-        $cosClient = new Qcloud\Cos\Client(array('region' => env('QCLOUD_REGION'),
-            'credentials'=> array(
-                'appId' => env('QCLOUD_APPID'),
-                'secretId'    => env('QCLOUD_SECRETID'),
-                'secretKey' => env('QCLOUD_SECRETKEY'))));
+         // CorpImg/SL/日常监管/广州华伟广告设计有限公司/SL-1_2018-06-12.jpg 
+        
+        $headers = get_headers($photo_url, true);
+        $content_length = $headers['Content-Length'];
+
         try {
-            $result = $cosClient->putObject(array(
-                'Bucket' => env('QCLOUD_BUCKET'),
-                'Key' =>  $fileName,
-                'Body' => fopen($realPath, 'rb'),
+            $result = $this->cos_client->putObject(array(
+                'Bucket' => config('qcloud.bucket'),
+                'Key' =>  $full_key,
+                'Body' => fopen($photo_url, 'rb'),
+                'ContentType' => 'image/jpeg', 
+                'ContentLength' => $content_length,
                 'ServerSideEncryption' => 'AES256'));
         } catch (\Exception $e) {
-            echo "$e\n";
-            echo '</br> 失败';
+             return 'fail';
         }
-        unset($cosClient);
+        return 'success';
     }
 
     public function list_objects_with_prefix($corp_name, $prefix='CorpImg/SL/日常监管')
     {
         try {
             $result = $this->cos_client->listObjects(array(
-                'Bucket' => 'aic-1253948304',
+                'Bucket' => config('qcloud.bucket'),
                 'Prefix' => $prefix . "/" . $corp_name,
             ));
         } catch (\Exception $e) {
