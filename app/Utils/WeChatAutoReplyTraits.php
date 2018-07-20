@@ -74,7 +74,8 @@ trait WeChatAutoReplyTraits
             return 'upload fail';
         }
 
-        $upload_image_link = 'http://aic-1253948304.cosgz.myqcloud.com/'. \urlencode($full_key);
+        $upload_image_link = 'https://aic-1253948304.cosgz.myqcloud.com/'. $full_key;
+        // TODO 转用LARAVEL 一对多的关系
         CorpPhotos::create([
             'corporation_name' => $current_corporation->corporation_name,
             'link' => $upload_image_link,
@@ -185,15 +186,14 @@ trait WeChatAutoReplyTraits
 
     public function upload_image($full_key, $photo_url)
     {
-         // CorpImg/SL/日常监管/广州华伟广告设计有限公司/SL-1_2018-06-12.jpg 
-        
+        // 要求提供content length的HTTP HEADER        
         $headers = get_headers($photo_url, true);
         $content_length = $headers['Content-Length'];
 
         try {
             $result = $this->cos_client->putObject(array(
                 'Bucket' => config('qcloud.bucket'),
-                'Key' =>  $full_key,
+                'Key' =>  $full_key, // CorpImg/SL/日常监管/广州华伟广告设计有限公司/SL-1_2018-06-12.jpg 
                 'Body' => fopen($photo_url, 'rb'),
                 'ContentType' => 'image/jpeg', 
                 'ContentLength' => $content_length,

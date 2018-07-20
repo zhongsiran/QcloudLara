@@ -17,3 +17,5 @@ Route::get('/', function () {
 
 Route::any('/wechat', 'WeChatController@serve');
 Route::get('/costest', 'CostestController@list');
+Route::get('/corp_photos/{corporation_name}/user/{user_openid}', 'CorpPhotoController@show')->name('show_photos');
+Route::delete('/corp_photos/{id}', 'CorpPhotoController@destroy')->name('delete_photo');

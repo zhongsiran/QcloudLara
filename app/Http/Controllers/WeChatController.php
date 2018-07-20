@@ -126,8 +126,8 @@ class WeChatController extends Controller
     	switch (true) {
 
             // 收到“进入”之后回复链接页面
-            case (strstr($keyword,'进入')):
-            $title = '微信监管平台' . session()->getId();
+            case (strstr($keyword,'进入|jr')):
+            $title = '微信监管平台';
             $url = 'https://hdscjg.applinzi.com/mylib/H5controllers/shilingaic_openid.php';
             $image = 'http://sinacloud.net/aicbucket/babb0823bf2de393cbb694b1c7a71964.jpg';
 
@@ -148,7 +148,7 @@ class WeChatController extends Controller
              * 回复当前操作中的业户
              * 从histories表中取注册号，再到Corps表中查企业名称
              */
-            case (strstr($keyword,'当前')):
+            case (strstr($keyword,'当前') or strstr($keyword,'dq')):
             try {
                 $history = ManHistory::findOrFail($message['FromUserName']);
                 $history_registration_num = $history->current_manipulating_corporation;
@@ -169,7 +169,7 @@ class WeChatController extends Controller
              * 从histories表中取注册号，再到Corps表中取出详情$corp_to_be_search
              * 然后用fetch_corp_info()格式化返回详情信息
              */
-            case($keyword== "查询"):
+            case($keyword == "查询" or $keyword == 'cx'):
             try {
                 $history = ManHistory::findOrFail($message['FromUserName']);
                 $history_registration_num = $history->current_manipulating_corporation;
@@ -209,8 +209,30 @@ class WeChatController extends Controller
             return $this->fetch_corp_info($corp_to_be_search);
 
             // TODO 回复现场照片页面
-            case(preg_match('/^现场*/',$keyword)):
-            return sprintf('查看 %s 的现场照片（如有）', $keyword);
+            case(preg_match('/^现场|xc/',$keyword)):
+            try {
+                $history = ManHistory::findOrFail($message['FromUserName']);
+                $history_registration_num = $history->current_manipulating_corporation;
+                $corp_to_be_search = Corps::where('registration_num', (string)$history_registration_num)->firstOrFail();
+            } catch (ModelNotFoundException $e) {
+                return '查询当前操作用户失败';
+                break;
+            }
+
+            $title = '企业信息与现场照片';
+            $url = route('show_photos', ['corporation_name' => $corp_to_be_search->corporation_name, 'user_openid' => $message['FromUserName']]);
+            $image = 'http://sinacloud.net/aicbucket/babb0823bf2de393cbb694b1c7a71964.jpg';
+
+            $items = [
+                new NewsItem([
+                    'title'       => $title,
+                    'description' => "企业信息与现场照片（如有）",
+                    'url'         => $url,
+                    'image'       => $image,
+                ]),
+            ];
+            $on_spot_photos = new News($items);
+            return $on_spot_photos;
             break;
 
             //回复导航链接
