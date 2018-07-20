@@ -117,10 +117,28 @@ trait WeChatAutoReplyTraits
         );
     }
 
-    public function get_corporation_info_by_name($keyword)
+    public function get_corporation_info_by_keyword($keyword, $type='corp_name')
     {
-        $corps_found = Corps::where('corporation_name', 'like', '%' .$keyword .'%')->take(15)->get();
-        $result_string = '';
+        switch ($type) {
+            case 'corp_name':
+                $column = 'corporation_name';
+                $result_string = sprintf("名称包含'%s'的企业:\n", $keyword);
+                break;
+            case 'address':
+                $column = 'address';
+                $result_string = sprintf("地址包含'%s'的企业:\n", $keyword);
+                break;
+            case 'rep_person':
+                $column = 'represent_person';
+                $result_string = sprintf("法人包含'%s'的企业:\n", $keyword);
+                break;
+            
+            default:
+                $column = 'corporation_name';
+                $result_string = sprintf("名称包含'%s'的企业:\n", $keyword);
+                break;
+        }
+        $corps_found = Corps::where($column, 'like', '%' .$keyword .'%')->take(15)->get();
         $count = 1;
         if ($corps_found->count() > 0) {
             foreach ($corps_found as $corp) {
@@ -128,12 +146,13 @@ trait WeChatAutoReplyTraits
                 $count . ':' .$corp->corporation_name . "\n" . 
                 $corp->registration_num . "\n".
                 str_replace('广州市花都区狮岭镇', '', $corp->address) ."\n".
+                $corp->represent_person . "\n".
                 "------------------------". "\n";
                 $count += 1;
             }
             return $result_string;
         }else{
-            return '无法找到包含“' . $keyword .'”的企业';
+            return '无法找到名称/地址中包含“' . $keyword .'”的企业';
         }
     }
 

@@ -155,7 +155,7 @@ class WeChatController extends Controller
                 $history_corporation_name = Corps::where('registration_num', $history_registration_num)
                 ->first()
                 ->corporation_name;
-                $content= sprintf("目前操作企业为： %s (%s)", $history_corporation_name, $history_registration_num);
+                $content= sprintf("目前操作企业为:\n%s\n%s", $history_corporation_name, $history_registration_num);
                 return $content;
                 break;    
             } catch (ModelNotFoundException $e) {
@@ -225,9 +225,23 @@ class WeChatController extends Controller
             return $this->get_corporation_route_plan($history_registration_num);
             break;
 
+            // 根据法人模糊查询
+            case(preg_match('/^法人*/',$keyword)):
+            $address = preg_replace('/^法人+[ ：:,，]*/', '', $keyword);
+            $result = $this->get_corporation_info_by_keyword($address, 'rep_person');
+            return $result;
+            break;
+
+            // 根据地址模糊查询
+            case(preg_match('/^地址*/',$keyword)):
+            $address = preg_replace('/^地址+[ ：:,，]*/', '', $keyword);
+            $result = $this->get_corporation_info_by_keyword($address, 'address');
+            return $result;
+            break;
+
             // 模糊查询企业字号
             case(preg_match('~[\x{4e00}-\x{9fa5}]+~u', $keyword)):
-            $result = $this->get_corporation_info_by_name($keyword);
+            $result = $this->get_corporation_info_by_keyword($keyword, 'corp_name');
             return $result;
             break;
 
