@@ -74,11 +74,11 @@ trait WeChatAutoReplyTraits
             return 'upload fail';
         }
 
-        $upload_image_link = 'https://aic-1253948304.cosgz.myqcloud.com/'. $full_key;
+        // $upload_image_link = 'https://aic-1253948304.cosgz.myqcloud.com/'. $full_key;
         // TODO 转用LARAVEL 一对多的关系
         CorpPhotos::create([
             'corporation_name' => $current_corporation->corporation_name,
-            'link' => $upload_image_link,
+            'link' => $full_key,
             'uploader' => $message['FromUserName']
         ]);
         $photos_number = CorpPhotos::where('corporation_name', $current_corporation->corporation_name)->count();

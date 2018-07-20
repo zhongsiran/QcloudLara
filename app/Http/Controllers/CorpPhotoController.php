@@ -49,12 +49,21 @@ class CorpPhotoController extends Controller
      * @param  \App\CorpPhotos  $corpPhotos
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, CorpPhotos $corpPhotos, Corps $corps, User $user)
+    public function show($corporation_name, $user_openid, Request $request, CorpPhotos $corpPhotos, Corps $corps, User $user, Client $cos_client)
     {
-        $photo_items = $corpPhotos->where('corporation_name', $request->corporation_name)->get();
-        $corp = $corps->where('corporation_name', $request->corporation_name)->first();
+        $photo_items = $corpPhotos->where('corporation_name', $corporation_name)->get();
+        $signed_url_list = array();
+        foreach ($photo_items as $photo_item) {
+            $url = "/{$photo_item->link}";
+            $request = $cos_client->get($url);
+            $signed_url = $cos_client->getObjectUrl(config('qcloud.bucket'), $photo_item->link, '+10 minutes');
+            $signed_url = str_replace('http', 'https', $signed_url);
+            $signed_url_list[$photo_item->id] = $signed_url;
+        }
+
+        $corp = $corps->where('corporation_name', $corporation_name)->first();
         // $request->user;
-        return view('wechat_dialog.show_photos', compact('corp', 'photo_items', 'request'));
+        return view('wechat_dialog.show_photos', compact('corp', 'photo_items', 'request', 'signed_url_list', 'user_openid'));
     }
 
     /**
@@ -96,6 +105,7 @@ class CorpPhotoController extends Controller
             'Bucket' => config('qcloud.bucket'),
             'Key' => $key));
         $corporation_photo->delete();
+        session()->flash('success', '成功删除照片');
         return redirect()->back();
     }
 }
