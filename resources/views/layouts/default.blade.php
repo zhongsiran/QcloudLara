@@ -11,7 +11,7 @@
     <body>
         {{-- @include('layouts._header') --}}
 
-        <div class="container">
+        <div class="container" id="app">
             {{-- <div class="col-md-offset-1 col-md-10"> --}}
             <div class="flex-center position-ref full-height">
                 @include('shared._messages')

@@ -15,6 +15,7 @@ use EasyWeChat\Kernel\Messages\Text;
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
 
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Log;
 
@@ -108,7 +109,9 @@ class WeChatController extends Controller
                 if (isset($message['Content'])) {
                     User::updateOrCreate(
                         ['slaic_openid' => $message['FromUserName']],
-                        ['user_real_name' => $message['Content']]
+                        ['user_real_name' => $message['Content'], 
+                         'password' => Hash::make($message['FromUserName'])
+                        ]
                     );
                 }
                 $current_user_real_name = User::where('slaic_openid', $message['FromUserName'])->first()->user_real_name ?? '无记录';
@@ -126,7 +129,7 @@ class WeChatController extends Controller
     	switch (true) {
 
             // 收到“进入”之后回复链接页面
-            case (strstr($keyword,'进入|jr')):
+            case (strstr($keyword,'进入') or strstr($keyword, 'jr')):
             $title = '微信监管平台';
             $url = 'https://hdscjg.applinzi.com/mylib/H5controllers/shilingaic_openid.php';
             $image = 'http://sinacloud.net/aicbucket/babb0823bf2de393cbb694b1c7a71964.jpg';
@@ -141,6 +144,23 @@ class WeChatController extends Controller
             ];
             $link_to_hd_cloud_aic_h5_website = new News($items);
             return $link_to_hd_cloud_aic_h5_website;
+            break;
+
+            case (strstr($keyword,'新进') or strstr($keyword, 'xj')):
+            $title = '微信监管平台';
+            $url = 'https://www.shilingaic.cn/index.php/platform/login?openid=' .$message['FromUserName'];
+            $image = 'http://sinacloud.net/aicbucket/babb0823bf2de393cbb694b1c7a71964.jpg';
+
+            $items = [
+                new NewsItem([
+                    'title'       => $title,
+                    'description' => "进入网页版监管平台",
+                    'url'         => $url,
+                    'image'       => $image,
+                ]),
+            ];
+            $platform_link = new News($items);
+            return $platform_link;
             break;
 
             /*
@@ -220,7 +240,7 @@ class WeChatController extends Controller
             }
 
             $title = '企业信息与现场照片';
-            $url = route('show_photos', ['corporation_name' => $corp_to_be_search->corporation_name, 'user_openid' => $message['FromUserName']]);
+            $url = route('corp_photos.show', ['corporation_name' => $corp_to_be_search->corporation_name, 'user_openid' => $message['FromUserName']]);
             $image = 'http://sinacloud.net/aicbucket/babb0823bf2de393cbb694b1c7a71964.jpg';
 
             $items = [
