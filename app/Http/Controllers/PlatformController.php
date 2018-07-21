@@ -42,12 +42,28 @@ class PlatformController extends Controller
         if (Auth::check()) {
             return 'still login';
         }else{
-            return 'you have logout';
+            abort(403, '你已经退出登录');
         }
     }
 
     public function home()
     {
         return view('platform.home');
+    }
+
+    public function daily()
+    {
+        return view('platform.daily');
+    }
+
+    public function daily_corp(Request $request)
+    {
+        
+        return dump($request->all());
+    }
+
+    public function special_action()
+    {
+        return view('platform.special_action');
     }
 }

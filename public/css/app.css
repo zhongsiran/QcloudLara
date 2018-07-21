@@ -1,4 +1,6 @@
-@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);/*!
+@charset "UTF-8";
+
+/*!
  * Bootstrap v4.1.2 (https://getbootstrap.com/)
  * Copyright 2011-2018 The Bootstrap Authors
  * Copyright 2011-2018 Twitter, Inc.
@@ -10469,6 +10471,20 @@ a.text-dark:focus {
   }
 }
 
+body,
+button,
+input,
+select,
+textarea,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: Microsoft YaHei,'\5B8B\4F53' , Tahoma, Helvetica, Arial, "\5B8B\4F53", sans-serif;
+}
+
 .navbar-laravel {
   background-color: #fff;
   -webkit-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
@@ -10481,6 +10497,7 @@ a.text-dark:focus {
 html {
   position: relative;
   min-height: 100%;
+  background-color: #fff;
 }
 
 body {
@@ -10494,5 +10511,14 @@ body {
   /* Set the fixed height of the footer here */
   height: 60px;
   background-color: #f5f5f5;
+}
+
+form {
+  margin-top: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 

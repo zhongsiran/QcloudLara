@@ -12,4 +12,7 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
+   .scripts([
+        'resources/assets/js/jweixin-1.2.0.js',
+    ], 'public/js/all.js')
    .sass('resources/assets/sass/app.scss', 'public/css');
