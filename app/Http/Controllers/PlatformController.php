@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Corps;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -57,21 +59,31 @@ class PlatformController extends Controller
         return view('platform.home');
     }
 
+    // 日常监管模块搜索页面
     public function daily()
     {
         return view('platform.daily');
     }
 
 
-    /*
-     *
-     *
+    /**
+     * 日常监管模块搜索企业的逻辑
+     * 
      *
      */
-    public function daily_corp(Request $request)
+    public function daily_corp(Request $request, Corps $corp)
     {
-        
-        // return dump($request->all());  array
+        $result_corps = $corp->where('registration_num', 'like', '%'. $request->registration_num .'%')
+                             ->where('corporation_name', 'like', '%'. $request->corporation_name .'%')
+                             ->where('address', 'like', '%'. $request->address .'%')
+                             ->where('represent_person', 'like', '%'. $request->represent_person .'%')
+                             ->where('corporation_aic_division',  $request->corporation_aic_division)
+                             ->paginate(15);
+                             // ->get();
+        return dump($result_corps);
+
+        // return dump($request->all());
+        // {"_token":"shhAiHZh1C6enTeAHEG2acSAwdJLOKcWg6NiQKxn","corporation_aic_division":"SL","registration_num":"1","corporation_name":"1","address":"1","represent_person":"1"}
 
     }
 
