@@ -24,6 +24,7 @@ Route::prefix('platform')->name('platform.')->group(function () {
     Route::get('/', 'PlatformController@home')->name('home');
     Route::any('login', 'PlatformController@login')->name('login');
     Route::any('logout', 'PlatformController@logout')->name('logout');
+    Route::get('login_by_account', 'PlatformController@login_by_account_page')->name('login_by_account_page');
     Route::post('login_by_account', 'PlatformController@login_by_account')->name('login_by_account');
 
     Route::get('daily', 'PlatformController@daily')->name('daily');

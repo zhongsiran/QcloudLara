@@ -12,10 +12,10 @@
                         @csrf
 
                         <div class="form-group row">
-                            <label for="user_name" class="col-sm-4 col-form-label text-md-right">{{ __('用户名') }}</label>
+                            <label for="user_real_name" class="col-sm-4 col-form-label text-md-right">{{ __('登记的真实姓名') }}</label>
 
                             <div class="col-md-6">
-                                <input id="user_name" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="user_name" value="{{ old('email') }}" required autofocus>
+                                <input id="user_real_name" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="user_real_name" value="{{ old('email') }}" required autofocus>
                             </div>
                         </div>
 

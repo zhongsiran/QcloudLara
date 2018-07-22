@@ -11,7 +11,7 @@ class PlatformController extends Controller
     public function __construct()
     {
         $this->middleware('auth', [
-            'except' => ['login', 'logout']
+            'except' => ['login', 'login_by_account_page', 'login_by_account', 'logout']
         ]);
     }
 
@@ -25,9 +25,14 @@ class PlatformController extends Controller
         }
     }
 
+    public function login_by_account_page()
+    {
+        return view('platform.login_by_account_page');
+    }
+
     public function login_by_account(Request $request)
     {
-        if (Auth::attempt(['user_name' => $request->user_name, 'password' => $request->password, 'active_status' => true])) {
+        if (Auth::attempt(['user_real_name' => $request->user_real_name, 'password' => $request->password, 'active_status' => true])) {
             return redirect()->route('platform.home');
         }else{
             abort(403, '登陆失败，请联系管理员');
@@ -38,11 +43,7 @@ class PlatformController extends Controller
     public function logout()
     {
         Auth::logout();
-        if (Auth::check()) {
-            return 'still login';
-        }else{
-            abort(403, '你已经退出登录');
-        }
+        return redirect()->route('platform.login_by_account_page');
     }
 
     public function home()
