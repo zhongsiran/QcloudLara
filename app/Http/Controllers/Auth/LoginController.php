@@ -26,7 +26,10 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/platform';
+    protected function redirectTo()
+    {
+        return abort(403, '你未登录，请先登录');
+    }
 
     /**
      * Create a new controller instance.

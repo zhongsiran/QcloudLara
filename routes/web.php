@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'StaticPageController@home');
 
 Route::any('/wechat', 'WeChatController@serve');
 

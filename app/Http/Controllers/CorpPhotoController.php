@@ -104,6 +104,7 @@ class CorpPhotoController extends Controller
      */
     public function destroy(CorpPhotos $corpPhotos, Client $cos_client)
     {
+        // 这里的$corp_photos已经由app/Providers/RouteServiceProvider.php里面的model和bind方法进行了参数绑定，因此不需要再进行find
         $key = str_replace('https://aic-1253948304.cosgz.myqcloud.com/', '', $corpPhotos->link);
         $key = urldecode($key);
         $result = $cos_client->deleteObject(array(

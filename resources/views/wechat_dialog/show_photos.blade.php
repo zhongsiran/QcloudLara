@@ -47,14 +47,17 @@
 </table>
 
 @foreach ($photo_items as $photo_item)
-    <form method="POST" action="{{ route('corp_photos.delete', ['id' => $photo_item->id]) }}">
+    <form style="margin:unset;" method="POST" action="{{ route('corp_photos.delete', ['id' => $photo_item->id]) }}">
         <img src="{{ $signed_url_list[$photo_item->id] }}" class="img-fluid border border-secondary rounded " alt="Responsive image" />
         <button type="button" class="btn btn-info">上传时间： {{ $photo_item->updated_at->format('Y-m-d h:i') }}</button>
         @if ($photo_item->uploader == $user_openid)
             {{ csrf_field() }}
             {{method_field('DELETE')}}
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeletePhoto">删除上面的照片</button>
-            <confirm-delete-photo></confirm-delete-photo>
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeletePhoto{{ $photo_item->id }}">删除上面的照片</button>
+            
+            <confirm-delete-photo photo-id="{{ $photo_item->id }}"></confirm-delete-photo>    
+            
+            
         @endif
     </form>
 @endforeach

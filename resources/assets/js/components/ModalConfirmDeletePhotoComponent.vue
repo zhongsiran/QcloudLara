@@ -1,9 +1,9 @@
 <template>
-  <div class="modal fade" id="confirmDeletePhoto" tabindex="-1" role="dialog" aria-labelledby="confirmDeletePhotoTitle" aria-hidden="true">
+  <div class="modal fade" :id="this.confirmDeletePhotoId" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="confirmDeletePhotoTitle">确认</h5>
+          <h5 class="modal-title" :id="this.confirmTitle" >确认</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -21,9 +21,16 @@
 </template>
 
 <script>
-    export default {
-        mounted() {
-            console.log('Component mounted.')
-        },
+export default {
+  props: ['photoId'],
+  data: function () {
+    return {
+      confirmDeletePhotoId: "confirmDeletePhoto" + this.photoId,
+      confirmTitle: "confirmTitle" + this.photoId
     }
+  },
+  mounted() {
+    console.log(this.confirmDeletePhotoId + '|' + this.confirmTitle)
+  },
+};
 </script>

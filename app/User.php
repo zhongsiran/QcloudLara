@@ -26,4 +26,10 @@ class User extends Authenticatable
     protected $hidden = [
         'remember_token', 'password',
     ];
+
+    public function corp_photos()
+    {
+        return $this->hasMany('App\CorpPhotos', 'uploader', 'slaic_openid');
+    }
+
 }
