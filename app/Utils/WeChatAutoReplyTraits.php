@@ -239,4 +239,20 @@ trait WeChatAutoReplyTraits
                 } 
                 ["RequestId"]=> string(40) "NWI0ZjY5ODhfNjBhYTk0MGFfOTkzM181NDEyMw==" } }*/
     }
+
+    public function add_new_inspection_status($registration_num, $keyword)
+    {
+        try {
+            $current_corporation = Corps::findOrFail($registration_num);
+        } catch (ModelNotFoundException $e) {
+            return '在数据库中无法找到当前操作企业，请重新指定要操作的企业。';
+        }
+        $today = \Carbon\Carbon::now()->format('Y-m-d');
+        $old_inspection_status = $current_corporation->inspection_status;
+        $new_inspection_status = $old_inspection_status . ';' . $today. ':'. $keyword;
+        $current_corporation->inspection_status = $new_inspection_status;
+        $current_corporation->save();
+
+        return '当前的备注信息为：'. $current_corporation->inspection_status;
+    }
 }

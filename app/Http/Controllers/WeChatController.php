@@ -267,6 +267,20 @@ class WeChatController extends Controller
             return $this->get_corporation_route_plan($history_registration_num);
             break;
 
+            // 添加备注
+            case(preg_match('/^备注|bz*/',$keyword)):
+            try {
+                $history = ManHistory::findOrFail($message['FromUserName']);
+                $history_registration_num = $history->current_manipulating_corporation;
+            } catch (ModelNotFoundException $e) {
+                return '查询当前操作用户失败';
+                break;
+            }
+            $keyword = preg_replace('/^备注|bz+[ ：:,，]*/', '', $keyword);
+            return $this->add_new_inspection_status($history_registration_num, $keyword);
+            break;
+
+
             // 根据法人模糊查询
             case(preg_match('/^法人*/',$keyword)):
             $address = preg_replace('/^法人+[ ：:,，]*/', '', $keyword);

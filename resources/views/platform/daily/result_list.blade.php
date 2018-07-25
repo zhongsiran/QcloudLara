@@ -2,7 +2,7 @@
 
 @section('navbar_items')
 <li class="nav-item">
-    <a class="nav-link" href="{{ route('platform.daily_search_form') }}">返回搜索</a>
+    <a class="nav-link" href="{{ route('platform.daily_search_form') }}">返回搜索页面</a>
 </li>
 @endsection
 
@@ -15,7 +15,7 @@
     <h6 class="card-subtitle mb-2 text-muted">{{$corp->address}}</h6>
     <p class="card-text">注册号：{{$corp->registration_num}}<br/>法人：{{$corp->represent_person}} <br/></p>
     <a href="{{ route('platform.daily_corp_detail', ['corporation_name' => $corp->corporation_name]) }}" class="card-link">详情</a>
-    <a href="#" class="card-link">导航</a>
+    {{-- <a href="#" class="card-link">导航</a> --}}
   </div>
 </div>
 @endforeach
@@ -28,6 +28,8 @@
 </div>
 @endif
 
-{{$result_corps->links()}}
+<div style="background-color: white">
+    {{$result_corps->links()}}
+</div>
 
 @endsection

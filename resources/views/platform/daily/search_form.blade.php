@@ -9,7 +9,7 @@
 
 @section('navbar_items')
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('platform.home') }}">返回上级</a>
+        <a class="nav-link" href="{{ route('platform.home') }}">返回首页</a>
     </li>
 @endsection
 

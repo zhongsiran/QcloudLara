@@ -2,10 +2,10 @@
 
 @section('navbar_items')
     <li class="nav-item">
-        <a class="nav-link" href="{{ url()->previous() }}">返回搜索结果</a>
+        <a class="nav-link" href="{{ url()->previous() }}">返回结果列表</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('platform.daily_search_form') }}">返回搜索</a>
+        <a class="nav-link" href="{{ route('platform.daily_search_form') }}">返回搜索页面</a>
     </li>
 @endsection
 
@@ -43,6 +43,10 @@
             <td>{{ $corp->phone_call_record }}</td>
         </tr>
         <tr>
+            <th scope="row">核查备注</th>
+            <td>{{ $corp->inspection_status }}</td>
+        </tr>        
+        <tr>
             <th scope="row">现有图片</th>
             <td> 
                 @if (count($photo_items))
@@ -50,6 +54,12 @@
                 @else
                 当前企业未上传照片
             @endif</td>
+        </tr>
+        <tr>
+            <th scope="row">操作</th>
+            <td>
+                
+            </td>
         </tr>
     </tbody>
 </table>
