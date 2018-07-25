@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Corps;
+use App\CorpPhotos;
+
+use Qcloud\Cos\Client;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,9 +63,9 @@ class PlatformController extends Controller
     }
 
     // 日常监管模块搜索页面
-    public function daily()
+    public function daily_search_form()
     {
-        return view('platform.daily');
+        return view('platform.daily.search_form');
     }
 
 
@@ -71,20 +74,38 @@ class PlatformController extends Controller
      * 
      *
      */
-    public function daily_corp(Request $request, Corps $corp)
+    public function daily_fetch_corp(Request $request, Corps $corp)
     {
         $result_corps = $corp->where('registration_num', 'like', '%'. $request->registration_num .'%')
                              ->where('corporation_name', 'like', '%'. $request->corporation_name .'%')
                              ->where('address', 'like', '%'. $request->address .'%')
                              ->where('represent_person', 'like', '%'. $request->represent_person .'%')
                              ->where('corporation_aic_division',  $request->corporation_aic_division)
-                             ->paginate(15);
+                             ->paginate(8);
+        $result_corps->withPath(url()->full());
                              // ->get();
-        return dump($result_corps);
+        return view('platform.daily.result_list', compact('result_corps'));
 
         // return dump($request->all());
         // {"_token":"shhAiHZh1C6enTeAHEG2acSAwdJLOKcWg6NiQKxn","corporation_aic_division":"SL","registration_num":"1","corporation_name":"1","address":"1","represent_person":"1"}
 
+    }
+
+    public function daily_corp_detail($corporation_name, CorpPhotos $corpPhotos, Corps $corps, Client $cos_client)
+    {
+        $user_openid = Auth::user()->slaic_openid;
+        $photo_items = $corpPhotos->where('corporation_name', $corporation_name)->get();
+        $signed_url_list = array();
+        foreach ($photo_items as $photo_item) {
+            $url = "/{$photo_item->link}";
+            $request = $cos_client->get($url);
+            $signed_url = $cos_client->getObjectUrl(config('qcloud.bucket'), $photo_item->link, '+10 minutes');
+            $signed_url = str_replace('http', 'https', $signed_url);
+            $signed_url_list[$photo_item->id] = $signed_url;
+        }
+
+        $corp = $corps->where('corporation_name', $corporation_name)->first();
+        return view('platform.daily.corp_detail', compact('corp', 'photo_items', 'signed_url_list', 'user_openid'));
     }
 
     public function special_action()

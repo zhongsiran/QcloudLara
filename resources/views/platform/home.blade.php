@@ -10,7 +10,7 @@
 <div class="weui-panel weui-panel_access">
     <div class="weui-panel__hd">选择功能模块</div>
     <div class="weui-panel__bd">
-        <a href="{{ route('platform.daily') }}" class="weui-media-box weui-media-box_appmsg">
+        <a href="{{ route('platform.daily_search_form') }}" class="weui-media-box weui-media-box_appmsg">
             <div class="weui-media-box__hd">
                 <img class="weui-media-box__thumb" src="https://sinacloud.net/aicbucket/AICBADGE.jpg" alt="">
             </div>

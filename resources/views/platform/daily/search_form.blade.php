@@ -15,7 +15,7 @@
 
 @section('content')
 
-<form action="{{ route('platform.daily_corp') }}" method="post">
+<form action="{{ route('platform.daily_fetch_corp') }}" method="get">
   @csrf
   <div class="form-group">
     <label for="introduction">说明</label>

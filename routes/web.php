@@ -27,8 +27,10 @@ Route::prefix('platform')->name('platform.')->group(function () {
     Route::get('login_by_account', 'PlatformController@login_by_account_page')->name('login_by_account_page');
     Route::post('login_by_account', 'PlatformController@login_by_account')->name('login_by_account');
 
-    Route::get('daily', 'PlatformController@daily')->name('daily');
-    Route::post('daily/corp', 'PlatformController@daily_corp')->name('daily_corp');
+    Route::get('daily', 'PlatformController@daily_search_form')->name('daily_search_form');
+    Route::get('daily/corps', 'PlatformController@daily_fetch_corp')->name('daily_fetch_corp');
+    Route::get('daily/corps/{corporation_name}', 'PlatformController@daily_corp_detail')->name('daily_corp_detail');
+
     Route::get('special_action', 'PlatformController@special_action')->name('special_action');
 });
 

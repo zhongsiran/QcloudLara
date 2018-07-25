@@ -14,36 +14,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CorpPhotoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -71,29 +41,6 @@ class CorpPhotoController extends Controller
         $corp = $corps->where('corporation_name', $corporation_name)->first();
         // $request->user;
         return view('wechat_dialog.show_photos', compact('corp', 'photo_items', 'request', 'signed_url_list', 'user_openid'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\CorpPhotos  $corpPhotos
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CorpPhotos $corpPhotos)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\CorpPhotos  $corpPhotos
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, CorpPhotos $corpPhotos)
-    {
-        //
     }
 
     /**
