@@ -11,4 +11,9 @@ class Corps extends Model
     public $incrementing  = false;
 
     protected $guarded = [];
+
+    public function special_action()
+    {
+        return $this->belongsTo('App\SpecialAction', 'registration_num', 'registration_num');
+    }
 }
