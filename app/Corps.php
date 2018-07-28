@@ -14,6 +14,6 @@ class Corps extends Model
 
     public function special_action()
     {
-        return $this->belongsTo('App\SpecialAction', 'registration_num', 'registration_num');
+        return $this->hasMany('App\SpecialAction', 'registration_num', 'registration_num');
     }
 }

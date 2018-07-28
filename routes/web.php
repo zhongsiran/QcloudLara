@@ -32,5 +32,7 @@ Route::prefix('platform')->name('platform.')->group(function () {
     Route::get('daily/corps/{corporation_name}', 'PlatformController@daily_corp_detail')->name('daily_corp_detail');
 
     Route::get('special_action', 'PlatformController@special_action')->name('special_action');
+    Route::get('special_action/{sp_num}', 'PlatformController@special_action_detail')->name('special_action_detail');
+    Route::get('special_action/corps/{id}', 'PlatformController@special_action_corp_detail')->name('special_action.corp_detail');
 });
 

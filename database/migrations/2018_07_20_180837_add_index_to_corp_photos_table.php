@@ -27,8 +27,8 @@ class AddIndexToCorpPhotosTable extends Migration
     public function down()
     {
     Schema::table('corp_photos', function (Blueprint $table) {
-        $table->dropIndex('corporation_name');
-        $table->dropIndex('uploader');
+        $table->dropIndex(['corporation_name']);
+        $table->dropIndex(['uploader']);
     });
    }
 }

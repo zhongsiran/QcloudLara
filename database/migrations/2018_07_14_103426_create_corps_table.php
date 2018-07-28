@@ -28,7 +28,7 @@ class CreateCorpsTable extends Migration
             $table->string('latitude')->comment('纬度')->nullable();
             $table->unsignedInteger('photos_number')->default(0);
             $table->boolean('is_active')->default('1');
-            $table->string('corporation_aic_division')->nullable();
+            $table->string('corporation_aic_division');
             $table->timestamps();
 
             $table->primary('registration_num');

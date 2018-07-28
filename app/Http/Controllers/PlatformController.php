@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Corps;
 use App\CorpPhotos;
+use App\SpecialAction;
 
 use Qcloud\Cos\Client;
 
@@ -77,18 +78,13 @@ class PlatformController extends Controller
     public function daily_fetch_corp(Request $request, Corps $corp)
     {
         $result_corps = $corp->where('registration_num', 'like', '%'. $request->registration_num .'%')
-                             ->where('corporation_name', 'like', '%'. $request->corporation_name .'%')
-                             ->where('address', 'like', '%'. $request->address .'%')
-                             ->where('represent_person', 'like', '%'. $request->represent_person .'%')
-                             ->where('corporation_aic_division',  $request->corporation_aic_division)
-                             ->paginate(8);
+        ->where('corporation_name', 'like', '%'. $request->corporation_name .'%')
+        ->where('address', 'like', '%'. $request->address .'%')
+        ->where('represent_person', 'like', '%'. $request->represent_person .'%')
+        ->where('corporation_aic_division',  $request->corporation_aic_division)
+        ->paginate(8);
         $result_corps->withPath(url()->full());
-                             // ->get();
         return view('platform.daily.result_list', compact('result_corps'));
-
-        // return dump($request->all());
-        // {"_token":"shhAiHZh1C6enTeAHEG2acSAwdJLOKcWg6NiQKxn","corporation_aic_division":"SL","registration_num":"1","corporation_name":"1","address":"1","represent_person":"1"}
-
     }
 
     public function daily_corp_detail($corporation_name, CorpPhotos $corpPhotos, Corps $corps, Client $cos_client)
@@ -108,8 +104,47 @@ class PlatformController extends Controller
         return view('platform.daily.corp_detail', compact('corp', 'photo_items', 'signed_url_list', 'user_openid'));
     }
 
-    public function special_action()
+    public function special_action(SpecialAction $special_action)
     {
-        return view('platform.special_action');
+        $special_action_list = $special_action->index();
+        foreach ($special_action_list as $sp_item) {
+            $sp_item->sp_count = $special_action->count($sp_item->sp_num);
+            $sp_item->sp_finish_count = $special_action->finish_count($sp_item->sp_num);
+        }              
+
+        return view('platform.special_action.index', compact('special_action_list'));
     }
+
+    public function special_action_detail($sp_num, SpecialAction $special_action, Corps $corp)
+    {
+        $special_action_corps_list = $special_action->where('sp_num', $sp_num)->orderBy('sp_corp_id')->get();
+
+        foreach ($special_action_corps_list as $sp_item) {
+
+            $corporation_infomation = $special_action->find($sp_item->id)->corp()->first();
+            $sp_item->detail = $corporation_infomation;
+        }
+        return view('platform.special_action.corp_list', compact('special_action_corps_list'));
+    }
+
+    public function special_action_corp_detail($id, SpecialAction $special_action, Corps $corp, CorpPhotos $corpPhotos, Client $cos_client)
+    {
+        $sp_item = $special_action->find($id);
+        $corp = $sp_item->corp()->first();
+
+        $user_openid = Auth::user()->slaic_openid;
+        $photo_items = $corpPhotos->where('corporation_name', $corp->corporation_name)
+                                  ->whereJsonContains('special_actions',  $sp_item->sp_num)  // 根据行动名称过滤
+                                  ->get();
+        $signed_url_list = array();
+        foreach ($photo_items as $photo_item) {
+            $url = "/{$photo_item->link}";
+            $request = $cos_client->get($url);
+            $signed_url = $cos_client->getObjectUrl(config('qcloud.bucket'), $photo_item->link, '+10 minutes');
+            $signed_url = str_replace('http', 'https', $signed_url);
+            $signed_url_list[$photo_item->id] = $signed_url;
+        }
+        return view('platform.special_action.corp_detail', compact('corp', 'sp_item', 'photo_items', 'signed_url_list', 'user_openid'));
+    }
+
 }
