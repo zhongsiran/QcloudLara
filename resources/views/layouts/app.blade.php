@@ -9,7 +9,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', '花都市场监管') </title>
-
+    
+    @yield('head_supplement_before_app_js')
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 
@@ -74,6 +75,8 @@
             {{-- @include('layouts._footer') --}}
         </div>
     </div>
+@include('layouts._footer')
+@yield('footer_supplement')
 </body>
-<script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+{{-- <script src="https://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script> --}}
 </html>

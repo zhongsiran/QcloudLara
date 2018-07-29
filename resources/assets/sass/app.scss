@@ -8,7 +8,7 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
-body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
+body, button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Microsoft YaHei,'宋体' , Tahoma, Helvetica, Arial, "\5b8b\4f53", sans-serif;}
 
 .navbar-laravel {
   background-color: #fff;
@@ -20,7 +20,7 @@ body,button, input, select, textarea,h1 ,h2, h3, h4, h5, h6 { font-family: Micro
 html {
   position: relative;
   min-height: 100%;
-  background-color: #fff;
+  background-color: #ffffff;
 }
 body {
   /* Margin bottom by footer height */
@@ -40,6 +40,16 @@ form {
   margin-left: 20px;
   margin-right: 20px;
   margin-bottom: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  button {
+    margin-top: 2px;
+  }
+}
+
+.form-row, .form-group {
+  a {
+    margin-top: 3px;
+    margin-right: 2px;
+  }
 }

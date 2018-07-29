@@ -15,9 +15,17 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-Vue.component('confirm-delete-photo', require('./components/ModalConfirmDeletePhotoComponent.vue'));
+Vue.component('confirm-delete-photo', require('./components/GeneralModalConfirmDeletePhotoComponent.vue'));
+Vue.component('corp-location-and-photo-upload-button', require('./components/GeneralButtonLocAndPicUpload.vue'));
+Vue.component('special-action-set-done-and-undone-button', require('./components/SpecialActionButtonDoneAndUndone.vue'));
+Vue.component('btn-group-general-corp-details', require('./components/GeneralBtnGroupCorpDetails.vue'));
+Vue.component('general-form-layout-corp-detail', require('./components/GeneralFormLayoutCorpDetail.vue'))
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    data: {
+    // declare message with an empty value
+    // sp_item: window.Backend.sp_item ?? '',
+    // corp: window.Backend.corp ?? ''
+  }
 });

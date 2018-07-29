@@ -55,14 +55,10 @@
                 当前企业未上传照片
             @endif</td>
         </tr>
-        <tr>
-            <th scope="row">操作</th>
-            <td>
-                
-            </td>
-        </tr>
     </tbody>
 </table>
+
+<general-form-layout-corp-detail></general-form-layout-corp-detail>
 
 @foreach ($photo_items as $photo_item)
     <form style="margin:unset;" method="POST" action="{{ route('corp_photos.delete', ['id' => $photo_item->id]) }}">

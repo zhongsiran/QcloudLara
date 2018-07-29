@@ -7,6 +7,8 @@
 </li>
 @endsection
 
+
+
 @section('content')
 <table class="table table-striped">
     <thead>
@@ -36,30 +38,18 @@
             <th scope="row">联络员及电话</th>
             <td>{{ $corp->contact_person }} - {{ $corp->contact_phone }}</td>
         </tr>
-        <tr>
+{{--         <tr>
             <th scope="row">电话记录</th>
             <td>{{ $corp->phone_call_record }}</td>
         </tr>
         <tr>
             <th scope="row">核查备注</th>
             <td>{{ $corp->inspection_status }}</td>
-        </tr>
-        <tr>
-            <th scope="row">操作</th>
-            <td>
-                <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-primary">上传照片</button>
-                  <button type="button" class="btn btn-primary">上传定位</button>
-                  @if ($sp_item->finish_status != 'finished')
-                    <button type="button" class="btn btn-primary">设为完成</button>
-                  @else
-                    <button type="button" class="btn btn-danger">取消完成</button>
-                  @endif
-              </div>
-          </td>
-      </tr>
+        </tr> --}}
   </tbody>
 </table>
+
+    <general-form-layout-corp-detail></general-form-layout-corp-detail>
 
 @foreach ($photo_items as $photo_item)
     <form style="margin:unset;" method="POST" action="{{ route('corp_photos.delete', ['id' => $photo_item->id]) }}">
@@ -71,7 +61,6 @@
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeletePhoto{{ $photo_item->id }}">删除照片</button>
             
             <confirm-delete-photo photo-id="{{ $photo_item->id }}"></confirm-delete-photo>    
-            
             
         @endif
     </form>

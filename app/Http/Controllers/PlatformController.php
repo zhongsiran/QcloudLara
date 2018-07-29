@@ -8,6 +8,8 @@ use App\SpecialAction;
 
 use Qcloud\Cos\Client;
 
+use JavaScript;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -101,6 +103,9 @@ class PlatformController extends Controller
         }
 
         $corp = $corps->where('corporation_name', $corporation_name)->first();
+        JavaScript::put([
+            'corp' => $corp
+        ]);
         return view('platform.daily.corp_detail', compact('corp', 'photo_items', 'signed_url_list', 'user_openid'));
     }
 
@@ -144,7 +149,13 @@ class PlatformController extends Controller
             $signed_url = str_replace('http', 'https', $signed_url);
             $signed_url_list[$photo_item->id] = $signed_url;
         }
-        return view('platform.special_action.corp_detail', compact('corp', 'sp_item', 'photo_items', 'signed_url_list', 'user_openid'));
+        
+        JavaScript::put([
+            'sp_item' => $sp_item,
+            'corp' => $corp
+        ]);
+
+        return View('platform.special_action.corp_detail', compact('corp', 'sp_item', 'photo_items', 'signed_url_list', 'user_openid'));
     }
 
 }
