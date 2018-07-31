@@ -30773,6 +30773,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props: ['sp_item', 'corp'],
@@ -30808,7 +30817,7 @@ var render = function() {
           _c("label", { attrs: { for: "inspection_status" } }, [
             _vm._v("日常备注")
           ]),
-          _vm._v(" "),
+          _vm._v("\n<<<<<<< HEAD\n                "),
           _c("textarea", {
             directives: [
               {
@@ -30830,7 +30839,31 @@ var render = function() {
               }
             }
           }),
-          _vm._v(" "),
+          _vm._v("\n=======\n                "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.inspection_status,
+                expression: "inspection_status"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { id: "inspection_status", rows: "2" },
+            domProps: { value: _vm.inspection_status },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.inspection_status = $event.target.value
+              }
+            }
+          }),
+          _vm._v(
+            "\n>>>>>>> 7405b03535ed8c7bdc2d6bfce4d36dd24b8dff9d\n                "
+          ),
           _c(
             "a",
             { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
@@ -30859,7 +30892,7 @@ var render = function() {
           _c("label", { attrs: { for: "inspection_status" } }, [
             _vm._v("电话记录")
           ]),
-          _vm._v(" "),
+          _vm._v("\n<<<<<<< HEAD\n                "),
           _c("textarea", {
             directives: [
               {
@@ -30881,7 +30914,31 @@ var render = function() {
               }
             }
           }),
-          _vm._v(" "),
+          _vm._v("\n=======\n                "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.phone_call_record,
+                expression: "phone_call_record"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { id: "inspection_status", rows: "2" },
+            domProps: { value: _vm.phone_call_record },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.phone_call_record = $event.target.value
+              }
+            }
+          }),
+          _vm._v(
+            "\n>>>>>>> 7405b03535ed8c7bdc2d6bfce4d36dd24b8dff9d\n                "
+          ),
           _c(
             "a",
             { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
@@ -30897,7 +30954,8 @@ var render = function() {
       ]
     ),
     _vm._v(" "),
-    _vm._m(2)
+    _vm._m(2),
+    _vm._v("\n<<<<<<< HEAD\n    ")
   ])
 }
 var staticRenderFns = [
@@ -30922,7 +30980,11 @@ var staticRenderFns = [
                 role: "button"
               }
             },
-            [_vm._v("\n                    修改核查记录\n                ")]
+            [
+              _vm._v(
+                "\n                        修改核查记录\n                    "
+              )
+            ]
           )
         ]),
         _vm._v(" "),
@@ -30937,7 +30999,11 @@ var staticRenderFns = [
                 role: "button"
               }
             },
-            [_vm._v("\n                    修改电话记录\n                ")]
+            [
+              _vm._v(
+                "\n                        修改电话记录\n                    "
+              )
+            ]
           )
         ])
       ])
