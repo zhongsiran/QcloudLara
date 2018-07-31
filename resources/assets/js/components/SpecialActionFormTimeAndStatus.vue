@@ -1,5 +1,5 @@
 <template>
-    <form class="shadow">
+    <form class="shadow rounded">
         <div class="form-group">
             <div class="form-row  justify-content-center">
                 <label for=""><b>专项行动操作</b></label>

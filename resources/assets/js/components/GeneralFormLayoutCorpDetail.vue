@@ -20,11 +20,7 @@
         <div class="form-group collapse" id="inspection_status_editor">
             <div class="form-row">
                 <label for="inspection_status">日常备注</label>
-<<<<<<< HEAD
                 <textarea class="form-control" v-model="corp.inspection_status" id="inspection_status" rows="2"></textarea>
-=======
-                <textarea class="form-control" v-model="inspection_status" id="inspection_status" rows="2"></textarea>
->>>>>>> 7405b03535ed8c7bdc2d6bfce4d36dd24b8dff9d
                 <a class="btn btn-primary" href="javascript:;">保存备注</a>
                 <a class="btn btn-primary" href="javascript:;">撤销更改</a>
 
@@ -39,11 +35,7 @@
         <div class="form-group collapse" id="phone_call_record_editor">
             <div class="form-row">
                 <label for="inspection_status">电话记录</label>
-<<<<<<< HEAD
                 <textarea class="form-control" v-model="corp.phone_call_record" id="phone_call_record" rows="2"></textarea>
-=======
-                <textarea class="form-control" v-model="phone_call_record" id="inspection_status" rows="2"></textarea>
->>>>>>> 7405b03535ed8c7bdc2d6bfce4d36dd24b8dff9d
                 <a class="btn btn-primary" href="javascript:;">保存记录</a>
                 <a class="btn btn-primary" href="javascript:;">撤销更改</a>
             </div>
@@ -59,7 +51,6 @@
                 <a class="btn btn-block btn-primary" href="javascript:;">进行导航</a>    
             </div>            
         </div>
-<<<<<<< HEAD
     </form>
 </template>
 
@@ -76,7 +67,3 @@ mounted() {
 },
 };
 </script>
-=======
-</form>
-</template>
->>>>>>> 7405b03535ed8c7bdc2d6bfce4d36dd24b8dff9d
