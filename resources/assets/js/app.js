@@ -19,7 +19,8 @@ Vue.component('confirm-delete-photo', require('./components/GeneralModalConfirmD
 Vue.component('corp-location-and-photo-upload-button', require('./components/GeneralButtonLocAndPicUpload.vue'));
 Vue.component('special-action-set-done-and-undone-button', require('./components/SpecialActionButtonDoneAndUndone.vue'));
 Vue.component('btn-group-general-corp-details', require('./components/GeneralBtnGroupCorpDetails.vue'));
-Vue.component('general-form-layout-corp-detail', require('./components/GeneralFormLayoutCorpDetail.vue'))
+Vue.component('general-form-layout-corp-detail', require('./components/GeneralFormLayoutCorpDetail.vue'));
+Vue.component('special-action-form', require('./components/SpecialActionFormTimeAndStatus.vue'));
 
 const app = new Vue({
     el: '#app',

@@ -111,7 +111,8 @@ class PlatformController extends Controller
 
     public function special_action(SpecialAction $special_action)
     {
-        $special_action_list = $special_action->index();
+        $division = Auth::user()->user_aic_division;
+        $special_action_list = $special_action->index($division);
         foreach ($special_action_list as $sp_item) {
             $sp_item->sp_count = $special_action->count($sp_item->sp_num);
             $sp_item->sp_finish_count = $special_action->finish_count($sp_item->sp_num);

@@ -13976,7 +13976,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(13);
-module.exports = __webpack_require__(52);
+module.exports = __webpack_require__(56);
 
 
 /***/ }),
@@ -14005,6 +14005,7 @@ Vue.component('corp-location-and-photo-upload-button', __webpack_require__(41));
 Vue.component('special-action-set-done-and-undone-button', __webpack_require__(44));
 Vue.component('btn-group-general-corp-details', __webpack_require__(47));
 Vue.component('general-form-layout-corp-detail', __webpack_require__(50));
+Vue.component('special-action-form', __webpack_require__(53));
 
 var app = new Vue({
   el: '#app',
@@ -30670,9 +30671,9 @@ if (false) {
 var disposed = false
 var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(51)
 /* template */
-var __vue_template__ = __webpack_require__(51)
+var __vue_template__ = __webpack_require__(52)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -30712,13 +30713,88 @@ module.exports = Component.exports
 
 /***/ }),
 /* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  // props: ['sp_item', 'corp'],
+  data: function data() {
+    return {
+      corp: window.Backend.corp
+    };
+  },
+  mounted: function mounted() {
+    console.log('Done Undone Btn Ok');
+  }
+});
+
+/***/ }),
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", [
+  return _c("form", { staticClass: "shadow rounded" }, [
     _vm._m(0),
     _vm._v(" "),
     _c(
@@ -30733,14 +30809,27 @@ var render = function() {
             _vm._v("日常备注")
           ]),
           _vm._v(" "),
-          _c(
-            "textarea",
-            {
-              staticClass: "form-control",
-              attrs: { id: "inspection_status", rows: "2" }
-            },
-            [_vm._v(_vm._s(_vm.inspection_status))]
-          ),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.corp.inspection_status,
+                expression: "corp.inspection_status"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { id: "inspection_status", rows: "2" },
+            domProps: { value: _vm.corp.inspection_status },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.corp, "inspection_status", $event.target.value)
+              }
+            }
+          }),
           _vm._v(" "),
           _c(
             "a",
@@ -30771,14 +30860,27 @@ var render = function() {
             _vm._v("电话记录")
           ]),
           _vm._v(" "),
-          _c(
-            "textarea",
-            {
-              staticClass: "form-control",
-              attrs: { id: "inspection_status", rows: "2" }
-            },
-            [_vm._v(_vm._s(_vm.inspection_status))]
-          ),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.corp.phone_call_record,
+                expression: "corp.phone_call_record"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { id: "phone_call_record", rows: "2" },
+            domProps: { value: _vm.corp.phone_call_record },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.corp, "phone_call_record", $event.target.value)
+              }
+            }
+          }),
           _vm._v(" "),
           _c(
             "a",
@@ -30804,8 +30906,8 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-group" }, [
-      _c("div", { staticClass: "form-row" }, [
-        _c("label", { attrs: { for: "" } }, [_vm._v("通用操作按键")])
+      _c("div", { staticClass: "form-row justify-content-center" }, [
+        _c("label", { attrs: { for: "" } }, [_c("b", [_vm._v("日常监管操作")])])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "form-row" }, [
@@ -30820,11 +30922,7 @@ var staticRenderFns = [
                 role: "button"
               }
             },
-            [
-              _vm._v(
-                "\n                        修改核查记录\n                    "
-              )
-            ]
+            [_vm._v("\n                    修改核查记录\n                ")]
           )
         ]),
         _vm._v(" "),
@@ -30839,11 +30937,7 @@ var staticRenderFns = [
                 role: "button"
               }
             },
-            [
-              _vm._v(
-                "\n                        修改电话记录\n                    "
-              )
-            ]
+            [_vm._v("\n                    修改电话记录\n                ")]
           )
         ])
       ])
@@ -30923,7 +31017,238 @@ if (false) {
 }
 
 /***/ }),
-/* 52 */
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(54)
+/* template */
+var __vue_template__ = __webpack_require__(55)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/SpecialActionFormTimeAndStatus.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-393934e0", Component.options)
+  } else {
+    hotAPI.reload("data-v-393934e0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  // props: ['sp_item', 'corp'],
+  data: function data() {
+    return {
+      sp_item: window.Backend.sp_item
+    };
+  },
+  mounted: function mounted() {
+    console.log('Done Undone Btn Ok');
+  }
+});
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("form", { staticClass: "shadow" }, [
+    _c("div", { staticClass: "form-group" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-row" }, [
+        _c("label", { attrs: { for: "inspection_status" } }, [
+          _vm._v("专项核查情况")
+        ]),
+        _vm._v(" "),
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.sp_item.inspection_record,
+              expression: "sp_item.inspection_record"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { id: "sp_inspection_record", rows: "2" },
+          domProps: { value: _vm.sp_item.inspection_record },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.sp_item, "inspection_record", $event.target.value)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          [_vm._v("保存备注")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          [_vm._v("撤销更改")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          [_vm._v("录入正常")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          [_vm._v("快速查无")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          [_vm._v("记录新电话")]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "form-group", staticStyle: { "margin-bottom": "0" } },
+      [
+        _c("div", { staticClass: "form-row" }, [
+          _c("label", { attrs: { for: "inspection_status" } }, [
+            _vm._v("专项电话记录")
+          ]),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.sp_item.phone_call_record,
+                expression: "sp_item.phone_call_record"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { id: "sp_phone_call_record", rows: "2" },
+            domProps: { value: _vm.sp_item.phone_call_record },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.sp_item, "phone_call_record", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+            [_vm._v("保存记录")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+            [_vm._v("撤销更改")]
+          )
+        ])
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-row  justify-content-center" }, [
+      _c("label", { attrs: { for: "" } }, [_c("b", [_vm._v("专项行动操作")])])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-393934e0", module.exports)
+  }
+}
+
+/***/ }),
+/* 56 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
