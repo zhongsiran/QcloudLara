@@ -5,6 +5,7 @@ namespace App\Utils;
 use App\Corps;
 use App\UserManipulationHistory as ManHistory;
 use App\CorpPhotos;
+use App\User;
 
 use EasyWeChat\Kernel\Messages\News;
 use EasyWeChat\Kernel\Messages\NewsItem;
@@ -79,7 +80,8 @@ trait WeChatAutoReplyTraits
         CorpPhotos::create([
             'corporation_name' => $current_corporation->corporation_name,
             'link' => $full_key,
-            'uploader' => $message['FromUserName']
+            'uploader' => $message['FromUserName'],
+            'division' => $current_corporation->corporation_aic_division
         ]);
         $photos_number = CorpPhotos::where('corporation_name', $current_corporation->corporation_name)->count();
         Corps::find($history_registration_num)->update(['photos_number' => $photos_number]);
@@ -139,7 +141,7 @@ trait WeChatAutoReplyTraits
                 $result_string = sprintf("名称包含'%s'的企业:\n", $keyword);
                 break;
         }
-        $corps_found = Corps::where($column, 'like', '%' .$keyword .'%')->take(15)->get();
+        $corps_found = Corps::where($column, 'like', '%' .$keyword .'%')->take(10)->get();
         $count = 1;
         if ($corps_found->count() > 0) {
             foreach ($corps_found as $corp) {
