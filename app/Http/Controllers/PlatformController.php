@@ -123,7 +123,11 @@ class PlatformController extends Controller
 
     public function special_action_detail($sp_num, SpecialAction $special_action, Corps $corp)
     {
-        $special_action_corps_list = $special_action->where('sp_num', $sp_num)->orderBy('sp_corp_id')->get();
+        
+        $special_action_corps_list = $special_action->where('sp_num', $sp_num)
+                                                    ->where('sp_aic_division', Auth::user()->user_aic_division)
+                                                    ->orderBy('sp_corp_id')
+                                                    ->get();
 
         foreach ($special_action_corps_list as $sp_item) {
 

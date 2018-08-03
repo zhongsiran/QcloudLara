@@ -129,7 +129,7 @@ trait WeChatScanningTraits
                 $history = ManHistory::findOrFail($message['FromUserName']);
                 $history_registration_num = $history->current_manipulating_corporation;
                 $special_action_item = SpecialAction::where('registration_num', $history_registration_num)
-                ->first();
+                ->firstOrFail();
                 $history_corporation_name = $special_action_item->corp()->corporation_name;
                 $special_action_name = $special_action_item->sp_name;
                 $special_action_num = $special_action_item->sp_num;

@@ -31,7 +31,6 @@ trait WeChatSpecialActionTraits
         $keyword = trim($message['Content']);
         switch (true) {
             // 转换模式
-            //    转换模式
             case(preg_match('/^模式|ms|MS*/',$keyword)):
             $mode = preg_replace('/^模式|ms|MS+[ ：:,，]*/', '', $keyword);
             switch ($mode) {
@@ -40,6 +39,7 @@ trait WeChatSpecialActionTraits
                 $this->current_user->mode = 'daily';
                 try {
                     $this->current_user->save();
+                    ManHistory::clear($message['FromUserName']);
                     return '成功转换为日常监管模式';
                 } catch (\Exception $e) {
                     return '转换模式出错';
@@ -50,6 +50,7 @@ trait WeChatSpecialActionTraits
                 $this->current_user->mode = 'scanning';
                 try {
                     $this->current_user->save();
+                    ManHistory::clear($message['FromUserName']);
                     return '成功转换为扫描模式';
                 } catch (\Exception $e) {
                     return '转换模式出错';
@@ -66,6 +67,7 @@ trait WeChatSpecialActionTraits
                 try {
                     $this->current_user->mode = $mode;
                     $this->current_user->save();
+                    ManHistory::clear($message['FromUserName']);
                     return '成功转换为专项行动模式，当前行动：' . $s->sp_num. ':' . $s->sp_name;
                 } catch (\Exception $e) {
                     return '转换模式出错';
@@ -76,8 +78,7 @@ trait WeChatSpecialActionTraits
 
             // 列出专项行动
             case (strstr($keyword,'专项') or strstr($keyword, 'zx')):
-            $special_action = new SpecialAction;
-            $actions_list = $special_action->index($this->current_user->user_aic_division);
+            $actions_list = SpecialAction::index($this->current_user->user_aic_division);
             $actions_text = '';
             foreach ($actions_list as $action) {
                 $actions_text  .= sprintf("行动序号：%s -- 行动名称：%s\n", $action->sp_num, $action->sp_name);
@@ -129,22 +130,24 @@ trait WeChatSpecialActionTraits
             try {
                 $history = ManHistory::findOrFail($message['FromUserName']);
                 $history_registration_num = $history->current_manipulating_corporation;
-                $special_action_item = SpecialAction::where('registration_num', $history_registration_num)
-                ->first();
-                $history_corporation_name = $special_action_item->corp()->corporation_name;
+                $special_action_item = SpecialAction::sp_item($this->current_user->mode, (string)$history_registration_num);
+                $history_corporation_name = $special_action_item->corp()->firstOrFail()->corporation_name;
                 $special_action_name = $special_action_item->sp_name;
                 $special_action_num = $special_action_item->sp_num;
                 $special_action_corp_id = $special_action_item->sp_corp_id;
                 $content= sprintf("目前操作企业为:\n代号为%s的”%s“行动的第%s号企业：\n%s\n%s", 
-                                    $special_action_num, 
-                                    $special_action_name, 
-                                    $special_action_corp_id, 
-                                    $history_corporation_name, 
-                                    $history_registration_num);
+                    $special_action_num, 
+                    $special_action_name, 
+                    $special_action_corp_id, 
+                    $history_corporation_name, 
+                    $history_registration_num);
                 return $content;
                 break;    
             } catch (ModelNotFoundException $e) {
-                return '当前无指定操作企业';
+                $division = $this->current_user->user_aic_division;
+                $sp_num = $this->current_user->mode;
+                $sp_name = SpecialAction::sp_name($division, $sp_num);
+                return sprintf("目前的专项行动是:\n代号为%s的”%s“行动，当前无指定操作企业",$sp_num, $sp_name);
                 break;
             }
 
@@ -158,24 +161,25 @@ trait WeChatSpecialActionTraits
             try {
                 $history = ManHistory::findOrFail($message['FromUserName']);
                 $history_registration_num = $history->current_manipulating_corporation;
-                $corp_to_be_search = Corps::where('registration_num', (string)$history_registration_num)->firstOrFail();
+                $sp_item = SpecialAction::sp_item($this->current_user->mode, (string)
+                    $history_registration_num);
+                $corp_item = $sp_item->corp()->firstOrFail();
             } catch (ModelNotFoundException $e) {
                 return '查询当前操作用户失败';
                 break;
             }
-            return $this->fetch_corp_info($corp_to_be_search);
+            return $this->print_sp_item_info($corp_item, $sp_item);
             break;
 
             /*
-            以下处理44开头的注册号，或者指定关键词开头的代号
-            第一个TRY尝试确定是否能在CORPS表中找到企业记录，如果找不到，即产生ModelNotFoundException，catch本异常后直接返回信息；
-            第地个TRY尝试在UserManipulationHistories表中进行记录，以便进行上下文对话。
-            注意：UserManipulationHistories表为复数名称，对应单数名称的UserManipulationHistory的Model类。
+            以下处理纯数字的内容，视为企业序号
             */
-            case(strstr($keyword,"44") AND strlen($keyword)>="6" OR preg_match('/^内资*/',$keyword) OR preg_match('/^独资*/',$keyword)):
-
+            case(is_numeric($keyword)):
+            // return $keyword;
+            // break;
             try {
-                $corp_to_be_search = Corps::where('registration_num', (string)$keyword)->firstOrFail();
+                $sp_item_by_id = SpecialAction::sp_item_by_id($this->division, $this->current_user->mode, $keyword);
+                $corp = $sp_item_by_id->corp()->firstOrFail();
             } catch (ModelNotFoundException $e) {
                 return sprintf('无法找到代号为 %s 的业户', $keyword);
                 break;
@@ -185,14 +189,14 @@ trait WeChatSpecialActionTraits
                     'id' => $message['FromUserName']
                 ]);
                 $current_user->previous_manipulated_corporation = $current_user->current_manipulating_corporation ?? '';
-                $current_user->current_manipulating_corporation = $keyword;
+                $current_user->current_manipulating_corporation = $sp_item_by_id->registration_num;
                 $current_user->save();
             } catch (\Exception $e) {
                 return '保存到ManHistories时出错';
                 break;    
             }
-
-            return $this->fetch_corp_info($corp_to_be_search);
+            return $this->print_sp_item_info($corp, $sp_item_by_id);
+            break;
 
             // TODO 回复现场照片页面
             case(preg_match('/^现场|xc/',$keyword)):
@@ -222,7 +226,7 @@ trait WeChatSpecialActionTraits
             break;
 
             //回复导航链接
-            case(preg_match('/^导航*/',$keyword)):
+            case(preg_match('/^导航|dh|DH*/',$keyword)):
             try {
                 $history = ManHistory::findOrFail($message['FromUserName']);
                 $history_registration_num = $history->current_manipulating_corporation;
@@ -234,7 +238,7 @@ trait WeChatSpecialActionTraits
             break;
 
             // 添加备注
-            case(preg_match('/^备注|bz*/',$keyword)):
+            case(preg_match('/^查无|cw*/',$keyword)):
             try {
                 $history = ManHistory::findOrFail($message['FromUserName']);
                 $history_registration_num = $history->current_manipulating_corporation;
@@ -242,10 +246,18 @@ trait WeChatSpecialActionTraits
                 return '查询当前操作用户失败';
                 break;
             }
-            $keyword = preg_replace('/^备注|bz+[ ：:,，]*/', '', $keyword);
-            return $this->add_new_inspection_status($history_registration_num, $keyword);
-            break;
+            $sp_item = SpecialAction::sp_item($this->current_user->mode, (string)$history_registration_num);
+            $corp = $sp_item->corp()->firstOrFail();
+            $start_inspect_time = \Carbon\Carbon::now()->subMinute(15)->format('Y年m月d日H时i分');
+            $end_inspect_time = \Carbon\Carbon::now()->addMinute(15)->format('Y年m月d日H时i分');
+            $call_time = \Carbon\Carbon::now()->format('Y年m月d日H时i分');
 
+            $sp_item->inspection_record = sprintf("执法人员在%s未发现当事人的经营迹象。当事人通过登记地址无法联系。", $corp->address);
+            $sp_item->start_inspect_time = $start_inspect_time;
+            $sp_item->end_inspect_time = $end_inspect_time;
+            $sp_item->save();
+            return sprintf("核查开始时间：%s\n核查结束时间：%s\n当前核查记录：%s", $sp_item->start_inspect_time, $sp_item->end_inspect_time, $sp_item->inspection_record);
+            break;
 
             // 根据法人模糊查询
             case(preg_match('/^法人*/',$keyword)):
@@ -323,22 +335,22 @@ trait WeChatSpecialActionTraits
     {
         switch ($type) {
             case 'corp_name':
-                $column = 'corporation_name';
-                $result_string = sprintf("名称包含'%s'的企业:\n", $keyword);
-                break;
+            $column = 'corporation_name';
+            $result_string = sprintf("名称包含'%s'的企业:\n", $keyword);
+            break;
             case 'address':
-                $column = 'address';
-                $result_string = sprintf("地址包含'%s'的企业:\n", $keyword);
-                break;
+            $column = 'address';
+            $result_string = sprintf("地址包含'%s'的企业:\n", $keyword);
+            break;
             case 'rep_person':
-                $column = 'represent_person';
-                $result_string = sprintf("法人包含'%s'的企业:\n", $keyword);
-                break;
+            $column = 'represent_person';
+            $result_string = sprintf("法人包含'%s'的企业:\n", $keyword);
+            break;
             
             default:
-                $column = 'corporation_name';
-                $result_string = sprintf("名称包含'%s'的企业:\n", $keyword);
-                break;
+            $column = 'corporation_name';
+            $result_string = sprintf("名称包含'%s'的企业:\n", $keyword);
+            break;
         }
         $corps_found = Corps::where($column, 'like', '%' .$keyword .'%')->take(10)->get();
         $count = 1;
@@ -372,5 +384,43 @@ trait WeChatSpecialActionTraits
         $current_corporation->save();
 
         return '当前的备注信息为：'. $current_corporation->inspection_status;
+    }
+
+    public function print_sp_item_info(Corps $corp, SpecialAction $sp_item)
+    {
+        //用sprintf会保留换行和空格，为了代码易读，在书写时保持缩进，用str_replace将空格删除。不需要\n换行
+        $corp_info_template = str_replace(' ','','
+            %s
+            %s
+            所属专项行动：%s
+            行动内序号：%s
+            地址：%s
+            法人：%s
+            电话：%s
+            联络员：%s
+            联络员电话：%s
+            日常核查记录：%s
+            电话联系记录：%s
+            专项核查记录：%s
+            专项电话记录：%s
+            图片数：%s
+            ====================');
+        return sprintf($corp_info_template,  // 模板
+                //数据
+            $corp->registration_num, 
+            $corp->corporation_name,
+            $sp_item->sp_name,
+            $sp_item->sp_corp_id,
+            $corp->address,
+            $corp->represent_person,
+            $corp->phone,
+            $corp->contact_person,
+            $corp->contact_phone,
+            $corp->inspection_status,
+            $corp->phone_call_record,
+            $sp_item->inspection_record,
+            $sp_item->phone_call_record,
+            $corp->photos_number
+        );
     }
 }
