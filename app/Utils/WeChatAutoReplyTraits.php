@@ -72,6 +72,18 @@ trait WeChatAutoReplyTraits
                 break;
             }
             break;
+
+            // 列出专项行动
+            case (strstr($keyword,'专项') or strstr($keyword, 'zx')):
+            $special_action = new SpecialAction;
+            $actions_list = $special_action->index($this->current_user->user_aic_division);
+            $actions_text = '';
+            foreach ($actions_list as $action) {
+                $actions_text  .= sprintf("行动序号：%s -- 行动名称：%s\n", $action->sp_num, $action->sp_name);
+            }
+            return $actions_text;
+            break;
+
              // 收到“进入”之后回复链接页面
             case (strstr($keyword,'进入') or strstr($keyword, 'jr')):
             $title = '微信监管平台';
