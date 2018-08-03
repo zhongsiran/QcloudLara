@@ -52,7 +52,7 @@
     <label for="represent_person">负责人（可选）</label>
     <input name="represent_person" type="text" class="form-control" id="represent_person" placeholder="">
 </div>
-<button type="submit" class="btn btn-primary">开始搜索</button>
+    <button type="submit" class="btn btn-block btn-primary">开始搜索</button>
 </form>
 
 @endsection

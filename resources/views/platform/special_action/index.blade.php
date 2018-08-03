@@ -14,7 +14,7 @@
     <h5 class="card-title">{{$special_action->sp_name}}</h5>
     <h6 class="card-subtitle mb-2 text-muted">行动代号：{{$special_action->sp_num}}</h6>
     <p class="card-text">任务数量：{{$special_action->sp_count}}<br/>完成数量：{{$special_action->sp_finish_count}}</p>
-    <a href="{{ route('platform.special_action_detail', ['sp_num' => $special_action->sp_num]) }}" class="card-link">进入行动</a>
+    <a href="{{ route('platform.special_action_detail', ['sp_num' => $special_action->sp_num]) }}" class="btn btn-primary">进入行动</a>
     {{-- <a href="#" class="card-link">导航</a> --}}
   </div>
 </div>
@@ -23,7 +23,7 @@
 <div class="card">
   <div class="card-body">
     <h5 class="card-title">目前没有专项行动</h5>
-    <a href="{{ route('platform.home') }}" class="card-link">返回首页</a>
+    <a href="{{ route('platform.home') }}" class="btn btn-primary">返回首页</a>
   </div>
 </div>
 @endif

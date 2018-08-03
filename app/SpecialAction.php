@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class SpecialAction extends Model
 {
-    public function index()
+    public function index($user_aic_division = '')
     {
-        return $this->select('sp_num', 'sp_name', 'created_at')->distinct()->orderBy('created_at', 'Desc')->get();
+        return $this->select('sp_num', 'sp_name', 'created_at')
+                    ->where('sp_aic_division', 'like', '%' . $user_aic_division . '%')
+                    ->distinct()->orderBy('created_at', 'Desc')->get();
     }
 
     public function count($sp_num)

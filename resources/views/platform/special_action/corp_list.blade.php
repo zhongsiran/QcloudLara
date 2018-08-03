@@ -13,18 +13,18 @@
 @foreach ($special_action_corps_list as $corp)
 <div 
   @if ($corp->finish_status == 'finished')
-    class="card text-white bg-success"
+    class="card text-white bg-info"
   @else
     class="card"
   @endif
 >
   <div id="{{$corp->sp_corp_id}}" class="card-body">
-    <h5 class="card-title">{{$corp->detail->corporation_name}}</h5>
+    <h5 class="card-title">{{$corp->detail->corporation_name}} {{$corp->finish_status}}</h5>
     <h6 class="card-subtitle mb-2">序号：{{$corp->sp_corp_id}}</h6>
     <p class="card-text">注册号：{{$corp->detail->registration_num}} <br/>
                          地址：{{$corp->detail->address}}<br/>
                          电话：{{$corp->detail->phone}}</p>
-    <a href="{{ route('platform.special_action.corp_detail', ['id' => $corp->id]) }}" class="card-link">详情</a>
+    <a href="{{ route('platform.special_action.corp_detail', ['id' => $corp->id]) }}" class="btn btn-info">详情</a>
     {{-- <a href="#" class="card-link">导航</a> --}}
   </div>
 </div>

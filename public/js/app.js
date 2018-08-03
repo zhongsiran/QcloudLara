@@ -70,7 +70,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(5);
+var bind = __webpack_require__(6);
 var isBuffer = __webpack_require__(18);
 
 /*global toString:true*/
@@ -377,6 +377,115 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports) {
 
+/* globals __VUE_SSR_CONTEXT__ */
+
+// IMPORTANT: Do NOT use ES2015 features in this file.
+// This module is a runtime utility for cleaner component module output and will
+// be included in the final webpack user bundle.
+
+module.exports = function normalizeComponent (
+  rawScriptExports,
+  compiledTemplate,
+  functionalTemplate,
+  injectStyles,
+  scopeId,
+  moduleIdentifier /* server only */
+) {
+  var esModule
+  var scriptExports = rawScriptExports = rawScriptExports || {}
+
+  // ES6 modules interop
+  var type = typeof rawScriptExports.default
+  if (type === 'object' || type === 'function') {
+    esModule = rawScriptExports
+    scriptExports = rawScriptExports.default
+  }
+
+  // Vue.extend constructor export interop
+  var options = typeof scriptExports === 'function'
+    ? scriptExports.options
+    : scriptExports
+
+  // render functions
+  if (compiledTemplate) {
+    options.render = compiledTemplate.render
+    options.staticRenderFns = compiledTemplate.staticRenderFns
+    options._compiled = true
+  }
+
+  // functional template
+  if (functionalTemplate) {
+    options.functional = true
+  }
+
+  // scopedId
+  if (scopeId) {
+    options._scopeId = scopeId
+  }
+
+  var hook
+  if (moduleIdentifier) { // server build
+    hook = function (context) {
+      // 2.3 injection
+      context =
+        context || // cached call
+        (this.$vnode && this.$vnode.ssrContext) || // stateful
+        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      // 2.2 with runInNewContext: true
+      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
+        context = __VUE_SSR_CONTEXT__
+      }
+      // inject component styles
+      if (injectStyles) {
+        injectStyles.call(this, context)
+      }
+      // register component module identifier for async chunk inferrence
+      if (context && context._registeredComponents) {
+        context._registeredComponents.add(moduleIdentifier)
+      }
+    }
+    // used by ssr in case component is cached and beforeCreate
+    // never gets called
+    options._ssrRegister = hook
+  } else if (injectStyles) {
+    hook = injectStyles
+  }
+
+  if (hook) {
+    var functional = options.functional
+    var existing = functional
+      ? options.render
+      : options.beforeCreate
+
+    if (!functional) {
+      // inject component registration as beforeCreate hook
+      options.beforeCreate = existing
+        ? [].concat(existing, hook)
+        : [hook]
+    } else {
+      // for template-only hot-reload because in that case the render fn doesn't
+      // go through the normalizer
+      options._injectStyles = hook
+      // register for functioal component in vue file
+      options.render = function renderWithStyleInjection (h, context) {
+        hook.call(context)
+        return existing(h, context)
+      }
+    }
+  }
+
+  return {
+    esModule: esModule,
+    exports: scriptExports,
+    options: options
+  }
+}
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
 var g;
 
 // This works in non-strict mode
@@ -401,7 +510,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -424,10 +533,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(7);
+    adapter = __webpack_require__(8);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(7);
+    adapter = __webpack_require__(8);
   }
   return adapter;
 }
@@ -502,10 +611,10 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3031,10 +3140,10 @@ Popper.Defaults = Defaults;
 /* harmony default export */ __webpack_exports__["default"] = (Popper);
 //# sourceMappingURL=popper.js.map
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -13405,7 +13514,7 @@ return jQuery;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13423,7 +13532,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -13613,7 +13722,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13624,7 +13733,7 @@ var settle = __webpack_require__(21);
 var buildURL = __webpack_require__(23);
 var parseHeaders = __webpack_require__(24);
 var isURLSameOrigin = __webpack_require__(25);
-var createError = __webpack_require__(8);
+var createError = __webpack_require__(9);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(26);
 
 module.exports = function xhrAdapter(config) {
@@ -13800,7 +13909,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13825,7 +13934,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13837,7 +13946,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13863,120 +13972,11 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-/* globals __VUE_SSR_CONTEXT__ */
-
-// IMPORTANT: Do NOT use ES2015 features in this file.
-// This module is a runtime utility for cleaner component module output and will
-// be included in the final webpack user bundle.
-
-module.exports = function normalizeComponent (
-  rawScriptExports,
-  compiledTemplate,
-  functionalTemplate,
-  injectStyles,
-  scopeId,
-  moduleIdentifier /* server only */
-) {
-  var esModule
-  var scriptExports = rawScriptExports = rawScriptExports || {}
-
-  // ES6 modules interop
-  var type = typeof rawScriptExports.default
-  if (type === 'object' || type === 'function') {
-    esModule = rawScriptExports
-    scriptExports = rawScriptExports.default
-  }
-
-  // Vue.extend constructor export interop
-  var options = typeof scriptExports === 'function'
-    ? scriptExports.options
-    : scriptExports
-
-  // render functions
-  if (compiledTemplate) {
-    options.render = compiledTemplate.render
-    options.staticRenderFns = compiledTemplate.staticRenderFns
-    options._compiled = true
-  }
-
-  // functional template
-  if (functionalTemplate) {
-    options.functional = true
-  }
-
-  // scopedId
-  if (scopeId) {
-    options._scopeId = scopeId
-  }
-
-  var hook
-  if (moduleIdentifier) { // server build
-    hook = function (context) {
-      // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
-      // 2.2 with runInNewContext: true
-      if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
-        context = __VUE_SSR_CONTEXT__
-      }
-      // inject component styles
-      if (injectStyles) {
-        injectStyles.call(this, context)
-      }
-      // register component module identifier for async chunk inferrence
-      if (context && context._registeredComponents) {
-        context._registeredComponents.add(moduleIdentifier)
-      }
-    }
-    // used by ssr in case component is cached and beforeCreate
-    // never gets called
-    options._ssrRegister = hook
-  } else if (injectStyles) {
-    hook = injectStyles
-  }
-
-  if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // for template-only hot-reload because in that case the render fn doesn't
-      // go through the normalizer
-      options._injectStyles = hook
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
-  }
-
-  return {
-    esModule: esModule,
-    exports: scriptExports,
-    options: options
-  }
-}
-
-
-/***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(13);
-module.exports = __webpack_require__(44);
+module.exports = __webpack_require__(56);
 
 
 /***/ }),
@@ -14000,11 +14000,12 @@ window.Vue = __webpack_require__(35);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('confirm-delete-photo', __webpack_require__(64));
-Vue.component('corp-location-and-photo-upload-button', __webpack_require__(67));
-Vue.component('special-action-set-done-and-undone-button', __webpack_require__(70));
-Vue.component('btn-group-general-corp-details', __webpack_require__(73));
-Vue.component('general-form-layout-corp-detail', __webpack_require__(76));
+Vue.component('confirm-delete-photo', __webpack_require__(38));
+Vue.component('corp-location-and-photo-upload-button', __webpack_require__(41));
+Vue.component('special-action-set-done-and-undone-button', __webpack_require__(44));
+Vue.component('btn-group-general-corp-details', __webpack_require__(47));
+Vue.component('general-form-layout-corp-detail', __webpack_require__(50));
+Vue.component('special-action-form', __webpack_require__(53));
 
 var app = new Vue({
   el: '#app',
@@ -14021,7 +14022,7 @@ var app = new Vue({
 
 
 // window._ = require('lodash');
-window.Popper = __webpack_require__(3).default;
+window.Popper = __webpack_require__(4).default;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -14030,7 +14031,7 @@ window.Popper = __webpack_require__(3).default;
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(4);
+  window.$ = window.jQuery = __webpack_require__(5);
 
   __webpack_require__(15);
 } catch (e) {}
@@ -14088,7 +14089,7 @@ if (token) {
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(4), __webpack_require__(3)) :
+   true ? factory(exports, __webpack_require__(5), __webpack_require__(4)) :
   typeof define === 'function' && define.amd ? define(['exports', 'jquery', 'popper.js'], factory) :
   (factory((global.bootstrap = {}),global.jQuery,global.Popper));
 }(this, (function (exports,$,Popper) { 'use strict';
@@ -18042,9 +18043,9 @@ module.exports = __webpack_require__(17);
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(5);
+var bind = __webpack_require__(6);
 var Axios = __webpack_require__(19);
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 
 /**
  * Create an instance of Axios
@@ -18077,9 +18078,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(10);
+axios.Cancel = __webpack_require__(11);
 axios.CancelToken = __webpack_require__(33);
-axios.isCancel = __webpack_require__(9);
+axios.isCancel = __webpack_require__(10);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -18127,7 +18128,7 @@ function isSlowBuffer (obj) {
 "use strict";
 
 
-var defaults = __webpack_require__(2);
+var defaults = __webpack_require__(3);
 var utils = __webpack_require__(0);
 var InterceptorManager = __webpack_require__(28);
 var dispatchRequest = __webpack_require__(29);
@@ -18232,7 +18233,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(8);
+var createError = __webpack_require__(9);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -18665,8 +18666,8 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(30);
-var isCancel = __webpack_require__(9);
-var defaults = __webpack_require__(2);
+var isCancel = __webpack_require__(10);
+var defaults = __webpack_require__(3);
 var isAbsoluteURL = __webpack_require__(31);
 var combineURLs = __webpack_require__(32);
 
@@ -18825,7 +18826,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(10);
+var Cancel = __webpack_require__(11);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -29880,7 +29881,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(36).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(36).setImmediate))
 
 /***/ }),
 /* 36 */
@@ -29950,7 +29951,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 37 */
@@ -30143,49 +30144,18 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(6)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(7)))
 
 /***/ }),
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */,
-/* 58 */,
-/* 59 */,
-/* 60 */,
-/* 61 */,
-/* 62 */,
-/* 63 */,
-/* 64 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(11)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(65)
+var __vue_script__ = __webpack_require__(39)
 /* template */
-var __vue_template__ = __webpack_require__(66)
+var __vue_template__ = __webpack_require__(40)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -30224,7 +30194,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 65 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30266,7 +30236,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 66 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -30367,15 +30337,15 @@ if (false) {
 }
 
 /***/ }),
-/* 67 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(11)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(68)
+var __vue_script__ = __webpack_require__(42)
 /* template */
-var __vue_template__ = __webpack_require__(69)
+var __vue_template__ = __webpack_require__(43)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -30414,7 +30384,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 68 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30440,7 +30410,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 69 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -30479,15 +30449,15 @@ if (false) {
 }
 
 /***/ }),
-/* 70 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(11)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(71)
+var __vue_script__ = __webpack_require__(45)
 /* template */
-var __vue_template__ = __webpack_require__(72)
+var __vue_template__ = __webpack_require__(46)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -30526,7 +30496,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 71 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30552,7 +30522,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 72 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -30584,15 +30554,15 @@ if (false) {
 }
 
 /***/ }),
-/* 73 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(11)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = __webpack_require__(74)
+var __vue_script__ = __webpack_require__(48)
 /* template */
-var __vue_template__ = __webpack_require__(75)
+var __vue_template__ = __webpack_require__(49)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -30631,7 +30601,7 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 74 */
+/* 48 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -30660,7 +30630,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 75 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -30695,15 +30665,15 @@ if (false) {
 }
 
 /***/ }),
-/* 76 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(11)
+var normalizeComponent = __webpack_require__(1)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(51)
 /* template */
-var __vue_template__ = __webpack_require__(77)
+var __vue_template__ = __webpack_require__(52)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -30742,104 +30712,237 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 77 */
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  // props: ['sp_item', 'corp'],
+  data: function data() {
+    return {
+      corp: window.Backend.corp
+    };
+  },
+  mounted: function mounted() {
+    console.log('Done Undone Btn Ok');
+  }
+});
+
+/***/ }),
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", [
+  return _c("form", { staticClass: "shadow rounded" }, [
+    _vm._m(0),
+    _vm._v(" "),
     _c(
       "div",
-      { staticClass: "collapse", attrs: { id: "inspection_status_editor" } },
+      {
+        staticClass: "form-group collapse",
+        attrs: { id: "inspection_status_editor" }
+      },
       [
-        _c("div", { staticClass: "form-group" }, [
-          _c("div", { staticClass: "form-row" }, [
-            _c("label", { attrs: { for: "inspection_status" } }, [
-              _vm._v("日常备注")
-            ]),
-            _vm._v(" "),
-            _c(
-              "textarea",
-              {
-                staticClass: "form-control",
-                attrs: { id: "inspection_status", rows: "2" }
-              },
-              [_vm._v(_vm._s(_vm.inspection_status))]
-            ),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "btn btn-primary",
-                attrs: { href: "javascript:;" }
-              },
-              [_vm._v("保存备注")]
-            ),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "btn btn-primary",
-                attrs: { href: "javascript:;" }
-              },
-              [_vm._v("撤销更改")]
-            )
+        _c("div", { staticClass: "form-row" }, [
+          _c("label", { attrs: { for: "inspection_status" } }, [
+            _vm._v("日常备注")
           ]),
           _vm._v(" "),
-          _vm._m(0)
-        ])
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.corp.inspection_status,
+                expression: "corp.inspection_status"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { id: "inspection_status", rows: "2" },
+            domProps: { value: _vm.corp.inspection_status },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.corp, "inspection_status", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+            [_vm._v("保存备注")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+            [_vm._v("撤销更改")]
+          )
+        ]),
+        _vm._v(" "),
+        _vm._m(1)
       ]
     ),
     _vm._v(" "),
     _c(
       "div",
-      { staticClass: "collapse", attrs: { id: "phone_call_record_editor" } },
+      {
+        staticClass: "form-group collapse",
+        attrs: { id: "phone_call_record_editor" }
+      },
       [
-        _c("div", { staticClass: "form-group" }, [
-          _c("div", { staticClass: "form-row" }, [
-            _c("label", { attrs: { for: "inspection_status" } }, [
-              _vm._v("电话记录")
-            ]),
-            _vm._v(" "),
-            _c(
-              "textarea",
+        _c("div", { staticClass: "form-row" }, [
+          _c("label", { attrs: { for: "inspection_status" } }, [
+            _vm._v("电话记录")
+          ]),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
               {
-                staticClass: "form-control",
-                attrs: { id: "inspection_status", rows: "2" }
-              },
-              [_vm._v(_vm._s(_vm.inspection_status))]
-            ),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "btn btn-primary",
-                attrs: { href: "javascript:;" }
-              },
-              [_vm._v("保存记录")]
-            ),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "btn btn-primary",
-                attrs: { href: "javascript:;" }
-              },
-              [_vm._v("撤销更改")]
-            )
-          ])
+                name: "model",
+                rawName: "v-model",
+                value: _vm.corp.phone_call_record,
+                expression: "corp.phone_call_record"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { id: "phone_call_record", rows: "2" },
+            domProps: { value: _vm.corp.phone_call_record },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.corp, "phone_call_record", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+            [_vm._v("保存记录")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+            [_vm._v("撤销更改")]
+          )
         ])
       ]
     ),
-    _vm._v(" "),
-    _vm._m(1),
     _vm._v(" "),
     _vm._m(2)
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("div", { staticClass: "form-row justify-content-center" }, [
+        _c("label", { attrs: { for: "" } }, [_c("b", [_vm._v("日常监管操作")])])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-row" }, [
+        _c("div", { staticClass: "col" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-block btn-primary",
+              attrs: {
+                "data-toggle": "collapse",
+                href: "#inspection_status_editor",
+                role: "button"
+              }
+            },
+            [_vm._v("\n                    修改核查记录\n                ")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-block btn-primary",
+              attrs: {
+                "data-toggle": "collapse",
+                href: "#phone_call_record_editor",
+                role: "button"
+              }
+            },
+            [_vm._v("\n                    修改电话记录\n                ")]
+          )
+        ])
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -30868,61 +30971,14 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("div", { staticClass: "form-row" }, [
-        _c("label", { attrs: { for: "" } }, [_vm._v("通用操作按键")])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-row" }, [
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-primary",
-              attrs: {
-                "data-toggle": "collapse",
-                href: "#inspection_status_editor",
-                role: "button"
-              }
-            },
-            [
-              _vm._v(
-                "\n                        修改核查记录\n                    "
-              )
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-primary",
-              attrs: {
-                "data-toggle": "collapse",
-                href: "#phone_call_record_editor",
-                role: "button"
-              }
-            },
-            [
-              _vm._v(
-                "\n                        修改电话记录\n                    "
-              )
-            ]
-          )
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "form-row" }, [
       _c("div", { staticClass: "col" }, [
         _c(
           "a",
-          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          {
+            staticClass: "btn btn-block btn-primary",
+            attrs: { href: "javascript:;" }
+          },
           [_vm._v("上传定位")]
         )
       ]),
@@ -30930,7 +30986,10 @@ var staticRenderFns = [
       _c("div", { staticClass: "col" }, [
         _c(
           "a",
-          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          {
+            staticClass: "btn btn-block btn-primary",
+            attrs: { href: "javascript:;" }
+          },
           [_vm._v("上传照片")]
         )
       ]),
@@ -30938,7 +30997,10 @@ var staticRenderFns = [
       _c("div", { staticClass: "col" }, [
         _c(
           "a",
-          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          {
+            staticClass: "btn btn-block btn-primary",
+            attrs: { href: "javascript:;" }
+          },
           [_vm._v("进行导航")]
         )
       ])
@@ -30953,6 +31015,243 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-7c250b2c", module.exports)
   }
 }
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(54)
+/* template */
+var __vue_template__ = __webpack_require__(55)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/SpecialActionFormTimeAndStatus.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-393934e0", Component.options)
+  } else {
+    hotAPI.reload("data-v-393934e0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 54 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  // props: ['sp_item', 'corp'],
+  data: function data() {
+    return {
+      sp_item: window.Backend.sp_item
+    };
+  },
+  mounted: function mounted() {
+    console.log('Done Undone Btn Ok');
+  }
+});
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("form", { staticClass: "shadow rounded" }, [
+    _c("div", { staticClass: "form-group" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-row" }, [
+        _c("label", { attrs: { for: "inspection_status" } }, [
+          _vm._v("专项核查情况")
+        ]),
+        _vm._v(" "),
+        _c("textarea", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.sp_item.inspection_record,
+              expression: "sp_item.inspection_record"
+            }
+          ],
+          staticClass: "form-control",
+          attrs: { id: "sp_inspection_record", rows: "2" },
+          domProps: { value: _vm.sp_item.inspection_record },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.sp_item, "inspection_record", $event.target.value)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          [_vm._v("保存备注")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          [_vm._v("撤销更改")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          [_vm._v("录入正常")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          [_vm._v("快速查无")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+          [_vm._v("记录新电话")]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "form-group", staticStyle: { "margin-bottom": "0" } },
+      [
+        _c("div", { staticClass: "form-row" }, [
+          _c("label", { attrs: { for: "inspection_status" } }, [
+            _vm._v("专项电话记录")
+          ]),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.sp_item.phone_call_record,
+                expression: "sp_item.phone_call_record"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { id: "sp_phone_call_record", rows: "2" },
+            domProps: { value: _vm.sp_item.phone_call_record },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.sp_item, "phone_call_record", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+            [_vm._v("保存记录")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+            [_vm._v("撤销更改")]
+          )
+        ])
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-row  justify-content-center" }, [
+      _c("label", { attrs: { for: "" } }, [_c("b", [_vm._v("专项行动操作")])])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-393934e0", module.exports)
+  }
+}
+
+/***/ }),
+/* 56 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

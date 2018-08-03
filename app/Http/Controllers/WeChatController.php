@@ -208,6 +208,7 @@ class WeChatController extends Controller
             注意：UserManipulationHistories表为复数名称，对应单数名称的UserManipulationHistory的Model类。
             */
             case(strstr($keyword,"44") AND strlen($keyword)>="6" OR preg_match('/^内资*/',$keyword) OR preg_match('/^独资*/',$keyword)):
+
             try {
                 $corp_to_be_search = Corps::where('registration_num', (string)$keyword)->firstOrFail();
             } catch (ModelNotFoundException $e) {
@@ -297,6 +298,7 @@ class WeChatController extends Controller
 
             // 模糊查询企业字号
             case(preg_match('~[\x{4e00}-\x{9fa5}]+~u', $keyword)):
+            
             $result = $this->get_corporation_info_by_keyword($keyword, 'corp_name');
             return $result;
             break;
