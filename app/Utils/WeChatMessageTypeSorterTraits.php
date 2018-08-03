@@ -53,7 +53,7 @@ trait WeChatMessageTypeSorterTraits
         switch ($message['MsgType']) {
             case 'text':
             // $result = $this->handle_text_message_scanning($message);
-            $result = 'scanning';
+            return $this->handle_text_message_scanning($message);
             return $result;
             break;
 

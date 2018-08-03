@@ -7,6 +7,8 @@ use App\UserManipulationHistory as ManHistory;
 use App\Corps;
 use App\Utils\WeChatAutoReplyTraits;
 use App\Utils\WeChatMessageTypeSorterTraits;
+use App\Utils\WeChatScanningTraits;
+use App\Utils\WeChatSpecialActionTraits;
 
 use Illuminate\Http\Request;
 use Qcloud\Cos\Client;
@@ -25,6 +27,8 @@ class WeChatController extends Controller
     protected $current_user;
 
     use WeChatAutoReplyTraits;
+    use WeChatScanningTraits;
+    use WeChatSpecialActionTraits;
     use WeChatMessageTypeSorterTraits;
 
     public function __construct(User $user, ManHistory $history, Corps $corps, Client $cos_client)

@@ -30,7 +30,48 @@ trait WeChatSpecialActionTraits
     {
         $keyword = trim($message['Content']);
         switch (true) {
-
+            // 转换模式
+            case(preg_match('/^模式|ms*/',$keyword)):
+            $mode = preg_replace('/^模式|ms+[ ：:,，]*/', '', $keyword);
+            switch ($mode) {
+                // 转成日常模式
+                case '日常':
+                $this->current_user->mode = 'daily';
+                try {
+                    $this->current_user->save();
+                    return '成功转换为日常监管模式';
+                } catch (\Exception $e) {
+                    return '转换模式出错';
+                };
+                break;
+                // 转成扫描模式
+                case '扫描':
+                $this->current_user->mode = 'scanning';
+                try {
+                    $this->current_user->save();
+                    return '成功转换为扫描模式';
+                } catch (\Exception $e) {
+                    return '转换模式出错';
+                };
+                break;
+                // 转成专项行动模式
+                default:
+                try {
+                    $s = SpecialAction::where('sp_num', $mode)->where('sp_aic_division', $this->current_user->user_aic_division)->firstOrFail();
+                } catch (ModelNotFoundException $e) {
+                    return '无此代号的专项行动，请核实。';
+                    break;
+                }
+                try {
+                    $this->current_user->mode = $mode;
+                    $this->current_user->save();
+                    return '成功转换为专项行动模式，当前行动：' . $s->sp_num. ':' . $s->sp_name;
+                } catch (\Exception $e) {
+                    return '转换模式出错';
+                };
+                break;
+            }
+            break;
             // 收到“进入”之后回复链接页面
             case (strstr($keyword,'进入') or strstr($keyword, 'jr')):
             $title = '微信监管平台';
