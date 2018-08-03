@@ -68,7 +68,7 @@ trait WeChatAutoReplyTraits
             $upload_timestring);
 
         // 命名规则:根目录/所代号/日常监管/年月/照片名称
-        $full_key = 'CorpImg/' . $current_corporation->corporation_aic_division . '/日常监管/' . date('Ym'). '/' . $image_upload_name;  
+        $full_key = 'CorpImg/' . $current_corporation->corporation_aic_division . '/日常监管/' . date('Ymd'). '/' . $image_upload_name;  
         try {
             $result = $this->upload_image($full_key, $message['PicUrl']);
         } catch (\Exception $e) {
