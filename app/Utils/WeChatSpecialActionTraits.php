@@ -81,8 +81,9 @@ trait WeChatSpecialActionTraits
             $actions_list = SpecialAction::index($this->current_user->user_aic_division);
             $actions_text = '';
             foreach ($actions_list as $action) {
-                $actions_text  .= sprintf("行动序号：%s -- 行动名称：%s\n", $action->sp_num, $action->sp_name);
+                $actions_text  .= sprintf("行动序号：%s    行动名称：%s\n", $action->sp_num, $action->sp_name);
             }
+            $actions_text = "提示：输入“模式+专项行动序号”切换到对应的专项行动（注意字母大小写）。\n" . $actions_text;
             return $actions_text;
             break;
             
@@ -346,6 +347,11 @@ trait WeChatSpecialActionTraits
             return $this->add_new_inspection_status_special_action($message, $keyword);
             break;
 
+            case (preg_match('/^电联|dl*/', $keyword)):
+            $keyword = preg_replace('/^电联|dl+[ ：:,，]*/', '', $keyword);
+            return $this->add_new_phone_record_special_action($message, $keyword);
+            break;
+
             // 模糊查询企业字号
             case(preg_match('~[\x{4e00}-\x{9fa5}]+~u', $keyword)):
             
@@ -467,6 +473,24 @@ trait WeChatSpecialActionTraits
         $sp_item->end_inspect_time = $sp_item->end_inspect_time ?? $end_inspect_time;
         $sp_item->save();
         return sprintf("核查开始时间：%s\n核查结束时间：%s\n当前核查记录：%s", $sp_item->start_inspect_time, $sp_item->end_inspect_time, $sp_item->inspection_record);
+    }
+
+    public function add_new_phone_record_special_action($message, $keyword)
+    {
+        try {
+            $history = ManHistory::findOrFail($message['FromUserName']);
+            $history_registration_num = $history->current_manipulating_corporation;
+        } catch (ModelNotFoundException $e) {
+            return '查询当前操作用户失败';
+        }
+        $sp_item = SpecialAction::sp_item($this->current_user->mode, (string)$history_registration_num);
+        $corp = $sp_item->corp()->firstOrFail();
+        $old_phone_call_record = $sp_item->phone_call_record;
+        // $call_time = \Carbon\Carbon::now()->format('Y年m月d日H时i分');
+        
+        $sp_item->phone_call_record = sprintf("%s%s", $old_phone_call_record, $keyword);
+        $sp_item->save();
+        return sprintf("最新电话联系记录：%s", $sp_item->phone_call_record);
     }
 
     public function print_sp_item_info(Corps $corp, SpecialAction $sp_item)

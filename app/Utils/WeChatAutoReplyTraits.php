@@ -81,8 +81,9 @@ trait WeChatAutoReplyTraits
             $actions_list = SpecialAction::index($this->current_user->user_aic_division);
             $actions_text = '';
             foreach ($actions_list as $action) {
-                $actions_text  .= sprintf("行动序号：%s -- 行动名称：%s\n", $action->sp_num, $action->sp_name);
+                $actions_text  .= sprintf("行动序号：%s   行动名称：%s\n", $action->sp_num, $action->sp_name);
             }
+            $actions_text = "提示：输入“模式+专项行动序号”切换到对应的专项行动（注意字母大小写）。\n" . $actions_text;
             return $actions_text;
             break;
 
