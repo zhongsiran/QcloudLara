@@ -52,6 +52,7 @@ class WeChatController extends Controller
         $this->current_user = User::firstOrCreate([
             "slaic_openid" => $message['FromUserName'],
         ]);
+        $this->division = $this->current_user->user_aic_division;
         
         if ($this->current_user->active_status === true) {
             return true;

@@ -39,6 +39,7 @@ trait WeChatAutoReplyTraits
                 $this->current_user->mode = 'daily';
                 try {
                     $this->current_user->save();
+                    ManHistory::clear($message['FromUserName']);
                     return '成功转换为日常监管模式';
                 } catch (\Exception $e) {
                     return '转换模式出错';
@@ -49,6 +50,7 @@ trait WeChatAutoReplyTraits
                 $this->current_user->mode = 'scanning';
                 try {
                     $this->current_user->save();
+                    ManHistory::clear($message['FromUserName']);
                     return '成功转换为扫描模式';
                 } catch (\Exception $e) {
                     return '转换模式出错';
@@ -65,6 +67,7 @@ trait WeChatAutoReplyTraits
                 try {
                     $this->current_user->mode = $mode;
                     $this->current_user->save();
+                    ManHistory::clear($message['FromUserName']);
                     return '成功转换为专项行动模式，当前行动：' . $s->sp_num. ':' . $s->sp_name;
                 } catch (\Exception $e) {
                     return '转换模式出错';
@@ -72,6 +75,18 @@ trait WeChatAutoReplyTraits
                 break;
             }
             break;
+
+            // 列出专项行动
+            case (strstr($keyword,'专项') or strstr($keyword, 'zx')):
+            $actions_list = SpecialAction::index($this->current_user->user_aic_division);
+            $actions_text = '';
+            foreach ($actions_list as $action) {
+                $actions_text  .= sprintf("行动序号：%s   行动名称：%s\n", $action->sp_num, $action->sp_name);
+            }
+            $actions_text = "提示：输入“模式+专项行动序号”切换到对应的专项行动（注意字母大小写）。\n" . $actions_text;
+            return $actions_text;
+            break;
+
              // 收到“进入”之后回复链接页面
             case (strstr($keyword,'进入') or strstr($keyword, 'jr')):
             $title = '微信监管平台';
@@ -117,7 +132,7 @@ trait WeChatAutoReplyTraits
                 $history = ManHistory::findOrFail($message['FromUserName']);
                 $history_registration_num = $history->current_manipulating_corporation;
                 $history_corporation_name = Corps::where('registration_num', $history_registration_num)
-                ->first()
+                ->firstOrFail()
                 ->corporation_name;
                 $content= sprintf("目前操作企业为:\n%s\n%s", $history_corporation_name, $history_registration_num);
                 return $content;

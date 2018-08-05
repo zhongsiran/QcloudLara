@@ -30,7 +30,7 @@ trait WeChatScanningTraits
     {
         $keyword = trim($message['Content']);
         switch (true) {
-            // 转换模式
+            //    转换模式
             case(preg_match('/^模式|ms|MS*/',$keyword)):
             $mode = preg_replace('/^模式|ms|MS+[ ：:,，]*/', '', $keyword);
             switch ($mode) {
@@ -72,6 +72,18 @@ trait WeChatScanningTraits
                 break;
             }
             break;
+
+            // 列出专项行动
+            case (strstr($keyword,'专项') or strstr($keyword, 'zx')):
+            $special_action = new SpecialAction;
+            $actions_list = $special_action->index($this->current_user->user_aic_division);
+            $actions_text = '';
+            foreach ($actions_list as $action) {
+                $actions_text  .= sprintf("行动序号：%s -- 行动名称：%s\n", $action->sp_num, $action->sp_name);
+            }
+            return $actions_text;
+            break;
+            
             // 收到“进入”之后回复链接页面
             case (strstr($keyword,'进入') or strstr($keyword, 'jr')):
             $title = '微信监管平台';
@@ -117,7 +129,7 @@ trait WeChatScanningTraits
                 $history = ManHistory::findOrFail($message['FromUserName']);
                 $history_registration_num = $history->current_manipulating_corporation;
                 $special_action_item = SpecialAction::where('registration_num', $history_registration_num)
-                ->first();
+                ->firstOrFail();
                 $history_corporation_name = $special_action_item->corp()->corporation_name;
                 $special_action_name = $special_action_item->sp_name;
                 $special_action_num = $special_action_item->sp_num;
