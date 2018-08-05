@@ -11,4 +11,9 @@ class StaticPageController extends Controller
     {
         return view('welcome');
     }
+
+    public function jssdk()
+    {
+        return env('WECHAT_JSSDK_VERIFY_CODE');
+    }
 }

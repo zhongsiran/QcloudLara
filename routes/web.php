@@ -13,6 +13,8 @@
 
 Route::get('/', 'StaticPageController@home');
 
+Route::get('/MP_verify_teK9Q4WmLvl6bYyo.txt', 'StaticPageController@jssdk');  // 微信JSSDK可信网页验证
+
 Route::any('/wechat', 'WeChatController@serve');
 
 Route::get('/corp_photos/{corporation_name}/user/{user_openid}', 'CorpPhotoController@show')->name('corp_photos.show');
@@ -34,6 +36,8 @@ Route::prefix('platform')->name('platform.')->group(function () {
     Route::get('special_action', 'PlatformController@special_action')->name('special_action');
     Route::get('special_action/{sp_num}', 'PlatformController@special_action_detail')->name('special_action_detail');
     Route::get('special_action/corps/{id}', 'PlatformController@special_action_corp_detail')->name('special_action.corp_detail');
+
+    Route::post('special_action/corps/{id}/photos', 'PlatformController@special_action_upload_photo')->name('special_action.upload_photo');
 });
 
 Route::prefix('test')->name('test')->group(function () {

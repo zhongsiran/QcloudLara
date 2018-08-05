@@ -29,13 +29,13 @@
 <script>
 export default {
   // props: ['sp_item', 'corp'],
-  data: function () {
+  data: function() {
     return {
-      sp_item: window.Backend.sp_item,
+      sp_item: window.Backend.sp_item
+    };
+  },
+  mounted() {
+    console.log("Done Undone Btn Ok");
   }
-},
-mounted() {
-    console.log('Done Undone Btn Ok')
-},
 };
 </script>

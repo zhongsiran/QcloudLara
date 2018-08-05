@@ -20,6 +20,9 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
+        "async-es": "^2.6.1",
+        "babel": "^6.23.0",
+        "babel-cli": "^6.26.0",
         "cnpm": "^6.0.0"
     }
 }

@@ -159,8 +159,17 @@ class PlatformController extends Controller
             'sp_item' => $sp_item,
             'corp' => $corp
         ]);
-
-        return View('platform.special_action.corp_detail', compact('corp', 'sp_item', 'photo_items', 'signed_url_list', 'user_openid'));
+        
+        $app = app('wechat.official_account');
+        $jssdk_config = $app->jssdk->buildConfig(array('chooseImage', 'uploadImage'));
+        $token = $app->access_token->getToken();
+        return View('platform.special_action.corp_detail', compact('corp', 'sp_item', 'photo_items', 
+        'signed_url_list', 'user_openid', 'jssdk_config', 'token'));
     }
 
+    public function special_action_upload_photo($id, Request $request, SpecialAction $special_action, Corps $corp, CorpPhotos $corpPhotos, Client $cos_client) {
+        $app = app('wechat.official_account');
+        $token = $app->access_token->getToken();
+        return array($request->server_ids[0], $token);
+    }
 }
