@@ -36,3 +36,10 @@ Route::prefix('platform')->name('platform.')->group(function () {
     Route::get('special_action/corps/{id}', 'PlatformController@special_action_corp_detail')->name('special_action.corp_detail');
 });
 
+Route::prefix('test')->name('test')->group(function () {
+    Route::get('/', function () {
+        $app = app('wechat.official_account');
+        return var_dump($app->jssdk->buildConfig(array('chooseImage'), true));
+    });
+});
+

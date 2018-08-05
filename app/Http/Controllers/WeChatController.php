@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use App\UserManipulationHistory as ManHistory;
 use App\Corps;
+
 use App\Utils\WeChatAutoReplyTraits;
 use App\Utils\WeChatMessageTypeSorterTraits;
 use App\Utils\WeChatScanningTraits;
