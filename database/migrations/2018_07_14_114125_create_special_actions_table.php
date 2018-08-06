@@ -17,7 +17,7 @@ class CreateSpecialActionsTable extends Migration
             $table->increments('id');
             $table->string('sp_name')->nullable();
             $table->string('sp_num')->nullable();
-            $table->string('sp_corp_id')->nullable();
+            $table->unsignedInteger('sp_corp_id')->nullable();
             $table->string('corporation_name')->nullable();
             $table->string('registration_num')->index();
             $table->string('predefined_name')->nullable();
