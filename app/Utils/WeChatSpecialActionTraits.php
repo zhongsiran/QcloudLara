@@ -267,7 +267,7 @@ trait WeChatSpecialActionTraits
             break;
 
             // 快速记录虚构信息
-            case(preg_match('/^虚构|cw*/',$keyword)):
+            case(preg_match('/^虚构|xg*/',$keyword)):
             try {
                 $history = ManHistory::findOrFail($message['FromUserName']);
                 $history_registration_num = $history->current_manipulating_corporation;

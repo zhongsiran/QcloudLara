@@ -7871,8 +7871,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props: ['sp_item', 'corp'],
@@ -7887,13 +7885,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   methods: {
-    saveInspectionRecord: function saveInspectionRecord() {
-      //   alert(this.sp_item.inspection_record)
-      var datetime_array = this.getChineseDateArray();
-      this.sp_item.start_inspect_time = datetime_array[0];
-      this.sp_item.end_inspect_time = datetime_array[2];
-
-      // alert(JSON.stringify(this.sp_item));
+    saveSpecialItem: function saveSpecialItem() {
+      axios.put('https://www.shilingaic.cn/index.php/api/special_action/' + this.sp_item.id, this.sp_item).then(function (response) {
+        console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+      });
     },
     getChineseDateArray: function getChineseDateArray() {
       var chn_datetime_now = moment().format("YYYY年M月D日H时m分");
@@ -7908,12 +7905,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.sp_item.inspection_record = '当事人在' + this.corp.address + '正常经营';
     },
     setInspectionNotFound: function setInspectionNotFound() {
-      this.sp_item.inspection_record = '执法人员在' + this.corp.address + '未发现当事人的经营迹象。当事人通过登记地址无法联系。';
+      this.sp_item.inspection_record = '在' + this.corp.address + '未发现当事人的经营迹象。当事人通过登记地址无法联系。';
+    },
+    setInspectionFake: function setInspectionFake() {
+      this.sp_item.inspection_record = '在相关地址附近均无法找到当事人的登记地址' + this.corp.address + '。当事人通过登记地址无法联系。';
     },
     setInspectionTimeShortcut: function setInspectionTimeShortcut() {
       var datetime_array = this.getChineseDateArray();
       this.sp_item.start_inspect_time = datetime_array[0];
       this.sp_item.end_inspect_time = datetime_array[2];
+    },
+    setPhoneNotAvailble: function setPhoneNotAvailble() {
+      var datetime_array = this.getChineseDateArray();
+      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] + '拨打当事人的登记电话，该电话无人接听';
+    },
+    setPhoneNotExist: function setPhoneNotExist() {
+      var datetime_array = this.getChineseDateArray();
+      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] + '拨打当事人的登记电话，该电话为空号';
+    },
+    setPhoneDisable: function setPhoneDisable() {
+      var datetime_array = this.getChineseDateArray();
+      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] + '拨打当事人的登记电话，该电话已经停机';
+    },
+    setPhoneNoConnection: function setPhoneNoConnection() {
+      var datetime_array = this.getChineseDateArray();
+      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] + '拨打当事人的登记电话，该电话接听人员表示与当事人无关系，不清楚当事人的情况';
     }
   }
 });
@@ -61218,8 +61234,6 @@ var render = function() {
     _c("div", { staticClass: "form-group" }, [
       _vm._m(0),
       _vm._v(" "),
-      _vm._m(1),
-      _vm._v(" "),
       _c("div", { staticClass: "form-row" }, [
         _c("label", { attrs: { for: "inspection_status" } }, [
           _vm._v("专项核查情况")
@@ -61252,9 +61266,9 @@ var render = function() {
           {
             staticClass: "btn btn-primary",
             attrs: { href: "javascript:;" },
-            on: { click: _vm.saveInspectionRecord }
+            on: { click: _vm.saveSpecialItem }
           },
-          [_vm._v("保存备注")]
+          [_vm._v("保存")]
         ),
         _vm._v(" "),
         _c(
@@ -61275,6 +61289,16 @@ var render = function() {
             on: { click: _vm.setInspectionNotFound }
           },
           [_vm._v("查无")]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            staticClass: "btn btn-primary",
+            attrs: { href: "javascript:;" },
+            on: { click: _vm.setInspectionFake }
+          },
+          [_vm._v("虚构")]
         )
       ])
     ]),
@@ -61335,14 +61359,12 @@ var render = function() {
         _vm._v(" "),
         _c(
           "a",
-          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
-          [_vm._v("保存开始时间")]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
-          [_vm._v("保存结束时间")]
+          {
+            staticClass: "btn btn-primary",
+            attrs: { href: "javascript:;" },
+            on: { click: _vm.saveSpecialItem }
+          },
+          [_vm._v("保存")]
         ),
         _vm._v(" "),
         _c(
@@ -61352,7 +61374,7 @@ var render = function() {
             attrs: { href: "javascript:;" },
             on: { click: _vm.setInspectionTimeShortcut }
           },
-          [_vm._v("快速设置时间并保存")]
+          [_vm._v("快速设置时间")]
         )
       ])
     ]),
@@ -61390,32 +61412,52 @@ var render = function() {
           _vm._v(" "),
           _c(
             "a",
-            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
-            [_vm._v("保存记录")]
+            {
+              staticClass: "btn btn-primary",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.saveSpecialItem }
+            },
+            [_vm._v("保存")]
           ),
           _vm._v(" "),
           _c(
             "a",
-            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+            {
+              staticClass: "btn btn-primary",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.setPhoneNotAvailble }
+            },
             [_vm._v("无法接通")]
           ),
           _vm._v(" "),
           _c(
             "a",
-            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+            {
+              staticClass: "btn btn-primary",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.setPhoneNotExist }
+            },
             [_vm._v("空号")]
           ),
           _vm._v(" "),
           _c(
             "a",
-            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
+            {
+              staticClass: "btn btn-primary",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.setPhoneDisable }
+            },
             [_vm._v("停机")]
           ),
           _vm._v(" "),
           _c(
             "a",
-            { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
-            [_vm._v("撤销更改")]
+            {
+              staticClass: "btn btn-primary",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.setPhoneNoConnection }
+            },
+            [_vm._v("与之无关")]
           )
         ])
       ]
@@ -61423,18 +61465,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-row  justify-content-center" }, [
-      _c("label", { attrs: { for: "" } }, [
-        _c("b", [
-          _vm._v("提示：开发中，按键未有实际保存作用，请通过公众号对话方式操作")
-        ])
-      ])
-    ])
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement

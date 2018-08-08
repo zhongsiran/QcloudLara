@@ -40,10 +40,4 @@ Route::prefix('platform')->name('platform.')->group(function () {
     Route::post('special_action/corps/{id}/photos', 'PlatformController@special_action_upload_photo')->name('special_action.upload_photo');
 });
 
-Route::prefix('test')->name('test')->group(function () {
-    Route::get('/', function () {
-        $app = app('wechat.official_account');
-        return var_dump($app->jssdk->buildConfig(array('chooseImage'), true));
-    });
-});
 
