@@ -75,7 +75,7 @@
 <script>
     wx.config( {!! $jssdk_config !!} );
     wx.ready(function () {
-        WxChooseAndUploadImages()
+        // WxChooseAndUploadImages()
     });
 
 </script>

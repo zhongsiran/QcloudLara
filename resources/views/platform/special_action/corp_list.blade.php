@@ -37,4 +37,9 @@
   </div>
 </div>
 @endif
+
+<div style="background-color: white">
+  {{$special_action_corps_list->links()}}
+</div>
+
 @endsection

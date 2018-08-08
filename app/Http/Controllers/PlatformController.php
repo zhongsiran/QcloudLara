@@ -127,7 +127,9 @@ class PlatformController extends Controller
         $special_action_corps_list = $special_action->where('sp_num', $sp_num)
                                                     ->where('sp_aic_division', Auth::user()->user_aic_division)
                                                     ->orderBy('sp_corp_id')
-                                                    ->get();
+                                                    // ->get()
+                                                    ->paginate(10);
+        // $special_action_corps_list->withPath(url()->full());                                     
 
         foreach ($special_action_corps_list as $sp_item) {
 
