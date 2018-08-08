@@ -266,6 +266,28 @@ trait WeChatSpecialActionTraits
             return sprintf("核查开始时间：%s\n核查结束时间：%s\n当前核查记录：%s", $sp_item->start_inspect_time, $sp_item->end_inspect_time, $sp_item->inspection_record);
             break;
 
+            // 快速记录虚构信息
+            case(preg_match('/^虚构|cw*/',$keyword)):
+            try {
+                $history = ManHistory::findOrFail($message['FromUserName']);
+                $history_registration_num = $history->current_manipulating_corporation;
+            } catch (ModelNotFoundException $e) {
+                return '查询当前操作用户失败';
+                break;
+            }
+            $sp_item = SpecialAction::sp_item($this->current_user->mode, (string)$history_registration_num);
+            $corp = $sp_item->corp()->firstOrFail();
+            $start_inspect_time = \Carbon\Carbon::now()->subMinute(15)->format('Y年m月d日H时i分');
+            $end_inspect_time = \Carbon\Carbon::now()->addMinute(15)->format('Y年m月d日H时i分');
+            $call_time = \Carbon\Carbon::now()->format('Y年m月d日H时i分');
+
+            $sp_item->inspection_record = sprintf("在相关地址周边无法找到当事人的登记地址%s。当事人通过登记地址无法联系。", $corp->address);
+            $sp_item->start_inspect_time = $start_inspect_time;
+            $sp_item->end_inspect_time = $end_inspect_time;
+            $sp_item->save();
+            return sprintf("核查开始时间：%s\n核查结束时间：%s\n当前核查记录：%s", $sp_item->start_inspect_time, $sp_item->end_inspect_time, $sp_item->inspection_record);
+            break;
+
             // 快速记录正常信息
             case(preg_match('/^正常|zc*/', $keyword)):
             try {
