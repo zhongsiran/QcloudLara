@@ -62,7 +62,9 @@ export default {
   },
   methods: {
     saveSpecialItem: function() {
-        $('.saveStatus').html('<p  class="alert alert-info">保存中</p>')
+      
+      $('.saveStatus').html('<p  class="alert alert-info">保存中</p>')
+      
       axios.put('https://www.shilingaic.cn/index.php/api/special_action/' + this.sp_item.id, this.sp_item)
       .then(function (response){
         $('.saveStatus').html('<p  class="alert alert-success">' + response.data.msg +  '</p>')
