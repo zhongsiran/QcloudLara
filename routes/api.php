@@ -27,4 +27,6 @@ Route::get('photos/{division}/{action_num?}', 'Apis\SpecialActionApiController@f
 
 Route::put('special_action/{id}', 'Apis\SpecialActionApiController@update_special_item');
 
+Route::post('/corps_photos/', 'Apis\SpecialActionApiController@general_upload_photo');
+
 // Route::put('special_action/{id}'), 

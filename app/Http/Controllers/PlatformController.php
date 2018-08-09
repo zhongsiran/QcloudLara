@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+
 class PlatformController extends Controller
 {
     // 登录和退出不需要登录，其他都需要
@@ -106,7 +107,12 @@ class PlatformController extends Controller
         JavaScript::put([
             'corp' => $corp
         ]);
-        return view('platform.daily.corp_detail', compact('corp', 'photo_items', 'signed_url_list', 'user_openid'));
+
+        $app = app('wechat.official_account');
+        $jssdk_config = $app->jssdk->buildConfig(array('chooseImage', 'uploadImage'));
+        $token = $app->access_token->getToken();
+
+        return view('platform.daily.corp_detail', compact('corp', 'photo_items', 'signed_url_list', 'user_openid', 'jssdk_config', 'token'));
     }
 
     public function special_action(SpecialAction $special_action)
@@ -169,9 +175,5 @@ class PlatformController extends Controller
         'signed_url_list', 'user_openid', 'jssdk_config', 'token'));
     }
 
-    public function special_action_upload_photo($id, Request $request, SpecialAction $special_action, Corps $corp, CorpPhotos $corpPhotos, Client $cos_client) {
-        $app = app('wechat.official_account');
-        $token = $app->access_token->getToken();
-        return array($request->server_ids[0], $token);
-    }
+
 }

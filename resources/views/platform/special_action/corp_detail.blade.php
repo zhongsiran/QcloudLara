@@ -54,7 +54,7 @@
 <special-action-form></special-action-form>
 <general-form-layout-corp-detail></general-form-layout-corp-detail>
 
-<img src="" id='upload' />
+<p id='response'>response</p>
 
 @foreach ($photo_items as $photo_item)
 <form style="margin:unset;" method="POST" action="{{ route('corp_photos.delete', ['id' => $photo_item->id]) }}">
@@ -74,6 +74,7 @@
 @section('footer_supplement')
 <script>
     wx.config( {!! $jssdk_config !!} );
+    let user_openid = '{{$user_openid}}';
     wx.ready(function () {
         // WxChooseAndUploadImages()
     });

@@ -9,6 +9,10 @@
     </li>
 @endsection
 
+@section('head_supplement')
+<script src="{{ mix('js/all.js') }}"></script>
+@endsection
+
 @section('content')
 <table class="table table-striped">
     <thead>
@@ -59,7 +63,8 @@
 </table>
 
 <general-form-layout-corp-detail></general-form-layout-corp-detail>
-
+{{--  <p id='response'>response</p>
+<img src="" id='responseimg' />  --}}
 @foreach ($photo_items as $photo_item)
     <form style="margin:unset;" method="POST" action="{{ route('corp_photos.delete', ['id' => $photo_item->id]) }}">
         <img src="{{ $signed_url_list[$photo_item->id] }}" class="img-fluid border border-secondary rounded " alt="Responsive image" />
@@ -76,4 +81,15 @@
     </form>
 @endforeach
 
+@endsection
+
+@section('footer_supplement')
+<script>
+    wx.config( {!! $jssdk_config !!} );
+    let user_openid = '{{$user_openid}}';
+    wx.ready(function () {
+        // WxChooseAndUploadImages()
+    });
+
+</script>
 @endsection

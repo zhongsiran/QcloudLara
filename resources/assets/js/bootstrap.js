@@ -1,6 +1,6 @@
 
-window._ = require('lodash');
-window.Popper = require('popper.js').default;
+// window._ = require('lodash');
+// window.Popper = require('popper.js').default;
 window.async = require('async-es');
 window.moment = require('moment');
 moment.locale('zh_cn');
