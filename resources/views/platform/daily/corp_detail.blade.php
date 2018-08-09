@@ -63,6 +63,9 @@
 </table>
 
 <general-form-layout-corp-detail></general-form-layout-corp-detail>
+<div id='response' class="flash-message">
+
+</div>
 {{--  <p id='response'>response</p>
 <img src="" id='responseimg' />  --}}
 @foreach ($photo_items as $photo_item)

@@ -54,7 +54,9 @@
 <special-action-form></special-action-form>
 <general-form-layout-corp-detail></general-form-layout-corp-detail>
 
-<p id='response'>response</p>
+<div id='response' class="flash-message">
+</div>
+{{--  <p id='response'>response</p>  --}}
 
 @foreach ($photo_items as $photo_item)
 <form style="margin:unset;" method="POST" action="{{ route('corp_photos.delete', ['id' => $photo_item->id]) }}">

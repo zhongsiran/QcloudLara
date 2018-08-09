@@ -59,7 +59,8 @@ export default {
   // props: ['sp_item', 'corp'],
   data: function() {
     return {
-      corp: window.Backend.corp
+      corp: window.Backend.corp,
+      photo_upload_msg: window.photo_upload_msg
     };
   },
   mounted() {
@@ -112,7 +113,7 @@ export default {
                 )
                 .then(function(res) {
                   // $("#responseimg").attr("src", res.data);
-                  $("#response").text(JSON.stringify(res.data));
+                  $("#response").html('<p  class="alert alert-info">' + res.data +  '</p>');
                 });
               // 对应日常监管
             }

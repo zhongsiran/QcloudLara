@@ -25,6 +25,7 @@ Vue.component('special-action-form', require('./components/SpecialActionFormTime
 const app = new Vue({
     el: '#app',
     data: {
+      // photo_upload_msg: window.photo_upload_msg
     // declare message with an empty value
     // sp_item: window.Backend.sp_item ?? '',
     // corp: window.Backend.corp ?? ''

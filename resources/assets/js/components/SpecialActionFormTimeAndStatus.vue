@@ -15,6 +15,8 @@
                 <a class="btn btn-primary" href="javascript:;" @click="setInspectionFake" >虚构</a>
             </div>
         </div>
+        <div class="flash-message saveStatus">
+        </div>
 
         <div class="form-group">
             <div class="form-row">
@@ -25,6 +27,8 @@
                 <a class="btn btn-primary" href="javascript:;" @click="saveSpecialItem">保存</a>
                 <a class="btn btn-primary" href="javascript:;" @click="setInspectionTimeShortcut">快速设置时间</a>
             </div>
+        </div>
+        <div class="flash-message saveStatus">
         </div>
 
         <div class="form-group" style="margin-bottom: 0">
@@ -38,6 +42,8 @@
                 <a class="btn btn-primary" href="javascript:;" @click="setPhoneNoConnection">与之无关</a>
                 <!-- <a class="btn btn-primary" href="javascript:;">撤销更改</a> -->
             </div>
+        </div>
+        <div class="flash-message saveStatus">
         </div>
     </form>
 </template>
@@ -56,9 +62,10 @@ export default {
   },
   methods: {
     saveSpecialItem: function() {
+        $('.saveStatus').html('<p  class="alert alert-info">保存中</p>')
       axios.put('https://www.shilingaic.cn/index.php/api/special_action/' + this.sp_item.id, this.sp_item)
       .then(function (response){
-        console.log(response)
+        $('.saveStatus').html('<p  class="alert alert-success">' + response.data.msg +  '</p>')
       })
       .catch(function (error) {
         console.log(error)
