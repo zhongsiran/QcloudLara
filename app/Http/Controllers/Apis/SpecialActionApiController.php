@@ -63,6 +63,30 @@ class SpecialActionApiController extends Controller
         return $data;
     }
 
+    public function update_corp($registration_num, Request $request)
+    {
+        try {
+            $server_corp = Corps::findOrFail($registration_num);
+        } catch (ModelNotFoundException $e) {
+            $data['msg'] ='保存企業信息失败';
+            return $data;
+        }
+
+        $attribute_list = [
+            "phone_call_record",
+            "inspection_status",
+            "longitude",
+            "latitude"
+        ];
+        // $server_special_item = $request->special_item;
+        foreach ($attribute_list as $attribute) {
+            $server_corp->$attribute = $request->$attribute;
+        }
+        $server_corp->save();
+        $data['msg'] = '成功保存';
+        return $data;
+    }
+
     public function general_upload_photo(Request $request, SpecialAction $special_action, Corps $corp, CorpPhotos $corpPhotos, Client $cos_client) {
         $app = app('wechat.official_account');
         $token = $app->access_token->getToken();

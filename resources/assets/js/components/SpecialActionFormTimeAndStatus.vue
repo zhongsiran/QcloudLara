@@ -43,7 +43,7 @@
                 <!-- <a class="btn btn-primary" href="javascript:;">撤销更改</a> -->
             </div>
         </div>
-        <div class="flash-message saveStatus">
+        <div class="flash-message saveStatus" style="margin-top:10px">
         </div>
     </form>
 </template>

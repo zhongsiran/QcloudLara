@@ -48,8 +48,10 @@
                 <a class="btn btn-block btn-primary" href="javascript:;" @click="uploadPhotosForSpecialAction">上传照片</a>    
             </div>
             <div class="col">
-                <a class="btn btn-block btn-primary" href="javascript:;">进行导航</a>    
+                <a class="btn btn-block btn-primary" href="javascript:;" @click="testCorp">进行导航</a>    
             </div>            
+        </div>
+        <div class="flash-message" id="upload_coordination_alert" style="margin-top:10px;margin-left: 5px;margin-right: 5px;">
         </div>
     </form>
 </template>
@@ -59,15 +61,53 @@ export default {
   // props: ['sp_item', 'corp'],
   data: function() {
     return {
-      corp: window.Backend.corp,
-      photo_upload_msg: window.photo_upload_msg
+      corp: window.Backend.corp
     };
   },
   mounted() {
     console.log("Done Undone Btn Ok");
   },
   methods: {
-    uploadCoordination: function() {},
+    testCorp: function() {
+      alert(JSON.stringify(this.corp));
+    },
+    uploadCoordination: function() {
+      $("#upload_coordination_alert").html(
+        '<p  class="alert alert-info">尝试取得定位</p>'
+      );
+      let corp = this.corp;
+      wx.getLocation({
+        type: "gcj02",
+        success: function(res) {
+          $("#upload_coordination_alert").html(
+            '<p  class="alert alert-info">上传定位中</p>'
+          );
+          corp.latitude = res.latitude;
+          corp.longitude = res.longitude;
+          axios
+            .post(
+              "https://www.shilingaic.cn/index.php/api/corps/" +
+                corp.registration_num,
+              corp
+            )
+            .then(function(response) {
+              $("#upload_coordination_alert").html(
+                '<p  class="alert alert-success">成功上传定位</p>'
+              );
+            })
+            .catch(function(response) {
+              $("#upload_coordination_alert").html(
+                '<p  class="alert alert-success">' + response.data.msg + "</p>"
+              );
+            });
+        },
+        cancel: function(res) {
+          $("#upload_coordination_alert").html(
+            '<p  class="alert alert-danger">用户拒绝获取定位权限</p>'
+          );
+        }
+      });
+    },
     uploadPhotosForSpecialAction: function() {
       var localIds = [];
       var serverIds = [];
@@ -113,7 +153,9 @@ export default {
                 )
                 .then(function(res) {
                   // $("#responseimg").attr("src", res.data);
-                  $("#response").html('<p  class="alert alert-info">' + res.data +  '</p>');
+                  $("#response").html(
+                    '<p  class="alert alert-info">' + res.data + "</p>"
+                  );
                 });
               // 对应日常监管
             }
