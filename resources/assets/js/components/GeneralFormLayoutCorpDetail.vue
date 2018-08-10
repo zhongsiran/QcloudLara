@@ -58,7 +58,6 @@
 
 <script>
 export default {
-  // props: ['sp_item', 'corp'],
   data: function() {
     return {
       corp: window.Backend.corp

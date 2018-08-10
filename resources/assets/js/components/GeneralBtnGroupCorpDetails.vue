@@ -9,7 +9,6 @@
 
 <script>
 export default {
-  // props: ['sp_item', 'corp'],
   data: function () {
     return {
       sp_item: (window.Backend.sp_item ? window.Backend.sp_item : ''),

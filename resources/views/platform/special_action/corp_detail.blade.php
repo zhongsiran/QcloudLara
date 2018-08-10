@@ -39,15 +39,6 @@
             <th scope="row">联络员及电话</th>
             <td>{{ $corp->contact_person }} - {{ $corp->contact_phone }}</td>
         </tr>
-        {{--
-        <tr>
-            <th scope="row">电话记录</th>
-            <td>{{ $corp->phone_call_record }}</td>
-        </tr>
-        <tr>
-            <th scope="row">核查备注</th>
-            <td>{{ $corp->inspection_status }}</td>
-        </tr> --}}
     </tbody>
 </table>
 
@@ -56,7 +47,8 @@
 
 <div id='response' class="flash-message">
 </div>
-{{--  <p id='response'>response</p>  --}}
+
+<done-and-undone-button></done-and-undone-button>
 
 @foreach ($photo_items as $photo_item)
 <form style="margin:unset;" method="POST" action="{{ route('corp_photos.delete', ['id' => $photo_item->id]) }}">
@@ -71,6 +63,7 @@
     @endif
 </form>
 @endforeach
+
 @endsection
  
 @section('footer_supplement')
@@ -78,8 +71,7 @@
     wx.config( {!! $jssdk_config !!} );
     let user_openid = '{{$user_openid}}';
     wx.ready(function () {
-        // WxChooseAndUploadImages()
-    });
 
+    });
 </script>
 @endsection

@@ -12,7 +12,7 @@
 
 @foreach ($special_action_corps_list as $corp)
 <div 
-  @if ($corp->finish_status == 'finished')
+  @if ($corp->finish_status == '已经完成')
     class="card text-white bg-info"
   @else
     class="card"

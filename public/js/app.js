@@ -7635,7 +7635,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  // props: ['sp_item', 'corp'],
   data: function data() {
     return {
       sp_item: window.Backend.sp_item ? window.Backend.sp_item : '',
@@ -7663,7 +7662,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  // props: ['sp_item', 'corp'],
   data: function data() {
     return {
       corp: window.Backend.corp
@@ -7741,7 +7739,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  // props: ['sp_item', 'corp'],
   data: function data() {
     return {
       corp: window.Backend.corp
@@ -7879,16 +7876,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  // props: ['sp_item', 'corp'],
   data: function data() {
     return {
       sp_item: window.Backend.sp_item
     };
   },
   mounted: function mounted() {
-    console.log('Done Undone Btn Ok');
+    console.log("Done Undone Btn Ok");
   }
 });
 
@@ -61238,21 +61242,42 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col" }, [
-    _vm.sp_item.finish_status != "finished"
-      ? _c(
-          "button",
-          { staticClass: "btn btn-primary", attrs: { type: "button" } },
-          [_vm._v("设为完成")]
-        )
-      : _c(
-          "button",
-          { staticClass: "btn btn-danger", attrs: { type: "button" } },
-          [_vm._v("取消完成")]
-        )
+  return _c("form", { staticClass: "shadow rounded" }, [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "form-row" }, [
+      _c("div", { staticClass: "col" }, [
+        _vm.sp_item.finish_status != "已经完成"
+          ? _c(
+              "a",
+              {
+                staticClass: "btn btn-block btn-primary",
+                attrs: { href: "javascript:;" }
+              },
+              [_vm._v("完成核查")]
+            )
+          : _c(
+              "a",
+              {
+                staticClass: "btn btn-block btn-secondary",
+                attrs: { href: "javascript:;" }
+              },
+              [_vm._v("已完成核查，点击取消完成状态")]
+            )
+      ])
+    ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-row justify-content-center" }, [
+      _c("label", { attrs: { for: "" } }, [_c("b", [_vm._v("进度")])])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -72980,7 +73005,7 @@ window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
 
 Vue.component('confirm-delete-photo', __webpack_require__("./resources/assets/js/components/GeneralModalConfirmDeletePhotoComponent.vue"));
 Vue.component('corp-location-and-photo-upload-button', __webpack_require__("./resources/assets/js/components/GeneralButtonLocAndPicUpload.vue"));
-Vue.component('special-action-set-done-and-undone-button', __webpack_require__("./resources/assets/js/components/SpecialActionButtonDoneAndUndone.vue"));
+Vue.component('done-and-undone-button', __webpack_require__("./resources/assets/js/components/SpecialActionButtonDoneAndUndone.vue"));
 Vue.component('btn-group-general-corp-details', __webpack_require__("./resources/assets/js/components/GeneralBtnGroupCorpDetails.vue"));
 Vue.component('general-form-layout-corp-detail', __webpack_require__("./resources/assets/js/components/GeneralFormLayoutCorpDetail.vue"));
 Vue.component('special-action-form', __webpack_require__("./resources/assets/js/components/SpecialActionFormTimeAndStatus.vue"));

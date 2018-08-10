@@ -24,7 +24,7 @@ class SpecialAction extends Model
     public static function finish_count($sp_num)
     {
         return static::where('sp_num', $sp_num)
-        ->where('finish_status', 'finished')
+        ->where('finish_status', '已经完成')
         ->get()
         ->count();
     }
