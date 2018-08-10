@@ -168,11 +168,12 @@ class PlatformController extends Controller
             'corp' => $corp
         ]);
         
+        $corp_list_url = url()->previous();
         $app = app('wechat.official_account');
         $jssdk_config = $app->jssdk->buildConfig(array('chooseImage', 'uploadImage', 'getLocation', 'openLocation'));
         $token = $app->access_token->getToken();
         return View('platform.special_action.corp_detail', compact('corp', 'sp_item', 'photo_items', 
-        'signed_url_list', 'user_openid', 'jssdk_config', 'token'));
+        'signed_url_list', 'user_openid', 'jssdk_config', 'token', 'corp_list_url'));
     }
 
 

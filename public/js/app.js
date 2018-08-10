@@ -7893,6 +7893,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   mounted: function mounted() {
     console.log("Done Undone Btn Ok");
+  },
+
+  methods: {
+    setDone: function setDone() {
+      var _this = this;
+
+      var id = this.sp_item.id;
+      var finish_status = "已经完成";
+      axios.post("https://www.shilingaic.cn/index.php/api/special_action_set_finish_status/" + id, {
+        finish_status: finish_status
+      }).then(function (res) {
+        _this.sp_item.finish_status = res.data;
+      });
+    },
+    setUndone: function setUndone() {
+      var _this2 = this;
+
+      var id = this.sp_item.id;
+      var finish_status = null;
+      axios.post("https://www.shilingaic.cn/index.php/api/special_action_set_finish_status/" + id, {
+        finish_status: finish_status
+      }).then(function (res) {
+        _this2.sp_item.finish_status = res.data;
+      });
+    }
   }
 });
 
@@ -61252,7 +61277,8 @@ var render = function() {
               "a",
               {
                 staticClass: "btn btn-block btn-primary",
-                attrs: { href: "javascript:;" }
+                attrs: { href: "javascript:;" },
+                on: { click: _vm.setDone }
               },
               [_vm._v("完成核查")]
             )
@@ -61260,7 +61286,8 @@ var render = function() {
               "a",
               {
                 staticClass: "btn btn-block btn-secondary",
-                attrs: { href: "javascript:;" }
+                attrs: { href: "javascript:;" },
+                on: { click: _vm.setUndone }
               },
               [_vm._v("已完成核查，点击取消完成状态")]
             )

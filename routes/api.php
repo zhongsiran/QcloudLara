@@ -31,3 +31,4 @@ Route::post('/corps_photos/', 'Apis\SpecialActionApiController@general_upload_ph
 
 Route::post('/corps/{registration_num}', 'Apis\SpecialActionApiController@update_corp');
 
+Route::post('/special_action_set_finish_status/{id}', 'Apis\SpecialActionApiController@set_finish_status');

@@ -2,7 +2,7 @@
 @section('title', $sp_item->sp_name) 
 @section('navbar_items')
 <li class="nav-item">
-    <a class="nav-link" href="{{ url()->previous() .'#'. $sp_item->sp_corp_id }}">返回名单</a>
+    <a class="nav-link" href="{{ $corp_list_url .'#'. $sp_item->sp_corp_id }}">返回名单</a>
 </li>
 @endsection
  
