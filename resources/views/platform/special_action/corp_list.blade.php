@@ -23,7 +23,8 @@
     <h6 class="card-subtitle mb-2">序号：{{$corp->sp_corp_id}}</h6>
     <p class="card-text">注册号：{{$corp->detail->registration_num}} <br/>
                          地址：{{$corp->detail->address}}<br/>
-                         电话：{{$corp->detail->phone}}</p>
+                         电话：{{$corp->detail->phone}}</br>
+                         组别：{{$corp->sp_responsible_group}}</p>
     <a href="{{ route('platform.special_action.corp_detail', ['id' => $corp->id]) }}" class="btn btn-info">详情</a>
     {{-- <a href="#" class="card-link">导航</a> --}}
   </div>

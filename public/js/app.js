@@ -7993,11 +7993,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     saveSpecialItem: function saveSpecialItem() {
+      $(".saveStatus").html('<p  class="alert alert-info">保存中</p>');
 
-      $('.saveStatus').html('<p  class="alert alert-info">保存中</p>');
-
-      axios.put('https://www.shilingaic.cn/index.php/api/special_action/' + this.sp_item.id, this.sp_item).then(function (response) {
-        $('.saveStatus').html('<p  class="alert alert-success">' + response.data.msg + '</p>');
+      axios.put("https://www.shilingaic.cn/index.php/api/special_action/" + this.sp_item.id, this.sp_item).then(function (response) {
+        $(".saveStatus").html('<p  class="alert alert-success">' + response.data.msg + "</p>");
       }).catch(function (error) {
         console.log(error);
       });
@@ -8012,13 +8011,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return [chn_datetime_15_b, chn_datetime_now, chn_datetime_15_a];
     },
     setInspectionNormal: function setInspectionNormal() {
-      this.sp_item.inspection_record = '当事人在' + this.corp.address + '正常经营';
+      this.sp_item.inspection_record = "当事人在" + this.corp.address + "正常经营";
     },
     setInspectionNotFound: function setInspectionNotFound() {
-      this.sp_item.inspection_record = '在' + this.corp.address + '未发现当事人的经营迹象。当事人通过登记地址无法联系。';
+      this.sp_item.inspection_record = "在" + this.corp.address + "未发现当事人的经营迹象。当事人通过登记地址无法联系。";
     },
     setInspectionFake: function setInspectionFake() {
-      this.sp_item.inspection_record = '在相关地址附近均无法找到当事人的登记地址' + this.corp.address + '。当事人通过登记地址无法联系。';
+      this.sp_item.inspection_record = "在相关地址附近均无法找到当事人的登记地址" + this.corp.address + "。当事人通过登记地址无法联系。";
     },
     setInspectionTimeShortcut: function setInspectionTimeShortcut() {
       var datetime_array = this.getChineseDateArray();
@@ -8027,19 +8026,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     setPhoneNotAvailble: function setPhoneNotAvailble() {
       var datetime_array = this.getChineseDateArray();
-      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] + '拨打当事人的登记电话，该电话无人接听';
+      this.sp_item.phone_call_record = "执法人员于" + datetime_array[1] + "拨打当事人的登记电话，该电话无人接听";
     },
     setPhoneNotExist: function setPhoneNotExist() {
       var datetime_array = this.getChineseDateArray();
-      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] + '拨打当事人的登记电话，该电话为空号';
+      this.sp_item.phone_call_record = "执法人员于" + datetime_array[1] + "拨打当事人的登记电话，该电话为空号";
     },
     setPhoneDisable: function setPhoneDisable() {
       var datetime_array = this.getChineseDateArray();
-      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] + '拨打当事人的登记电话，该电话已经停机';
+      this.sp_item.phone_call_record = "执法人员于" + datetime_array[1] + "拨打当事人的登记电话，该电话已经停机";
     },
     setPhoneNoConnection: function setPhoneNoConnection() {
       var datetime_array = this.getChineseDateArray();
-      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] + '拨打当事人的登记电话，该电话接听人员表示与当事人无关系，不清楚当事人的情况';
+      this.sp_item.phone_call_record = "执法人员于" + datetime_array[1] + "拨打当事人的登记电话，该电话接听人员表示与当事人无关系，不清楚当事人的情况";
     }
   }
 });
@@ -61754,7 +61753,7 @@ var render = function() {
         _c(
           "a",
           {
-            staticClass: "btn btn-block btn-primary",
+            staticClass: "btn btn-block btn-secondary",
             attrs: { href: "javascript:;" },
             on: { click: _vm.testCorp }
           },
@@ -61789,7 +61788,7 @@ var staticRenderFns = [
           _c(
             "a",
             {
-              staticClass: "btn btn-block btn-primary",
+              staticClass: "btn btn-block btn-secondary",
               attrs: {
                 "data-toggle": "collapse",
                 href: "#inspection_status_editor",
@@ -61804,7 +61803,7 @@ var staticRenderFns = [
           _c(
             "a",
             {
-              staticClass: "btn btn-block btn-primary",
+              staticClass: "btn btn-block btn-secondary",
               attrs: {
                 "data-toggle": "collapse",
                 href: "#phone_call_record_editor",

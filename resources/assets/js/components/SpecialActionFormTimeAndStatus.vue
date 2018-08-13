@@ -54,7 +54,7 @@ export default {
   data: function() {
     return {
       sp_item: window.Backend.sp_item,
-      corp:  window.Backend.corp,
+      corp: window.Backend.corp
     };
   },
   mounted() {
@@ -62,16 +62,22 @@ export default {
   },
   methods: {
     saveSpecialItem: function() {
-      
-      $('.saveStatus').html('<p  class="alert alert-info">保存中</p>')
-      
-      axios.put('https://www.shilingaic.cn/index.php/api/special_action/' + this.sp_item.id, this.sp_item)
-      .then(function (response){
-        $('.saveStatus').html('<p  class="alert alert-success">' + response.data.msg +  '</p>')
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+      $(".saveStatus").html('<p  class="alert alert-info">保存中</p>');
+
+      axios
+        .put(
+          "https://www.shilingaic.cn/index.php/api/special_action/" +
+            this.sp_item.id,
+          this.sp_item
+        )
+        .then(response => {
+          $(".saveStatus").html(
+            '<p  class="alert alert-success">' + response.data.msg + "</p>"
+          );
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     getChineseDateArray: function() {
       let chn_datetime_now = moment().format("YYYY年M月D日H时m分");
@@ -86,35 +92,52 @@ export default {
 
       return [chn_datetime_15_b, chn_datetime_now, chn_datetime_15_a];
     },
-    setInspectionNormal: function () {
-      this.sp_item.inspection_record = '当事人在' + this.corp.address + '正常经营'
+    setInspectionNormal: function() {
+      this.sp_item.inspection_record =
+        "当事人在" + this.corp.address + "正常经营";
     },
-    setInspectionNotFound: function () {
-      this.sp_item.inspection_record = '在' + this.corp.address + '未发现当事人的经营迹象。当事人通过登记地址无法联系。'
+    setInspectionNotFound: function() {
+      this.sp_item.inspection_record =
+        "在" +
+        this.corp.address +
+        "未发现当事人的经营迹象。当事人通过登记地址无法联系。";
     },
-    setInspectionFake: function () {
-      this.sp_item.inspection_record = '在相关地址附近均无法找到当事人的登记地址' + this.corp.address + '。当事人通过登记地址无法联系。'
+    setInspectionFake: function() {
+      this.sp_item.inspection_record =
+        "在相关地址附近均无法找到当事人的登记地址" +
+        this.corp.address +
+        "。当事人通过登记地址无法联系。";
     },
     setInspectionTimeShortcut: function() {
       let datetime_array = this.getChineseDateArray();
       this.sp_item.start_inspect_time = datetime_array[0];
       this.sp_item.end_inspect_time = datetime_array[2];
     },
-    setPhoneNotAvailble: function () {
+    setPhoneNotAvailble: function() {
       let datetime_array = this.getChineseDateArray();
-      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] +'拨打当事人的登记电话，该电话无人接听'
+      this.sp_item.phone_call_record =
+        "执法人员于" +
+        datetime_array[1] +
+        "拨打当事人的登记电话，该电话无人接听";
     },
-    setPhoneNotExist: function () {
+    setPhoneNotExist: function() {
       let datetime_array = this.getChineseDateArray();
-      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] +'拨打当事人的登记电话，该电话为空号'
+      this.sp_item.phone_call_record =
+        "执法人员于" + datetime_array[1] + "拨打当事人的登记电话，该电话为空号";
     },
-    setPhoneDisable: function () {
+    setPhoneDisable: function() {
       let datetime_array = this.getChineseDateArray();
-      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] +'拨打当事人的登记电话，该电话已经停机'
+      this.sp_item.phone_call_record =
+        "执法人员于" +
+        datetime_array[1] +
+        "拨打当事人的登记电话，该电话已经停机";
     },
-    setPhoneNoConnection: function () {
+    setPhoneNoConnection: function() {
       let datetime_array = this.getChineseDateArray();
-      this.sp_item.phone_call_record = '执法人员于' + datetime_array[1] +'拨打当事人的登记电话，该电话接听人员表示与当事人无关系，不清楚当事人的情况'
+      this.sp_item.phone_call_record =
+        "执法人员于" +
+        datetime_array[1] +
+        "拨打当事人的登记电话，该电话接听人员表示与当事人无关系，不清楚当事人的情况";
     }
   }
 };

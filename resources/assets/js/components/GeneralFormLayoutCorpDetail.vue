@@ -6,12 +6,12 @@
             </div>
             <div class="form-row">
                 <div class="col">
-                    <a class="btn btn-block btn-primary" data-toggle="collapse" href="#inspection_status_editor" role="button">
+                    <a class="btn btn-block btn-secondary" data-toggle="collapse" href="#inspection_status_editor" role="button">
                         修改核查记录
                     </a>
                 </div>
                 <div class="col">
-                    <a class="btn btn-block btn-primary" data-toggle="collapse" href="#phone_call_record_editor" role="button">
+                    <a class="btn btn-block btn-secondary" data-toggle="collapse" href="#phone_call_record_editor" role="button">
                         修改电话记录
                     </a>
                 </div>
@@ -48,7 +48,7 @@
                 <a class="btn btn-block btn-primary" href="javascript:;" @click="uploadPhotosForSpecialAction">上传照片</a>    
             </div>
             <div class="col">
-                <a class="btn btn-block btn-primary" href="javascript:;" @click="testCorp">进行导航</a>    
+                <a class="btn btn-block btn-secondary" href="javascript:;" @click="testCorp">进行导航</a>    
             </div>            
         </div>
         <div class="flash-message" id="upload_coordination_alert" style="margin-top:10px;margin-left: 5px;margin-right: 5px;">
@@ -89,18 +89,18 @@ export default {
                 corp.registration_num,
               corp
             )
-            .then(function(response) {
+            .then(response => {
               $("#upload_coordination_alert").html(
                 '<p  class="alert alert-success">成功上传定位</p>'
               );
             })
-            .catch(function(response) {
+            .catch(response => {
               $("#upload_coordination_alert").html(
                 '<p  class="alert alert-success">' + response.data.msg + "</p>"
               );
             });
         },
-        cancel: function(res) {
+        cancel: res => {
           $("#upload_coordination_alert").html(
             '<p  class="alert alert-danger">用户拒绝获取定位权限</p>'
           );
@@ -115,7 +115,7 @@ export default {
         count: 9, // 默认9
         sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
-        success: function(res) {
+        success: res => {
           localIds = res.localIds; // 返回选定照片的本地Id列表，localId可以作为img标签的src属性显示图片
 
           async.map(
@@ -124,11 +124,11 @@ export default {
               wx.uploadImage({
                 localId: localId,
                 isShowProgressTips: 1,
-                success: function(res) {
+                success: res => {
                   serverIds.push(res.serverId);
                   callback();
                 },
-                fail: function(res) {
+                fail: res => {
                   callback(res);
                 }
               });
@@ -150,7 +150,7 @@ export default {
                   "https://www.shilingaic.cn/index.php/api/corps_photos/",
                   datapack
                 )
-                .then(function(res) {
+                .then(res => {
                   // $("#responseimg").attr("src", res.data);
                   $("#response").html(
                     '<p  class="alert alert-info">' + res.data + "</p>"

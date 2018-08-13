@@ -35,7 +35,7 @@ export default {
             finish_status: finish_status
           }
         )
-        .then((res) => {
+        .then(res => {
           this.sp_item.finish_status = res.data;
         });
     },
@@ -50,7 +50,7 @@ export default {
             finish_status: finish_status
           }
         )
-        .then((res) => {
+        .then(res => {
           this.sp_item.finish_status = res.data;
         });
     }
