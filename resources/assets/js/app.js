@@ -19,6 +19,7 @@ Vue.component('general-confirm-delete-photo', require('./components/GeneralModal
 Vue.component('general-form-layout-corp-detail', require('./components/GeneralFormLayoutCorpDetail.vue'));
 Vue.component('special-action-done-and-undone-button', require('./components/SpecialActionButtonDoneAndUndone.vue'));
 Vue.component('special-action-form', require('./components/SpecialActionFormTimeAndStatus.vue'));
+Vue.component('special-action-jump-to-form', require('./components/SpecialActionJumpToForm.vue'));
 // Vue.component('general-corp-location-and-photo-upload-button', require('./components/GeneralButtonLocAndPicUpload.vue'));
 // Vue.component('btn-group-general-corp-details', require('./components/GeneralBtnGroupCorpDetails.vue'));
 

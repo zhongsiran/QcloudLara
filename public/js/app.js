@@ -7992,6 +7992,60 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/SpecialActionJumpToForm.vue":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      max_item: window.Backend.max_item,
+      jumpToItem: ""
+    };
+  },
+  methods: {
+    jump: function jump() {
+      if (this.jumpToItem <= this.max_item) {
+        var page = Math.floor(this.jumpToItem / 10) + 1;
+        var targetUrl = "https://" + location.host + location.pathname + "?page=" + page + "#" + this.jumpToItem;
+        location.href = targetUrl;
+      } else {
+        alert('不能超過最大序號(' + this.max_item + '號)');
+      }
+    }
+  },
+  computed: {
+    placeholder: function placeholder() {
+      return "最大序號為" + this.max_item;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/bootstrap/dist/js/bootstrap.js":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -61170,6 +61224,90 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1a73cd75\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SpecialActionJumpToForm.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "jump-to-form" }, [
+    _c("form", { staticClass: "form-inline-sm" }, [
+      _c("div", { staticClass: "form-row align-items-center" }, [
+        _c("div", { staticClass: "col-auto" }, [
+          _c(
+            "label",
+            { staticClass: "sr-only", attrs: { for: "inlineFormInputGroup" } },
+            [_vm._v("sp-corp-id")]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group mb-2" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.jumpToItem,
+                  expression: "jumpToItem"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "number",
+                id: "inlineFormInputGroup",
+                placeholder: _vm.placeholder
+              },
+              domProps: { value: _vm.jumpToItem },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.jumpToItem = $event.target.value
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-auto" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-info mb-2 text-white",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.jump }
+            },
+            [_vm._v("跳转")]
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("div", { staticClass: "input-group-text" }, [_vm._v("序号")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-1a73cd75", module.exports)
+  }
+}
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2ee4dec6\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SpecialActionButtonDoneAndUndone.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -61233,166 +61371,19 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("form", { staticClass: "shadow rounded" }, [
-    _c("div", { staticClass: "form-group" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c("div", { staticClass: "form-row" }, [
-        _c("label", { attrs: { for: "inspection_status" } }, [
-          _vm._v("专项核查情况")
-        ]),
+  return _c(
+    "form",
+    {
+      staticClass: "shadow rounded",
+      attrs: { id: "special-action-time-and-status-form" }
+    },
+    [
+      _c("div", { staticClass: "form-group" }, [
+        _vm._m(0),
         _vm._v(" "),
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.sp_item.inspection_record,
-              expression: "sp_item.inspection_record"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: { id: "sp_inspection_record", rows: "3" },
-          domProps: { value: _vm.sp_item.inspection_record },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.sp_item, "inspection_record", $event.target.value)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary",
-            attrs: { href: "javascript:;" },
-            on: { click: _vm.saveSpecialItem }
-          },
-          [_vm._v("保存")]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary",
-            attrs: { href: "javascript:;" },
-            on: { click: _vm.setInspectionNormal }
-          },
-          [_vm._v("正常")]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary",
-            attrs: { href: "javascript:;" },
-            on: { click: _vm.setInspectionNotFound }
-          },
-          [_vm._v("查无")]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary",
-            attrs: { href: "javascript:;" },
-            on: { click: _vm.setInspectionFake }
-          },
-          [_vm._v("虚构")]
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "flash-message saveStatus" }),
-    _vm._v(" "),
-    _c("div", { staticClass: "form-group" }, [
-      _c("div", { staticClass: "form-row" }, [
-        _c("label", { attrs: { for: "inspection_status" } }, [
-          _vm._v("核查开始时间")
-        ]),
-        _vm._v(" "),
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.sp_item.start_inspect_time,
-              expression: "sp_item.start_inspect_time"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: { rows: "1" },
-          domProps: { value: _vm.sp_item.start_inspect_time },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.sp_item, "start_inspect_time", $event.target.value)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c("label", { attrs: { for: "inspection_status" } }, [
-          _vm._v("核查结束时间")
-        ]),
-        _vm._v(" "),
-        _c("textarea", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.sp_item.end_inspect_time,
-              expression: "sp_item.end_inspect_time"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: { rows: "1" },
-          domProps: { value: _vm.sp_item.end_inspect_time },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.sp_item, "end_inspect_time", $event.target.value)
-            }
-          }
-        }),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary",
-            attrs: { href: "javascript:;" },
-            on: { click: _vm.saveSpecialItem }
-          },
-          [_vm._v("保存")]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "btn btn-primary",
-            attrs: { href: "javascript:;" },
-            on: { click: _vm.setInspectionTimeShortcut }
-          },
-          [_vm._v("快速设置时间")]
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "flash-message saveStatus" }),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "form-group", staticStyle: { "margin-bottom": "0" } },
-      [
         _c("div", { staticClass: "form-row" }, [
           _c("label", { attrs: { for: "inspection_status" } }, [
-            _vm._v("专项电话记录")
+            _vm._v("专项核查情况")
           ]),
           _vm._v(" "),
           _c("textarea", {
@@ -61400,19 +61391,19 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.sp_item.phone_call_record,
-                expression: "sp_item.phone_call_record"
+                value: _vm.sp_item.inspection_record,
+                expression: "sp_item.inspection_record"
               }
             ],
             staticClass: "form-control",
-            attrs: { id: "sp_phone_call_record", rows: "2" },
-            domProps: { value: _vm.sp_item.phone_call_record },
+            attrs: { id: "sp_inspection_record", rows: "3" },
+            domProps: { value: _vm.sp_item.inspection_record },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.$set(_vm.sp_item, "phone_call_record", $event.target.value)
+                _vm.$set(_vm.sp_item, "inspection_record", $event.target.value)
               }
             }
           }),
@@ -61432,9 +61423,9 @@ var render = function() {
             {
               staticClass: "btn btn-primary",
               attrs: { href: "javascript:;" },
-              on: { click: _vm.setPhoneNotAvailble }
+              on: { click: _vm.setInspectionNormal }
             },
-            [_vm._v("无法接通")]
+            [_vm._v("正常")]
           ),
           _vm._v(" "),
           _c(
@@ -61442,9 +61433,9 @@ var render = function() {
             {
               staticClass: "btn btn-primary",
               attrs: { href: "javascript:;" },
-              on: { click: _vm.setPhoneNotExist }
+              on: { click: _vm.setInspectionNotFound }
             },
-            [_vm._v("空号")]
+            [_vm._v("查无")]
           ),
           _vm._v(" "),
           _c(
@@ -61452,29 +61443,187 @@ var render = function() {
             {
               staticClass: "btn btn-primary",
               attrs: { href: "javascript:;" },
-              on: { click: _vm.setPhoneDisable }
+              on: { click: _vm.setInspectionFake }
             },
-            [_vm._v("停机")]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "btn btn-primary",
-              attrs: { href: "javascript:;" },
-              on: { click: _vm.setPhoneNoConnection }
-            },
-            [_vm._v("与之无关")]
+            [_vm._v("虚构")]
           )
         ])
-      ]
-    ),
-    _vm._v(" "),
-    _c("div", {
-      staticClass: "flash-message saveStatus",
-      staticStyle: { "margin-top": "10px" }
-    })
-  ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "flash-message saveStatus" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group" }, [
+        _c("div", { staticClass: "form-row" }, [
+          _c("label", { attrs: { for: "inspection_status" } }, [
+            _vm._v("核查开始时间")
+          ]),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.sp_item.start_inspect_time,
+                expression: "sp_item.start_inspect_time"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { rows: "1" },
+            domProps: { value: _vm.sp_item.start_inspect_time },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.sp_item, "start_inspect_time", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c("label", { attrs: { for: "inspection_status" } }, [
+            _vm._v("核查结束时间")
+          ]),
+          _vm._v(" "),
+          _c("textarea", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.sp_item.end_inspect_time,
+                expression: "sp_item.end_inspect_time"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { rows: "1" },
+            domProps: { value: _vm.sp_item.end_inspect_time },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.sp_item, "end_inspect_time", $event.target.value)
+              }
+            }
+          }),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.saveSpecialItem }
+            },
+            [_vm._v("保存")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.setInspectionTimeShortcut }
+            },
+            [_vm._v("快速设置时间")]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "flash-message saveStatus" }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "form-group", staticStyle: { "margin-bottom": "0" } },
+        [
+          _c("div", { staticClass: "form-row" }, [
+            _c("label", { attrs: { for: "inspection_status" } }, [
+              _vm._v("专项电话记录")
+            ]),
+            _vm._v(" "),
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.sp_item.phone_call_record,
+                  expression: "sp_item.phone_call_record"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { id: "sp_phone_call_record", rows: "2" },
+              domProps: { value: _vm.sp_item.phone_call_record },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(
+                    _vm.sp_item,
+                    "phone_call_record",
+                    $event.target.value
+                  )
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { href: "javascript:;" },
+                on: { click: _vm.saveSpecialItem }
+              },
+              [_vm._v("保存")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { href: "javascript:;" },
+                on: { click: _vm.setPhoneNotAvailble }
+              },
+              [_vm._v("无法接通")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { href: "javascript:;" },
+                on: { click: _vm.setPhoneNotExist }
+              },
+              [_vm._v("空号")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { href: "javascript:;" },
+                on: { click: _vm.setPhoneDisable }
+              },
+              [_vm._v("停机")]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "btn btn-primary",
+                attrs: { href: "javascript:;" },
+                on: { click: _vm.setPhoneNoConnection }
+              },
+              [_vm._v("与之无关")]
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", {
+        staticClass: "flash-message saveStatus",
+        staticStyle: { "margin-top": "10px", "padding-bottom": "1px" }
+      })
+    ]
+  )
 }
 var staticRenderFns = [
   function() {
@@ -72914,6 +73063,7 @@ Vue.component('general-confirm-delete-photo', __webpack_require__("./resources/a
 Vue.component('general-form-layout-corp-detail', __webpack_require__("./resources/assets/js/components/GeneralFormLayoutCorpDetail.vue"));
 Vue.component('special-action-done-and-undone-button', __webpack_require__("./resources/assets/js/components/SpecialActionButtonDoneAndUndone.vue"));
 Vue.component('special-action-form', __webpack_require__("./resources/assets/js/components/SpecialActionFormTimeAndStatus.vue"));
+Vue.component('special-action-jump-to-form', __webpack_require__("./resources/assets/js/components/SpecialActionJumpToForm.vue"));
 // Vue.component('general-corp-location-and-photo-upload-button', require('./components/GeneralButtonLocAndPicUpload.vue'));
 // Vue.component('btn-group-general-corp-details', require('./components/GeneralBtnGroupCorpDetails.vue'));
 
@@ -73171,6 +73321,54 @@ if (false) {(function () {
     hotAPI.createRecord("data-v-393934e0", Component.options)
   } else {
     hotAPI.reload("data-v-393934e0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+
+/***/ "./resources/assets/js/components/SpecialActionJumpToForm.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
+/* script */
+var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/SpecialActionJumpToForm.vue")
+/* template */
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-1a73cd75\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SpecialActionJumpToForm.vue")
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/SpecialActionJumpToForm.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-1a73cd75", Component.options)
+  } else {
+    hotAPI.reload("data-v-1a73cd75", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true

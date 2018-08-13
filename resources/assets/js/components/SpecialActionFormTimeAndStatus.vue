@@ -1,5 +1,5 @@
 <template>
-<form class="shadow rounded">
+<form class="shadow rounded" id="special-action-time-and-status-form">
         <div class="form-group">
             <div class="form-row  justify-content-center">
                 <label for=""><b>专项行动操作</b></label>
@@ -43,7 +43,7 @@
                 <!-- <a class="btn btn-primary" href="javascript:;">撤销更改</a> -->
             </div>
         </div>
-        <div class="flash-message saveStatus" style="margin-top:10px">
+        <div class="flash-message saveStatus" style="margin-top:10px;padding-bottom:1px">
         </div>
     </form>
 </template>

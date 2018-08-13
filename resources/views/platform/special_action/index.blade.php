@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('navbar_items')
+{{--  @section('navbar_items')
     <li class="nav-item">
         <a class="nav-link" href="{{ route('platform.home') }}">返回首页</a>
     </li>
-@endsection
+@endsection  --}}
 
 @section('content')
 @if (count($special_action_list))

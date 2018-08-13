@@ -7,11 +7,11 @@
 <script src="{{ asset('js/all.js') }}" defer></script>
 @endsection
 
-@section('navbar_items')
+{{--  @section('navbar_items')
     <li class="nav-item">
         <a class="nav-link" href="{{ route('platform.home') }}">返回首页</a>
     </li>
-@endsection
+@endsection  --}}
 
 @section('content')
 

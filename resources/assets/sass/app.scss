@@ -69,3 +69,21 @@ form {
   margin-left: 5px;
   margin-right: 5px;
 }
+
+
+// 专项行动时间与情况
+#special-action-time-and-status-form {
+  padding-bottom: 0rem;
+}
+
+// 跳转表格
+.jump-to-form {
+  margin-top: 20px;
+  padding: 0%;
+  form {
+    padding: 0%;
+  }
+  a {
+    margin-top: 0px;
+  }
+}

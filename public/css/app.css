@@ -10546,3 +10546,20 @@ form button {
   margin-right: 5px;
 }
 
+#special-action-time-and-status-form {
+  padding-bottom: 0rem;
+}
+
+.jump-to-form {
+  margin-top: 20px;
+  padding: 0%;
+}
+
+.jump-to-form form {
+  padding: 0%;
+}
+
+.jump-to-form a {
+  margin-top: 0px;
+}
+

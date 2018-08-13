@@ -131,6 +131,10 @@ class PlatformController extends Controller
             ->paginate(10);
         // $special_action_corps_list->withPath(url()->full());
 
+        JavaScript::put([
+            'max_item' => $special_action_corps_list->total()
+        ]);
+
         foreach ($special_action_corps_list as $sp_item) {
 
             $corporation_infomation = $special_action->find($sp_item->id)->corp()->first();

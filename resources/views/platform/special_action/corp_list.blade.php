@@ -10,6 +10,8 @@
 @section('content')
 @if (count($special_action_corps_list))
 
+<special-action-jump-to-form></special-action-jump-to-form>
+
 @foreach ($special_action_corps_list as $corp)
 <div 
   @if ($corp->finish_status == '已经完成')
@@ -30,6 +32,27 @@
   </div>
 </div>
 @endforeach
+
+{{--  <special-action-jump-to-form></special-action-jump-to-form>  --}}
+{{--  <div class="float-right fixed-top fixed-right mt-20">
+  <form class="form-inline">
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <label class="sr-only" for="inlineFormInputGroup">sp-corp-id</label>
+        <div class="input-group mb-2">
+          <div class="input-group-prepend">
+            <div class="input-group-text">企业序号</div>
+          </div>
+          <input type="number" class="form-control" id="inlineFormInputGroup" placeholder="">
+        </div>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary mb-2" style="margin-top: 0px;">跳转</button>
+      </div>
+    </div>
+  </form>
+</div>  --}}
+
 @else
 <div class="card">
   <div class="card-body">
