@@ -77,7 +77,7 @@
             {{method_field('DELETE')}}
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeletePhoto{{ $photo_item->id }}">删除照片</button>
             
-            <confirm-delete-photo photo-id="{{ $photo_item->id }}"></confirm-delete-photo>    
+            <general-confirm-delete-photo photo-id="{{ $photo_item->id }}"></confirm-delete-photo>    
             
             
         @endif

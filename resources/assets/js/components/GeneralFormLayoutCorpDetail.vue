@@ -53,6 +53,8 @@
         </div>
         <div class="flash-message" id="upload_coordination_alert" style="margin-top:10px;margin-left: 5px;margin-right: 5px;">
         </div>
+        <div class="flash-message" id="upload_photo_alert" style="margin-top:10px;margin-left: 5px;margin-right: 5px;">
+        </div>
     </form>
 </template>
 
@@ -152,7 +154,7 @@ export default {
                 )
                 .then(res => {
                   // $("#responseimg").attr("src", res.data);
-                  $("#response").html(
+                  $("#upload_photo_alert").html(
                     '<p  class="alert alert-info">' + res.data + "</p>"
                   );
                 });

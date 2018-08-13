@@ -2,7 +2,7 @@
 @section('title', $sp_item->sp_name) 
 @section('navbar_items')
 <li class="nav-item">
-    <a class="nav-link" href="{{ $corp_list_url .'#'. $sp_item->sp_corp_id }}">返回名单</a>
+    <a class="nav-link" href="{{ session()->get('corp_list_url') .'#'. $sp_item->sp_corp_id }}">返回名单</a>
 </li>
 @endsection
  
@@ -44,11 +44,7 @@
 
 <special-action-form></special-action-form>
 <general-form-layout-corp-detail></general-form-layout-corp-detail>
-
-<div id='response' class="flash-message">
-</div>
-
-<done-and-undone-button></done-and-undone-button>
+<special-action-done-and-undone-button></special-action-done-and-undone-button>
 
 @foreach ($photo_items as $photo_item)
 <form style="margin:unset;" method="POST" action="{{ route('corp_photos.delete', ['id' => $photo_item->id]) }}">
@@ -58,7 +54,7 @@
     == $user_openid) {{ csrf_field() }} {{method_field('DELETE')}}
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeletePhoto{{ $photo_item->id }}">删除照片</button>
 
-    <confirm-delete-photo photo-id="{{ $photo_item->id }}"></confirm-delete-photo>
+    <general-confirm-delete-photo photo-id="{{ $photo_item->id }}"></general-confirm-delete-photo>
 
     @endif
 </form>

@@ -2,18 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Corps;
 use App\CorpPhotos;
+use App\Corps;
 use App\SpecialAction;
-
-use Qcloud\Cos\Client;
-
-use JavaScript;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-
+use JavaScript;
+use Qcloud\Cos\Client;
 
 class PlatformController extends Controller
 {
@@ -21,7 +16,7 @@ class PlatformController extends Controller
     public function __construct()
     {
         $this->middleware('auth', [
-            'except' => ['login', 'login_by_account_page', 'login_by_account', 'logout']
+            'except' => ['login', 'login_by_account_page', 'login_by_account', 'logout'],
         ]);
     }
 
@@ -30,7 +25,7 @@ class PlatformController extends Controller
     {
         if (Auth::attempt(['slaic_openid' => $request->openid, 'password' => $request->openid, 'active_status' => true])) {
             return redirect()->route('platform.home');
-        }else{
+        } else {
             // abort(404);
 
             return view('platform.login_by_account_page', ['err_msg' => '登录失败，请重试']);
@@ -48,7 +43,7 @@ class PlatformController extends Controller
     {
         if (Auth::attempt(['user_real_name' => $request->user_real_name, 'password' => $request->password, 'active_status' => true])) {
             return redirect()->route('platform.home');
-        }else{
+        } else {
             // abort(404);
             return view('platform.login_by_account_page', ['err_msg' => '登录失败，请重试']);
         }
@@ -72,20 +67,19 @@ class PlatformController extends Controller
         return view('platform.daily.search_form');
     }
 
-
     /**
      * 日常监管模块搜索企业的逻辑
-     * 
+     *
      *
      */
     public function daily_fetch_corp(Request $request, Corps $corp)
     {
-        $result_corps = $corp->where('registration_num', 'like', '%'. $request->registration_num .'%')
-        ->where('corporation_name', 'like', '%'. $request->corporation_name .'%')
-        ->where('address', 'like', '%'. $request->address .'%')
-        ->where('represent_person', 'like', '%'. $request->represent_person .'%')
-        ->where('corporation_aic_division',  $request->corporation_aic_division)
-        ->paginate(8);
+        $result_corps = $corp->where('registration_num', 'like', '%' . $request->registration_num . '%')
+            ->where('corporation_name', 'like', '%' . $request->corporation_name . '%')
+            ->where('address', 'like', '%' . $request->address . '%')
+            ->where('represent_person', 'like', '%' . $request->represent_person . '%')
+            ->where('corporation_aic_division', $request->corporation_aic_division)
+            ->paginate(8);
         $result_corps->withPath(url()->full());
         return view('platform.daily.result_list', compact('result_corps'));
     }
@@ -105,7 +99,7 @@ class PlatformController extends Controller
 
         $corp = $corps->where('corporation_name', $corporation_name)->first();
         JavaScript::put([
-            'corp' => $corp
+            'corp' => $corp,
         ]);
 
         $app = app('wechat.official_account');
@@ -122,20 +116,20 @@ class PlatformController extends Controller
         foreach ($special_action_list as $sp_item) {
             $sp_item->sp_count = $special_action->count($sp_item->sp_num);
             $sp_item->sp_finish_count = $special_action->finish_count($sp_item->sp_num);
-        }              
+        }
 
         return view('platform.special_action.index', compact('special_action_list'));
     }
 
     public function special_action_detail($sp_num, SpecialAction $special_action, Corps $corp)
     {
-        
+
         $special_action_corps_list = $special_action->where('sp_num', $sp_num)
-                                                    ->where('sp_aic_division', Auth::user()->user_aic_division)
-                                                    ->orderBy('sp_corp_id')
-                                                    // ->get()
-                                                    ->paginate(10);
-        // $special_action_corps_list->withPath(url()->full());                                     
+            ->where('sp_aic_division', Auth::user()->user_aic_division)
+            ->orderBy('sp_corp_id')
+        // ->get()
+            ->paginate(10);
+        // $special_action_corps_list->withPath(url()->full());
 
         foreach ($special_action_corps_list as $sp_item) {
 
@@ -152,8 +146,8 @@ class PlatformController extends Controller
 
         $user_openid = Auth::user()->slaic_openid;
         $photo_items = $corpPhotos->where('corporation_name', $corp->corporation_name)
-                                  ->whereJsonContains('special_actions',  $sp_item->sp_num)  // 根据行动名称过滤
-                                  ->get();
+            ->whereJsonContains('special_actions', $sp_item->sp_num) // 根据行动名称过滤
+            ->get();
         $signed_url_list = array();
         foreach ($photo_items as $photo_item) {
             $url = "/{$photo_item->link}";
@@ -162,19 +156,20 @@ class PlatformController extends Controller
             $signed_url = str_replace('http', 'https', $signed_url);
             $signed_url_list[$photo_item->id] = $signed_url;
         }
-        
+
         JavaScript::put([
             'sp_item' => $sp_item,
-            'corp' => $corp
+            'corp' => $corp,
         ]);
-        
-        $corp_list_url = url()->previous();
+        if (!strstr(url()->previous(), 'corps')){
+            session(['corp_list_url' => url()->previous()]);
+        }
+
         $app = app('wechat.official_account');
         $jssdk_config = $app->jssdk->buildConfig(array('chooseImage', 'uploadImage', 'getLocation', 'openLocation'));
         $token = $app->access_token->getToken();
-        return View('platform.special_action.corp_detail', compact('corp', 'sp_item', 'photo_items', 
-        'signed_url_list', 'user_openid', 'jssdk_config', 'token', 'corp_list_url'));
+        return View('platform.special_action.corp_detail', compact('corp', 'sp_item', 'photo_items',
+            'signed_url_list', 'user_openid', 'jssdk_config', 'token', 'corp_list_url'));
     }
-
 
 }

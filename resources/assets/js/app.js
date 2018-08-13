@@ -15,19 +15,15 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('confirm-delete-photo', require('./components/GeneralModalConfirmDeletePhotoComponent.vue'));
-Vue.component('corp-location-and-photo-upload-button', require('./components/GeneralButtonLocAndPicUpload.vue'));
-Vue.component('done-and-undone-button', require('./components/SpecialActionButtonDoneAndUndone.vue'));
-Vue.component('btn-group-general-corp-details', require('./components/GeneralBtnGroupCorpDetails.vue'));
+Vue.component('general-confirm-delete-photo', require('./components/GeneralModalConfirmDeletePhotoComponent.vue'));
 Vue.component('general-form-layout-corp-detail', require('./components/GeneralFormLayoutCorpDetail.vue'));
+Vue.component('special-action-done-and-undone-button', require('./components/SpecialActionButtonDoneAndUndone.vue'));
 Vue.component('special-action-form', require('./components/SpecialActionFormTimeAndStatus.vue'));
+// Vue.component('general-corp-location-and-photo-upload-button', require('./components/GeneralButtonLocAndPicUpload.vue'));
+// Vue.component('btn-group-general-corp-details', require('./components/GeneralBtnGroupCorpDetails.vue'));
 
 const app = new Vue({
-    el: '#app',
-    data: {
-      // photo_upload_msg: window.photo_upload_msg
-    // declare message with an empty value
-    // sp_item: window.Backend.sp_item ?? '',
-    // corp: window.Backend.corp ?? ''
+  el: '#app',
+  data: {
   }
 });

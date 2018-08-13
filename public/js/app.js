@@ -7619,66 +7619,13 @@ module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/GeneralBtnGroupCorpDetails.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      sp_item: window.Backend.sp_item ? window.Backend.sp_item : '',
-      corp: window.Backend.corp ? window.Backend.corp : ''
-    };
-  },
-  mounted: function mounted() {
-    console.log('Done Undone Btn Ok');
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/GeneralButtonLocAndPicUpload.vue":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      corp: window.Backend.corp
-    };
-  },
-  mounted: function mounted() {
-    console.log('Loc Pic Btn ok');
-  }
-});
-
-/***/ }),
-
 /***/ "./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/GeneralFormLayoutCorpDetail.vue":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
 //
 //
 //
@@ -7809,7 +7756,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.post("https://www.shilingaic.cn/index.php/api/corps_photos/", datapack).then(function (res) {
               // $("#responseimg").attr("src", res.data);
-              $("#response").html('<p  class="alert alert-info">' + res.data + "</p>");
+              $("#upload_photo_alert").html('<p  class="alert alert-info">' + res.data + "</p>");
             });
             // 对应日常监管
           });
@@ -61223,42 +61170,6 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-02b764a4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/GeneralBtnGroupCorpDetails.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "container btn-group", attrs: { role: "group" } },
-    [
-      _c(
-        "div",
-        { staticClass: "row" },
-        [
-          _c("corp-location-and-photo-upload-button"),
-          _vm._v(" "),
-          _c("special-action-set-done-and-undone-button")
-        ],
-        1
-      )
-    ]
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-02b764a4", module.exports)
-  }
-}
-
-/***/ }),
-
 /***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-2ee4dec6\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/SpecialActionButtonDoneAndUndone.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -61310,46 +61221,6 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-2ee4dec6", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-36fcbede\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/GeneralButtonLocAndPicUpload.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "button" } },
-        [_vm._v("上传照片")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "button" } },
-        [_vm._v("上传定位")]
-      )
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-36fcbede", module.exports)
   }
 }
 
@@ -61770,6 +61641,16 @@ var render = function() {
         "margin-right": "5px"
       },
       attrs: { id: "upload_coordination_alert" }
+    }),
+    _vm._v(" "),
+    _c("div", {
+      staticClass: "flash-message",
+      staticStyle: {
+        "margin-top": "10px",
+        "margin-left": "5px",
+        "margin-right": "5px"
+      },
+      attrs: { id: "upload_photo_alert" }
     })
   ])
 }
@@ -73029,21 +72910,16 @@ window.Vue = __webpack_require__("./node_modules/vue/dist/vue.common.js");
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('confirm-delete-photo', __webpack_require__("./resources/assets/js/components/GeneralModalConfirmDeletePhotoComponent.vue"));
-Vue.component('corp-location-and-photo-upload-button', __webpack_require__("./resources/assets/js/components/GeneralButtonLocAndPicUpload.vue"));
-Vue.component('done-and-undone-button', __webpack_require__("./resources/assets/js/components/SpecialActionButtonDoneAndUndone.vue"));
-Vue.component('btn-group-general-corp-details', __webpack_require__("./resources/assets/js/components/GeneralBtnGroupCorpDetails.vue"));
+Vue.component('general-confirm-delete-photo', __webpack_require__("./resources/assets/js/components/GeneralModalConfirmDeletePhotoComponent.vue"));
 Vue.component('general-form-layout-corp-detail', __webpack_require__("./resources/assets/js/components/GeneralFormLayoutCorpDetail.vue"));
+Vue.component('special-action-done-and-undone-button', __webpack_require__("./resources/assets/js/components/SpecialActionButtonDoneAndUndone.vue"));
 Vue.component('special-action-form', __webpack_require__("./resources/assets/js/components/SpecialActionFormTimeAndStatus.vue"));
+// Vue.component('general-corp-location-and-photo-upload-button', require('./components/GeneralButtonLocAndPicUpload.vue'));
+// Vue.component('btn-group-general-corp-details', require('./components/GeneralBtnGroupCorpDetails.vue'));
 
 var app = new Vue({
   el: '#app',
-  data: {
-    // photo_upload_msg: window.photo_upload_msg
-    // declare message with an empty value
-    // sp_item: window.Backend.sp_item ?? '',
-    // corp: window.Backend.corp ?? ''
-  }
+  data: {}
 });
 
 /***/ }),
@@ -73111,102 +72987,6 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/GeneralBtnGroupCorpDetails.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/GeneralBtnGroupCorpDetails.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-02b764a4\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/GeneralBtnGroupCorpDetails.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/assets/js/components/GeneralBtnGroupCorpDetails.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-02b764a4", Component.options)
-  } else {
-    hotAPI.reload("data-v-02b764a4", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ "./resources/assets/js/components/GeneralButtonLocAndPicUpload.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/component-normalizer.js")
-/* script */
-var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/GeneralButtonLocAndPicUpload.vue")
-/* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-36fcbede\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/GeneralButtonLocAndPicUpload.vue")
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/assets/js/components/GeneralButtonLocAndPicUpload.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-36fcbede", Component.options)
-  } else {
-    hotAPI.reload("data-v-36fcbede", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
 
 /***/ }),
 
