@@ -46,19 +46,18 @@
 <general-form-layout-corp-detail></general-form-layout-corp-detail>
 <special-action-done-and-undone-button></special-action-done-and-undone-button>
 
-@foreach ($photo_items as $photo_item)
-<form style="margin:unset;" method="POST" action="{{ route('corp_photos.delete', ['id' => $photo_item->id]) }}">
-    <img src="{{ $signed_url_list[$photo_item->id] }}" class="img-fluid border border-secondary rounded " alt="Responsive image"
-    />
-    <button type="button" class="btn btn-info">上传时间： {{ $photo_item->updated_at->format('Y-m-d h:i') }}</button> @if ($photo_item->uploader
-    == $user_openid) {{ csrf_field() }} {{method_field('DELETE')}}
-    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeletePhoto{{ $photo_item->id }}">删除照片</button>
-
-    <general-confirm-delete-photo photo-id="{{ $photo_item->id }}"></general-confirm-delete-photo>
-
-    @endif
-</form>
-@endforeach
+@if (count($photo_items))
+    <general-show-photos-toggle v-if="hide_photo"></general-show-photos-toggle>
+    <div v-else>
+        <general-show-photos-toggle></general-show-photos-toggle>
+        <general-show-photos v-for="photo_item in photo_items" 
+                            :photo_item="photo_item" 
+                            :key="photo_item.id" 
+                            user_openid="{{$user_openid}}"
+        >
+        </general-show-photos>
+    </div>
+@endif
 
 @endsection
  

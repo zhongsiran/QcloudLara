@@ -13,7 +13,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-          <button type="submit" class="btn btn-primary">确认删除</button>
+          <a href="javascript:;" class="btn btn-primary" @click="confirmedDelete">确认删除</a>
         </div>
       </div>
     </div>
@@ -22,15 +22,30 @@
 
 <script>
 export default {
-  props: ['photoId'],
-  data: function () {
+  props: ["photoId"],
+  data: function() {
     return {
       confirmDeletePhotoId: "confirmDeletePhoto" + this.photoId,
       confirmTitle: "confirmTitle" + this.photoId
-    }
+    };
   },
   mounted() {
-    console.log(this.confirmDeletePhotoId + '|' + this.confirmTitle)
+    console.log(this.confirmDeletePhotoId + "|" + this.confirmTitle);
   },
+  methods: {
+    confirmedDelete: function() {
+      axios
+        .delete("https://www.shilingaic.cn/index.php/corp_photos/" + this.photoId
+        )
+        .then(
+          response => {
+            location.reload();
+          },
+          error => {
+            // error callback
+          }
+        );
+    }
+  }
 };
 </script>

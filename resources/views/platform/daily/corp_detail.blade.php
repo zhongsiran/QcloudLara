@@ -1,16 +1,17 @@
 @extends('layouts.app')
 
 @section('navbar_items')
-    <li class="nav-item">
-        <a class="nav-link" href="{{ url()->previous() }}">返回结果列表</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('platform.daily_search_form') }}">返回搜索页面</a>
-    </li>
+    {{--  <li class="nav-item">  --}}
+        <a class="nav-link" href="{{ session()->get('daily_corp_list_url') }}">结果列表</a>
+    {{--  </li>
+    <li class="nav-item">  --}}
+        <a class="nav-link" href="{{ route('platform.daily_search_form') }}">搜索页面</a>
+    {{--  </li>  --}}
 @endsection
 
 @section('head_supplement')
 <script src="{{ mix('js/all.js') }}"></script>
+{{--  <script>window.showPhoto = false</script>  --}}
 @endsection
 
 @section('content')
@@ -54,7 +55,7 @@
             <th scope="row">现有图片</th>
             <td> 
                 @if (count($photo_items))
-                {{ count($photo_items) }}
+                    {{ count($photo_items) }}
                 @else
                 当前企业未上传照片
             @endif</td>
@@ -65,21 +66,19 @@
 <general-form-layout-corp-detail></general-form-layout-corp-detail>
 <div id='response' class="flash-message">
 </div>
-{{--  <p id='response'>response</p>
-<img src="" id='responseimg' />  --}}
-@foreach ($photo_items as $photo_item)
-    <form style="margin:unset;" method="POST" action="{{ route('corp_photos.delete', ['id' => $photo_item->id]) }}">
-        <img src="{{ $signed_url_list[$photo_item->id] }}" class="img-fluid border border-secondary rounded " alt="Responsive image"
-        />
-        <button type="button" class="btn btn-info">上传时间： {{ $photo_item->updated_at->format('Y-m-d h:i') }}</button> @if ($photo_item->uploader
-        == $user_openid) {{ csrf_field() }} {{method_field('DELETE')}}
-        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmDeletePhoto{{ $photo_item->id }}">删除照片</button>
 
-        <general-confirm-delete-photo photo-id="{{ $photo_item->id }}"></general-confirm-delete-photo>
-
-        @endif
-    </form>
-@endforeach
+@if (count($photo_items))
+    <general-show-photos-toggle v-if="hide_photo"></general-show-photos-toggle>
+    <div v-else>
+        <general-show-photos-toggle></general-show-photos-toggle>
+        <general-show-photos v-for="photo_item in photo_items" 
+                            :photo_item="photo_item" 
+                            :key="photo_item.id" 
+                            user_openid="{{$user_openid}}"
+        >
+        </general-show-photos>
+    </div>
+@endif
 
 
 @endsection

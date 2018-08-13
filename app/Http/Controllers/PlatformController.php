@@ -88,25 +88,30 @@ class PlatformController extends Controller
     {
         $user_openid = Auth::user()->slaic_openid;
         $photo_items = $corpPhotos->where('corporation_name', $corporation_name)->get();
-        $signed_url_list = array();
         foreach ($photo_items as $photo_item) {
             $url = "/{$photo_item->link}";
             $request = $cos_client->get($url);
             $signed_url = $cos_client->getObjectUrl(config('qcloud.bucket'), $photo_item->link, '+10 minutes');
             $signed_url = str_replace('http', 'https', $signed_url);
-            $signed_url_list[$photo_item->id] = $signed_url;
+            $photo_item->signed_url = $signed_url;
         }
 
         $corp = $corps->where('corporation_name', $corporation_name)->first();
         JavaScript::put([
             'corp' => $corp,
+            'photo_items' => $photo_items,
+            'user_openid' => $user_openid
         ]);
+
+        if (strstr(url()->previous(), '_token')){
+            session(['daily_corp_list_url' => url()->previous()]);
+        }
 
         $app = app('wechat.official_account');
         $jssdk_config = $app->jssdk->buildConfig(array('chooseImage', 'uploadImage', 'getLocation', 'openLocation'));
         $token = $app->access_token->getToken();
 
-        return view('platform.daily.corp_detail', compact('corp', 'photo_items', 'signed_url_list', 'user_openid', 'jssdk_config', 'token'));
+        return view('platform.daily.corp_detail', compact('corp','photo_items', 'user_openid', 'jssdk_config', 'token'));
     }
 
     public function special_action(SpecialAction $special_action)
@@ -158,12 +163,14 @@ class PlatformController extends Controller
             $request = $cos_client->get($url);
             $signed_url = $cos_client->getObjectUrl(config('qcloud.bucket'), $photo_item->link, '+10 minutes');
             $signed_url = str_replace('http', 'https', $signed_url);
-            $signed_url_list[$photo_item->id] = $signed_url;
+            $photo_item->signed_url = $signed_url;
         }
 
         JavaScript::put([
             'sp_item' => $sp_item,
             'corp' => $corp,
+            'photo_items' => $photo_items,
+            'user_openid' => $user_openid
         ]);
         if (!strstr(url()->previous(), 'corps')){
             session(['corp_list_url' => url()->previous()]);
@@ -173,7 +180,7 @@ class PlatformController extends Controller
         $jssdk_config = $app->jssdk->buildConfig(array('chooseImage', 'uploadImage', 'getLocation', 'openLocation'));
         $token = $app->access_token->getToken();
         return View('platform.special_action.corp_detail', compact('corp', 'sp_item', 'photo_items',
-            'signed_url_list', 'user_openid', 'jssdk_config', 'token', 'corp_list_url'));
+                    'user_openid', 'jssdk_config', 'token'));
     }
 
 }

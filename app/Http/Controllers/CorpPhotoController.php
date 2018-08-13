@@ -62,6 +62,7 @@ class CorpPhotoController extends Controller
         $photos_number = CorpPhotos::where('corporation_name', $corpPhotos->corporation_name)->count();
         Corps::where('corporation_name', $corpPhotos->corporation_name)->first()->update(['photos_number' => $photos_number]);
         session()->flash('success', '成功删除照片');
-        return redirect()->back();
+        // return redirect()->back();
+        return 'success';
     }
 }

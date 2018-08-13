@@ -38,7 +38,7 @@
 </div>
 <div class="form-group">
     <label for="registration_num">注册号</label>
-    <input name="registration_num" type="text" class="form-control" id="registration_num" placeholder="440121000xxxxxx">
+    <input name="registration_num" type="number" class="form-control" id="registration_num" placeholder="440121000xxxxxx">
 </div>
 <div class="form-group">
     <label for="corporation_name">名称（可选）</label>
