@@ -23,8 +23,6 @@ Vue.component('general-show-photos-toggle', require('./components/GeneralShowPho
 Vue.component('special-action-done-and-undone-button', require('./components/SpecialActionButtonDoneAndUndone.vue'));
 Vue.component('special-action-form', require('./components/SpecialActionFormTimeAndStatus.vue'));
 Vue.component('special-action-jump-to-form', require('./components/SpecialActionJumpToForm.vue'));
-// Vue.component('general-corp-location-and-photo-upload-button', require('./components/GeneralButtonLocAndPicUpload.vue'));
-// Vue.component('btn-group-general-corp-details', require('./components/GeneralBtnGroupCorpDetails.vue'));
 
 const app = new Vue({
   el: '#app',
