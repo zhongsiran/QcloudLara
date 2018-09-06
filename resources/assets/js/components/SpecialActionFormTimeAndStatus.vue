@@ -4,18 +4,6 @@
             <div class="form-row  justify-content-center">
                 <label for=""><b>专项行动操作</b></label>
             </div>
-            
-            <div class="form-row">
-                <label for="inspection_status">专项核查情况</label>
-                <textarea class="form-control" v-model="sp_item.inspection_record" id="sp_inspection_record" rows="3"></textarea>
-                <a class="btn btn-primary" href="javascript:;" @click="saveSpecialItem">保存</a>
-                <!-- <a class="btn btn-primary" href="javascript:;" @click = "getChineseDate">撤销更改</a> -->
-                <a class="btn btn-primary" href="javascript:;" @click="setInspectionNormal">正常</a>
-                <a class="btn btn-primary" href="javascript:;" @click="setInspectionNotFound" >查无</a>
-                <a class="btn btn-primary" href="javascript:;" @click="setInspectionFake" >虚构</a>
-            </div>
-        </div>
-        <div class="flash-message saveStatus">
         </div>
 
         <div class="form-group">
@@ -26,6 +14,20 @@
                 <textarea class="form-control" v-model="sp_item.end_inspect_time" rows="1"></textarea>
                 <a class="btn btn-primary" href="javascript:;" @click="saveSpecialItem">保存</a>
                 <a class="btn btn-primary" href="javascript:;" @click="setInspectionTimeShortcut">快速设置时间</a>
+            </div>
+        </div>
+        <div class="flash-message saveStatus">
+        </div>
+
+        <div class="form-group">
+            <div class="form-row">
+                <label for="inspection_status">专项核查情况</label>
+                <textarea class="form-control" v-model="sp_item.inspection_record" id="sp_inspection_record" rows="3"></textarea>
+                <a class="btn btn-primary" href="javascript:;" @click="saveSpecialItem">保存</a>
+                <!-- <a class="btn btn-primary" href="javascript:;" @click = "getChineseDate">撤销更改</a> -->
+                <a class="btn btn-primary" href="javascript:;" @click="setInspectionNormal">正常</a>
+                <a class="btn btn-primary" href="javascript:;" @click="setInspectionNotFound" >查无</a>
+                <a class="btn btn-primary" href="javascript:;" @click="setInspectionFake" >虚构</a>
             </div>
         </div>
         <div class="flash-message saveStatus">
