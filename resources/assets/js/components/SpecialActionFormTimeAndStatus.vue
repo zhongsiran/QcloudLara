@@ -42,6 +42,8 @@
                 <a class="btn btn-primary" href="javascript:;" @click="setPhoneNotExist">空号</a>
                 <a class="btn btn-primary" href="javascript:;" @click="setPhoneDisable">停机</a>
                 <a class="btn btn-primary" href="javascript:;" @click="setPhoneNoConnection">与之无关</a>
+                <a class="btn btn-primary" href="javascript:;" @click="setPhoneShutdown">关机</a>
+                <a class="btn btn-primary" href="javascript:;" @click="setPhoneClose">不做了</a>
                 <!-- <a class="btn btn-primary" href="javascript:;">撤销更改</a> -->
             </div>
         </div>
@@ -140,6 +142,20 @@ export default {
         "执法人员于" +
         datetime_array[1] +
         "拨打当事人的登记电话，该电话接听人员表示与当事人无关系，不清楚当事人的情况";
+    },
+    setPhoneShutdown: function () {
+      let datetime_array = this.getChineseDateArray();
+      this.sp_item.phone_call_record =
+        "执法人员于" +
+        datetime_array[1] +
+        "拨打当事人的登记电话，该电话已经关机";
+    },
+    setPhoneClose: function () {
+      let datetime_array = this.getChineseDateArray();
+      this.sp_item.phone_call_record =
+        "执法人员于" +
+        datetime_array[1] +
+        "拨打当事人的登记电话，接听人员表示该公司已经倒闭不再经营";
     }
   }
 };
