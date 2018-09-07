@@ -4,18 +4,6 @@
             <div class="form-row  justify-content-center">
                 <label for=""><b>专项行动操作</b></label>
             </div>
-            
-            <div class="form-row">
-                <label for="inspection_status">专项核查情况</label>
-                <textarea class="form-control" v-model="sp_item.inspection_record" id="sp_inspection_record" rows="3"></textarea>
-                <a class="btn btn-primary" href="javascript:;" @click="saveSpecialItem">保存</a>
-                <!-- <a class="btn btn-primary" href="javascript:;" @click = "getChineseDate">撤销更改</a> -->
-                <a class="btn btn-primary" href="javascript:;" @click="setInspectionNormal">正常</a>
-                <a class="btn btn-primary" href="javascript:;" @click="setInspectionNotFound" >查无</a>
-                <a class="btn btn-primary" href="javascript:;" @click="setInspectionFake" >虚构</a>
-            </div>
-        </div>
-        <div class="flash-message saveStatus">
         </div>
 
         <div class="form-group">
@@ -31,6 +19,20 @@
         <div class="flash-message saveStatus">
         </div>
 
+        <div class="form-group">
+            <div class="form-row">
+                <label for="inspection_status">专项核查情况</label>
+                <textarea class="form-control" v-model="sp_item.inspection_record" id="sp_inspection_record" rows="3"></textarea>
+                <a class="btn btn-primary" href="javascript:;" @click="saveSpecialItem">保存</a>
+                <!-- <a class="btn btn-primary" href="javascript:;" @click = "getChineseDate">撤销更改</a> -->
+                <a class="btn btn-primary" href="javascript:;" @click="setInspectionNormal">正常</a>
+                <a class="btn btn-primary" href="javascript:;" @click="setInspectionNotFound" >查无</a>
+                <a class="btn btn-primary" href="javascript:;" @click="setInspectionFake" >虚构</a>
+            </div>
+        </div>
+        <div class="flash-message saveStatus">
+        </div>
+
         <div class="form-group" style="margin-bottom: 0">
             <div class="form-row">
                 <label for="inspection_status">专项电话记录</label>
@@ -40,6 +42,8 @@
                 <a class="btn btn-primary" href="javascript:;" @click="setPhoneNotExist">空号</a>
                 <a class="btn btn-primary" href="javascript:;" @click="setPhoneDisable">停机</a>
                 <a class="btn btn-primary" href="javascript:;" @click="setPhoneNoConnection">与之无关</a>
+                <a class="btn btn-primary" href="javascript:;" @click="setPhoneShutdown">关机</a>
+                <a class="btn btn-primary" href="javascript:;" @click="setPhoneClose">不做了</a>
                 <!-- <a class="btn btn-primary" href="javascript:;">撤销更改</a> -->
             </div>
         </div>
@@ -138,6 +142,20 @@ export default {
         "执法人员于" +
         datetime_array[1] +
         "拨打当事人的登记电话，该电话接听人员表示与当事人无关系，不清楚当事人的情况";
+    },
+    setPhoneShutdown: function () {
+      let datetime_array = this.getChineseDateArray();
+      this.sp_item.phone_call_record =
+        "执法人员于" +
+        datetime_array[1] +
+        "拨打当事人的登记电话，该电话已经关机";
+    },
+    setPhoneClose: function () {
+      let datetime_array = this.getChineseDateArray();
+      this.sp_item.phone_call_record =
+        "执法人员于" +
+        datetime_array[1] +
+        "拨打当事人的登记电话，接听人员表示该公司已经倒闭不再经营";
     }
   }
 };
