@@ -37,11 +37,11 @@
         </tr>
         <tr>
             <th scope="row">负责人及电话</th>
-            <td>{{ $corp->represent_person }} - {{ $corp->phone }}</td>
+            <td>{{ $corp->represent_person }} - <a href="tel:{{ $corp->phone }}">{{ $corp->phone }}</a></td>
         </tr>
         <tr>
             <th scope="row">联络员及电话</th>
-            <td>{{ $corp->contact_person }} - {{ $corp->contact_phone }}</td>
+            <td>{{ $corp->contact_person }} - <a href="tel:{{ $corp->contact_phone }}">{{ $corp->contact_phone }}</a></td>
         </tr>
         <tr>
             <th scope="row">电话记录</th>
