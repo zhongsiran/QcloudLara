@@ -109,7 +109,7 @@ export default {
         }
       });
     },
-    uploadPhotosForSpecialAction: function() {
+    uploadPhotosForSpecialAction: function() { //实际上同时用于日常监管和专项行动
       var localIds = [];
       var serverIds = [];
 
@@ -117,10 +117,13 @@ export default {
         count: 9, // 默认9
         sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
+        // sourceType: ["camera"],
         success: res => {
           localIds = res.localIds; // 返回选定照片的本地Id列表，localId可以作为img标签的src属性显示图片
-
-          async.map(
+          $("#upload_photo_alert").html(
+                    '<p  class="alert alert-info">  尝试上传中 </p>'
+                  )
+          async.map( //将localIds的元素作为localId， 经过处理后，
             localIds,
             (localId, callback) => {
               wx.uploadImage({
@@ -136,7 +139,8 @@ export default {
               });
             },
             err => {
-              if (err) console.error(err.message);
+              // if (err) console.error(err.message);
+              if (err) alert(err)
               // 全部上传完毕，得到完整的serverId
               let datapack = new Object();
               datapack.serverIds = serverIds;
@@ -158,7 +162,6 @@ export default {
                     '<p  class="alert alert-info">' + res.data + "</p>"
                   );
                 });
-              // 对应日常监管
             }
           );
         }

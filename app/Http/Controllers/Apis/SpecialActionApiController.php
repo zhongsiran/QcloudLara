@@ -146,10 +146,10 @@ class SpecialActionApiController extends Controller
                 $fail_count += 1;
             }
         }
-        return sprintf('共上传%d张照片，成功%d张，失败%d张', $total_count, $sucess_count, $fail_count);
+        return sprintf('本次上传：成功%d张，失败%d张。<br>目前共有%d张照片，点击刷新马上查看最新照片。<br><button class="btn btn-sm btn-primary" onClick:"Location:reload()">刷新</button>', $sucess_count, $fail_count, $photos_number);
     }
 
-    public function upload_image($full_key, $photo_url, Client $cos_client)
+    private function upload_image($full_key, $photo_url, Client $cos_client)
     {
         // 要求提供content length的HTTP HEADER
         $headers = get_headers($photo_url, true);

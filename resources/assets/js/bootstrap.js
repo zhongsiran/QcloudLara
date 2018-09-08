@@ -1,8 +1,8 @@
 
 // window._ = require('lodash');
 // window.Popper = require('popper.js').default;
-window.async = require('async-es');
-window.moment = require('moment');
+window.async = require('async-es'); //手动引入的模块，用于多张照片上传时，确保全部上传完成后再继续
+window.moment = require('moment'); //方便的取得格式化日期的模块
 moment.locale('zh_cn');
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
