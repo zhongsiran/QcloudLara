@@ -8033,6 +8033,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   // props: ['sp_item', 'corp'],
@@ -44639,6 +44640,18 @@ var render = function() {
                   {
                     staticClass: "btn btn-primary",
                     attrs: { href: "javascript:;" },
+                    on: { click: _vm.setPhoneShutdown }
+                  },
+                  [_vm._v("关机")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("span", { staticClass: "float-left" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { href: "javascript:;" },
                     on: { click: _vm.setPhoneNoConnection }
                   },
                   [_vm._v("与之无关")]
@@ -44649,19 +44662,9 @@ var render = function() {
                   {
                     staticClass: "btn btn-primary",
                     attrs: { href: "javascript:;" },
-                    on: { click: _vm.setPhoneShutdown }
-                  },
-                  [_vm._v("关机")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  {
-                    staticClass: "btn btn-primary",
-                    attrs: { href: "javascript:;" },
                     on: { click: _vm.setPhoneClose }
                   },
-                  [_vm._v("不做了")]
+                  [_vm._v("倒闭")]
                 )
               ]),
               _vm._v(" "),

@@ -53,13 +53,14 @@
         <textarea class="form-control" v-model="sp_item.phone_call_record" id="sp_phone_call_record" rows="2"></textarea>
         <div class="container-fluid special-form">
           <span class="float-left">
-
             <a class="btn btn-primary" href="javascript:;" @click="setPhoneNotAvailble">无法接通</a>
             <a class="btn btn-primary" href="javascript:;" @click="setPhoneNotExist">空号</a>
             <a class="btn btn-primary" href="javascript:;" @click="setPhoneDisable">停机</a>
-            <a class="btn btn-primary" href="javascript:;" @click="setPhoneNoConnection">与之无关</a>
             <a class="btn btn-primary" href="javascript:;" @click="setPhoneShutdown">关机</a>
-            <a class="btn btn-primary" href="javascript:;" @click="setPhoneClose">不做了</a>
+          </span>
+          <span class="float-left">
+            <a class="btn btn-primary" href="javascript:;" @click="setPhoneNoConnection">与之无关</a>
+            <a class="btn btn-primary" href="javascript:;" @click="setPhoneClose">倒闭</a>
           </span>
           <span class="float-right">
             <a class="btn btn-primary" href="javascript:;" @click="saveSpecialItem('phone')">保存</a>
