@@ -7697,8 +7697,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   methods: {
     testCorp: function testCorp() {
-      alert(JSON.stringify(this.corp));
+      // alert(JSON.stringify(this.corp));
+      $("#upload_coordination_alert").html('<p  class="alert alert-info">灰色按键相关功能建设中</p>');
     },
+    setDailyInspect: function setDailyInspect(status) {
+      var latest_status;
+      switch (status) {
+        case 'normal':
+          latest_status = '检查期间，该业户正常经营；';
+          break;
+        case 'notFound':
+          latest_status = '检查期间，通过登记地址无法联系该业户；';
+        default:
+          break;
+      }
+      var corp = this.corp;
+      var chn_datetime_now = moment().format("YYYY年M月D日H时");
+      corp.inspection_status = corp.inspection_status ? corp.inspection_status + chn_datetime_now + latest_status : '' + chn_datetime_now + latest_status;
+    },
+    setNewPhoneNumber: function setNewPhoneNumber() {},
     uploadCoordination: function uploadCoordination() {
       $("#upload_coordination_alert").html('<p  class="alert alert-info">尝试取得定位</p>');
       var corp = this.corp;
@@ -7719,7 +7736,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
       });
     },
-    uploadPhotosForSpecialAction: function uploadPhotosForSpecialAction() {
+    uploadPhotos: function uploadPhotos() {
       //实际上同时用于日常监管和专项行动
       var localIds = [];
       var serverIds = [];
@@ -8129,6 +8146,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -44302,6 +44335,60 @@ var render = function() {
           )
         ])
       ])
+    ]),
+    _vm._v(" "),
+    _c("form", { staticClass: "form-inline-sm" }, [
+      _c("div", { staticClass: "form-row align-items-center" }, [
+        _c("div", { staticClass: "col-auto" }, [
+          _c(
+            "label",
+            { staticClass: "sr-only", attrs: { for: "inlineFormInputGroup2" } },
+            [_vm._v("sp-corp-filter")]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group mb-2" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.corpToFilter,
+                  expression: "corpToFilter"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "number",
+                id: "inlineFormInputGroup2",
+                placeholder: _vm.输入企业名称进行筛选
+              },
+              domProps: { value: _vm.corpToFilter },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.corpToFilter = $event.target.value
+                }
+              }
+            })
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-auto" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-info mb-2 text-white",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.filter }
+            },
+            [_vm._v("筛选")]
+          )
+        ])
+      ])
     ])
   ])
 }
@@ -44312,6 +44399,14 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "input-group-prepend" }, [
       _c("div", { staticClass: "input-group-text" }, [_vm._v("序号")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-prepend" }, [
+      _c("div", { staticClass: "input-group-text" }, [_vm._v("名称")])
     ])
   }
 ]
@@ -44882,7 +44977,45 @@ var render = function() {
           )
         ]),
         _vm._v(" "),
-        _vm._m(1)
+        _c("div", { staticClass: "form-row" }, [
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { href: "javascript:;" },
+              on: {
+                click: function($event) {
+                  _vm.setDailyInspect("normal")
+                }
+              }
+            },
+            [_vm._v("录入正常")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { href: "javascript:;" },
+              on: {
+                click: function($event) {
+                  _vm.setDailyInspect("notFound")
+                }
+              }
+            },
+            [_vm._v("快速查无")]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "btn btn-primary",
+              attrs: { href: "javascript:;" },
+              on: { click: _vm.setNewPhoneNumber }
+            },
+            [_vm._v("记录新电话")]
+          )
+        ])
       ]
     ),
     _vm._v(" "),
@@ -44948,7 +45081,7 @@ var render = function() {
           {
             staticClass: "btn btn-block btn-primary",
             attrs: { href: "javascript:;" },
-            on: { click: _vm.uploadPhotosForSpecialAction }
+            on: { click: _vm.uploadPhotos }
           },
           [_vm._v("上传照片")]
         )
@@ -45029,30 +45162,6 @@ var staticRenderFns = [
           )
         ])
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-row" }, [
-      _c(
-        "a",
-        { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
-        [_vm._v("录入正常")]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
-        [_vm._v("快速查无")]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        { staticClass: "btn btn-primary", attrs: { href: "javascript:;" } },
-        [_vm._v("记录新电话")]
-      )
     ])
   }
 ]

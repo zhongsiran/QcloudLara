@@ -26,9 +26,9 @@
 
             </div>
             <div class="form-row">
-                <a class="btn btn-primary" href="javascript:;">录入正常</a>
-                <a class="btn btn-primary" href="javascript:;">快速查无</a>
-                <a class="btn btn-primary" href="javascript:;">记录新电话</a>
+                <a class="btn btn-primary" href="javascript:;" @click="setDailyInspect('normal')">录入正常</a>
+                <a class="btn btn-primary" href="javascript:;" @click="setDailyInspect('notFound')">快速查无</a>
+                <a class="btn btn-primary" href="javascript:;" @click="setNewPhoneNumber">记录新电话</a>
             </div>
         </div>
         
@@ -45,7 +45,7 @@
                 <a class="btn btn-block btn-primary" href="javascript:;" @click="uploadCoordination">上传定位</a>    
             </div>
             <div class="col">
-                <a class="btn btn-block btn-primary" href="javascript:;" @click="uploadPhotosForSpecialAction">上传照片</a>    
+                <a class="btn btn-block btn-primary" href="javascript:;" @click="uploadPhotos">上传照片</a>    
             </div>
             <div class="col">
                 <a class="btn btn-block btn-secondary" href="javascript:;" @click="testCorp">进行导航</a>    
@@ -70,7 +70,28 @@ export default {
   },
   methods: {
     testCorp: function() {
-      alert(JSON.stringify(this.corp));
+      // alert(JSON.stringify(this.corp));
+      $("#upload_coordination_alert").html(
+        '<p  class="alert alert-info">灰色按键相关功能建设中</p>'
+      );
+    },
+    setDailyInspect: function (status) {
+      var latest_status;
+      switch (status) {
+        case 'normal':
+          latest_status = '检查期间，该业户正常经营；';
+          break;
+        case 'notFound':
+          latest_status = '检查期间，通过登记地址无法联系该业户；';
+        default:
+          break;
+      }
+      let corp = this.corp;
+      let chn_datetime_now = moment().format("YYYY年M月D日H时");
+      corp.inspection_status = (corp.inspection_status) ? corp.inspection_status + chn_datetime_now + latest_status : '' + chn_datetime_now + latest_status;
+    },
+    setNewPhoneNumber: function () {
+      
     },
     uploadCoordination: function() {
       $("#upload_coordination_alert").html(
@@ -109,7 +130,7 @@ export default {
         }
       });
     },
-    uploadPhotosForSpecialAction: function() { //实际上同时用于日常监管和专项行动
+    uploadPhotos: function() { //实际上同时用于日常监管和专项行动
       var localIds = [];
       var serverIds = [];
 

@@ -41,7 +41,7 @@ class SpecialActionApiController extends Controller
         try {
             $server_special_item = SpecialAction::findOrFail($id);
         } catch (ModelNotFoundException $e) {
-            $data['msg'] = '保存失败m';
+            $data['msg'] = '保存失败';
             return $data;
         }
 

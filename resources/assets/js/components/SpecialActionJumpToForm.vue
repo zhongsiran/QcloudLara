@@ -2,18 +2,34 @@
     <div class="jump-to-form">
         <form class="form-inline-sm" >
             <div class="form-row align-items-center">
-            <div class="col-auto">
-                <label class="sr-only" for="inlineFormInputGroup">sp-corp-id</label>
-                <div class="input-group mb-2">
-                <div class="input-group-prepend">
-                    <div class="input-group-text">序号</div>
-                </div>
-                <input type="number" class="form-control" id="inlineFormInputGroup" :placeholder="placeholder" v-model="jumpToItem">
-                </div>
+              <div class="col-auto">
+                  <label class="sr-only" for="inlineFormInputGroup">sp-corp-id</label>
+                  <div class="input-group mb-2">
+                  <div class="input-group-prepend">
+                      <div class="input-group-text">序号</div>
+                  </div>
+                  <input type="number" class="form-control" id="inlineFormInputGroup" :placeholder="placeholder" v-model="jumpToItem">
+                  </div>
+              </div>
+              <div class="col-auto">
+                  <a href="javascript:;" class="btn btn-info mb-2 text-white" @click="jump">跳转</a>
+              </div>
             </div>
-            <div class="col-auto">
-                <a href="javascript:;" class="btn btn-info mb-2 text-white" @click="jump">跳转</a>
-            </div>
+        </form>
+        <form class="form-inline-sm" >
+            <div class="form-row align-items-center">
+              <div class="col-auto">
+                  <label class="sr-only" for="inlineFormInputGroup2">sp-corp-filter</label>
+                  <div class="input-group mb-2">
+                  <div class="input-group-prepend">
+                      <div class="input-group-text">名称</div>
+                  </div>
+                  <input type="number" class="form-control" id="inlineFormInputGroup2" :placeholder="输入企业名称进行筛选" v-model="corpToFilter">
+                  </div>
+              </div>
+              <div class="col-auto">
+                  <a href="javascript:;" class="btn btn-info mb-2 text-white" @click="filter">筛选</a>
+              </div>
             </div>
         </form>
     </div>
