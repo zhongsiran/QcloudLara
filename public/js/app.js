@@ -8183,12 +8183,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      jumpToItem: '',
       max_item: window.Backend.max_item,
-      jumpToItem: ""
+      corp_list: window.Backend.corp_list,
+      corpToFilter: '',
+      corpFilterResult: new Object(),
+      corpFilterNotFound: false
     };
   },
   methods: {
@@ -8200,11 +8212,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       } else {
         alert('不能超過最大序號(' + this.max_item + '號)');
       }
+    },
+    corp_filter: function corp_filter(keyword) {
+      var _this = this;
+
+      this.corpFilterResult = new Object();
+      this.corpFilterNotFound = false;
+      var corp_list_array = Object.keys(this.corp_list);
+      var corpFilterNames = corp_list_array.filter(function (item) {
+        return item.match(keyword);
+      });
+      if (corpFilterNames.length == 0) {
+        this.corpFilterNotFound = true;
+      }
+      corpFilterNames.forEach(function (element) {
+        Vue.set(_this.corpFilterResult, _this.corp_list[element], element);
+      });
     }
   },
   computed: {
     placeholder: function placeholder() {
       return "最大序號為" + this.max_item;
+    }
+  },
+  watch: {
+    corpToFilter: function corpToFilter(val) {
+      this.corpFilterNotFound = false;
     }
   }
 });
@@ -44360,9 +44393,9 @@ var render = function() {
               ],
               staticClass: "form-control",
               attrs: {
-                type: "number",
+                type: "text",
                 id: "inlineFormInputGroup2",
-                placeholder: _vm.输入企业名称进行筛选
+                placeholder: "输入企业名称进行搜索"
               },
               domProps: { value: _vm.corpToFilter },
               on: {
@@ -44383,13 +44416,42 @@ var render = function() {
             {
               staticClass: "btn btn-info mb-2 text-white",
               attrs: { href: "javascript:;" },
-              on: { click: _vm.filter }
+              on: {
+                click: function($event) {
+                  _vm.corp_filter(_vm.corpToFilter)
+                }
+              }
             },
-            [_vm._v("筛选")]
+            [_vm._v("搜索")]
           )
         ])
       ])
-    ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "table",
+      { staticClass: "table table-striped" },
+      [
+        Object.keys(_vm.corpFilterResult).length
+          ? _c("th", [_vm._v("搜索结果（在上面输入序号来跳转）")])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.corpFilterNotFound
+          ? _c("th", [
+              _vm._v("没有找到带" + _vm._s(_vm.corpToFilter) + "的企业名称")
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm._l(_vm.corpFilterResult, function(value, key) {
+          return _c("tr", { key: key }, [
+            _c("th", [_vm._v(_vm._s(value))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(key))])
+          ])
+        })
+      ],
+      2
+    )
   ])
 }
 var staticRenderFns = [

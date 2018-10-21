@@ -135,9 +135,16 @@ class PlatformController extends Controller
         // ->get()
             ->paginate(10);
         // $special_action_corps_list->withPath(url()->full());
+        $original_corp_list = $special_action->where('sp_num', $sp_num)
+                  ->where('sp_aic_division', Auth::user()->user_aic_division)
+                  ->get();
+        $filtered_corp_list = $original_corp_list->mapWithKeys(function ($item) {
+            return [$item['corporation_name'] => $item['sp_corp_id']];
+        });
 
         JavaScript::put([
-            'max_item' => $special_action_corps_list->total()
+            'max_item' => $special_action_corps_list->total(),
+            'corp_list' => $filtered_corp_list
         ]);
 
         foreach ($special_action_corps_list as $sp_item) {

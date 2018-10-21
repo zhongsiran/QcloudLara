@@ -24,14 +24,22 @@
                   <div class="input-group-prepend">
                       <div class="input-group-text">名称</div>
                   </div>
-                  <input type="number" class="form-control" id="inlineFormInputGroup2" :placeholder="输入企业名称进行筛选" v-model="corpToFilter">
+                  <input type="text" class="form-control" id="inlineFormInputGroup2" placeholder="输入企业名称进行搜索" v-model="corpToFilter">
                   </div>
               </div>
               <div class="col-auto">
-                  <a href="javascript:;" class="btn btn-info mb-2 text-white" @click="filter">筛选</a>
+                  <a href="javascript:;" class="btn btn-info mb-2 text-white" @click="corp_filter(corpToFilter)">搜索</a>
               </div>
             </div>
         </form>
+        <table class="table table-striped">
+          <th v-if="Object.keys(corpFilterResult).length">搜索结果（在上面输入序号来跳转）</th>
+          <th v-if="corpFilterNotFound">没有找到带{{corpToFilter}}的企业名称</th>
+          <tr v-for="(value, key) in corpFilterResult" :key="key">
+            <th>{{value}}</th>
+            <td>{{key}}</td>
+          </tr>
+        </table>
     </div>
 </template>
 
@@ -39,8 +47,12 @@
 export default {
   data: function() {
     return {
+      jumpToItem: '',
       max_item: window.Backend.max_item,
-      jumpToItem: ""
+      corp_list: window.Backend.corp_list,
+      corpToFilter: '',
+      corpFilterResult: new Object,
+      corpFilterNotFound: false
     };
   },
   methods: {
@@ -59,11 +71,30 @@ export default {
       } else {
           alert('不能超過最大序號(' + this.max_item + '號)')
       }
+    },
+    corp_filter: function(keyword) {
+      this.corpFilterResult = new Object
+      this.corpFilterNotFound = false
+      let corp_list_array = Object.keys(this.corp_list)
+      let corpFilterNames = corp_list_array.filter(function(item) {
+        return item.match(keyword)
+      })
+      if (corpFilterNames.length == 0) {
+        this.corpFilterNotFound = true
+      }
+      corpFilterNames.forEach(element => {
+        Vue.set(this.corpFilterResult, this.corp_list[element], element)
+      });
     }
   },
   computed: {
     placeholder: function() {
       return "最大序號為" + this.max_item;
+    }
+  },
+  watch: {
+    corpToFilter: function(val) {
+      this.corpFilterNotFound = false
     }
   }
 };
