@@ -87,7 +87,8 @@ trait WeChatScanningTraits
             // 收到“进入”之后回复链接页面
             case (strstr($keyword,'进入') or strstr($keyword, 'jr')):
             $title = '微信监管平台';
-            $url = 'https://hdscjg.applinzi.com/mylib/H5controllers/shilingaic_openid.php';
+            // $url = 'https://hdscjg.applinzi.com/mylib/H5controllers/shilingaic_openid.php';
+            $url = 'https://www.shilingaic.cn/index.php/platform/login?openid=' .$message['FromUserName'];
             $image = 'http://sinacloud.net/aicbucket/babb0823bf2de393cbb694b1c7a71964.jpg';
 
             $items = [
